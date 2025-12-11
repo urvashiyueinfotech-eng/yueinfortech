@@ -101,12 +101,17 @@ const MobileMenu = ({ isOpen, setIsOpen, isScrolled }: { isOpen: boolean; setIsO
           role="dialog"
           aria-modal="true"
         >
-          <div className="flex items-center justify-between border-b border-white/10 p-5">
-            <Logo isScrolled={isScrolled} />
-            <button type="button" onClick={() => { console.log('close button clicked'); setIsOpen(false); }} className="rounded-full p-2 text-foreground/70 transition-colors hover:bg-white/10 hover:text-primary" aria-label="Close menu">
-              <X className="h-5 w-5" />
-            </button>
-          </div>
+            <div className="flex items-center justify-between border-b border-white/10 p-5">
+              <Logo isScrolled={isScrolled} />
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="rounded-full p-2 text-foreground/70 transition-colors hover:bg-white/10 hover:text-primary"
+                aria-label="Close menu"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
           <div className="flex flex-1 flex-col justify-between p-5">
             <nav className="space-y-3">
                 {navItems.map((item) => {

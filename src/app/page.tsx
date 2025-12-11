@@ -1,11 +1,11 @@
 import HeaderWrapper from "@/components/HeaderWrapper";
-import MarketingProcess from "@/components/HowItWorks";
+import WhatWeDo from "@/components/WhatWeDo";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-background">
       <HeaderWrapper />
-      <MarketingProcess />
+      <WhatWeDo />
     </main>
   );
 }
