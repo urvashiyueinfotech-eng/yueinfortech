@@ -1,6 +1,6 @@
 import { ShieldCheck, BrainCircuit, UsersRound, Target } from "lucide-react";
-import Link from "next/link";
 import SectionHeader from "@/components/SectionHeader";
+import CtaButton from "@/components/CtaButton";
 
 const steps = [
   {
@@ -62,16 +62,14 @@ export default function WhyChooseUs() {
               className="max-w-xl"
             />
 
-            <Link
+            <CtaButton
               href="#contact"
-              className="
-                mt-8 inline-flex w-fit items-center justify-center 
-                rounded-full bg-primary px-7 py-3 text-[15px] font-semibold 
-                text-white shadow-lg transition hover:bg-orange-500
-              "
+              bgClassName="bg-gradient-to-r from-primary to-orange-400 hover:brightness-110 px-7 py-3"
+              textClassName="text-white text-[15px]"
+              className="w-fit"
             >
               Get a Strategy Recommendation →
-            </Link>
+            </CtaButton>
           </div>
         </div>
 

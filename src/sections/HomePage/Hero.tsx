@@ -4,6 +4,8 @@ import type { CSSProperties } from "react";
 import { useEffect, useState } from "react";
 import { ArrowUpRight, Sparkles } from "lucide-react";
 import Image from "next/image";
+import SectionHeader from "@/components/SectionHeader";
+import CtaButton from "@/components/CtaButton";
 
 // Image Imports
 import growArrow from "@/assets/theme-images/grow-arrow-theme.png";
@@ -119,56 +121,55 @@ const Hero = () => {
 
           {/* LEFT COLUMN */}
           <div className="relative space-y-6 text-left lg:space-y-8">
+            <SectionHeader
+              as="h1"
+              eyebrow="Take your business"
+              eyebrowContent={
+                <span className="inline-flex items-center gap-2">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/15 text-primary">
+                    <Sparkles className="h-4 w-4" />
+                  </span>
+                  Take your business
+                </span>
+              }
+              eyebrowClassName="bg-primary/15 text-primary ring-primary/20 px-3 py-2"
+              title="Web Development, SEO & IT Solutions That Help You Grow!"
+              titleClassName="text-[1.95rem] sm:text-[2.2rem] md:text-[2.45rem] lg:text-[3rem] xl:text-[3.25rem] leading-[1.14] tracking-[0.5px] text-white"
+              subtitle="Yue Infotech builds fast, modern websites, AI-optimized SEO strategies, performance ads, powerful content, and secure IT solutions — everything your business needs to scale."
+              subtitleClassName="text-[15px] text-muted-foreground sm:text-base sm:max-w-xl md:max-w-2xl"
+              align="left"
+              className="relative isolate z-0"
+            />
 
-            {/* Badge */}
-            <div className="inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.22em] text-primary sm:text-sm">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/15 text-primary">
-                <Sparkles className="h-4 w-4" />
-              </span>
-              Take your business
-            </div>
-
-            {/* Heading */}
-            <h1 className="relative isolate z-0 text-[1.95rem] font-bold leading-[1.14] tracking-[0.5px] sm:text-[2.2rem] md:text-[2.45rem] lg:text-[3rem] xl:text-[3.25rem]">
-              <span className="relative z-[20] inline-block">
-                Web Development, SEO & IT Solutions
-                <span className="block">That Help You Grow!</span>
-              </span>
-
-              {/* =====================================================
-                  SMALL SCREEN — BIG ARROW BEHIND HEADING
-              ===================================================== */}
+            {/* SMALL SCREEN ARROWS */}
+            <div className="relative lg:hidden">
               <Image
                 src={growArrow}
                 alt=""
-                className="lg:hidden absolute right-[6px] top-[-70px] w-[240px] sm:w-[300px] md:w-[340px] rotate-[-12deg] opacity-80 pointer-events-none z-[10]"
+                className="absolute right-[6px] top-[-70px] w-[240px] sm:w-[300px] md:w-[340px] rotate-[-12deg] opacity-80 pointer-events-none z-[10]"
               />
-
-              {/* SMALL SCREEN — TWO MINI ARROWS */}
               <Image
                 src={growArrowSmall}
                 alt=""
-                className="lg:hidden absolute right-[200px] top-[-50px] w-[22px] rotate-[-10deg] opacity-70 z-[1]"
+                className="absolute right-[200px] top-[-50px] w-[22px] rotate-[-10deg] opacity-70 z-[1]"
               />
-
               <Image
                 src={growArrowSmall}
                 alt=""
-                className="lg:hidden absolute right-[24px] top-[90px] w-[22px] rotate-[6deg] opacity-70 z-[1]"
+                className="absolute right-[24px] top-[90px] w-[22px] rotate-[6deg] opacity-70 z-[1]"
               />
-            </h1>
-
-            {/* Description */}
-            <p className="text-[15px] text-muted-foreground sm:text-base sm:max-w-xl md:max-w-2xl">
-              Yue Infotech builds fast, modern websites, AI-optimized SEO strategies, performance ads, powerful content,
-              and secure IT solutions — everything your business needs to scale.
-            </p>
+            </div>
 
             {/* CTA */}
-            <button className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-primary to-orange-400 px-8 py-3 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition hover:-translate-y-0.5 hover:shadow-primary/40 sm:w-auto sm:text-sm">
-              Get a Custom Quote
+            <CtaButton
+              href="#contact"
+              bgClassName="bg-gradient-to-r from-primary to-orange-400 hover:brightness-110"
+              textClassName="text-primary-foreground"
+              className="w-full sm:w-auto gap-2"
+            >
+              <span>Get a Custom Quote</span>
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </button>
+            </CtaButton>
           </div>
         </div>
       </div>

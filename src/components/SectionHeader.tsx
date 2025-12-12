@@ -1,12 +1,18 @@
 import { cn } from "@/lib/utils";
+import { type ReactNode } from "react";
 
 type SectionHeaderProps = {
   id?: string;
   eyebrow?: string;
+  eyebrowClassName?: string;
+  eyebrowContent?: ReactNode;
   title: string;
+  titleClassName?: string;
   subtitle?: string;
+  subtitleClassName?: string;
   align?: "left" | "center";
   className?: string;
+  as?: "h1" | "h2" | "h3";
 };
 
 const alignmentStyles: Record<NonNullable<SectionHeaderProps["align"]>, string> = {
@@ -17,11 +23,18 @@ const alignmentStyles: Record<NonNullable<SectionHeaderProps["align"]>, string> 
 const SectionHeader = ({
   id,
   eyebrow,
+  eyebrowClassName,
+  eyebrowContent,
   title,
+  titleClassName,
   subtitle,
+  subtitleClassName,
   align = "center",
   className,
+  as = "h2",
 }: SectionHeaderProps) => {
+  const Heading = as;
+
   return (
     <div
       className={cn(
@@ -30,19 +43,27 @@ const SectionHeader = ({
         className
       )}
     >
-      {eyebrow ? (
-        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-orange-600">
-          {eyebrow}
+      {eyebrow || eyebrowContent ? (
+        <p
+          className={cn(
+            "inline-flex w-fit items-center rounded-full bg-primary/10 px-3 py-1 text-[12px] font-semibold uppercase tracking-[0.22em] text-primary ring-1 ring-primary/15",
+            eyebrowClassName
+          )}
+        >
+          {eyebrowContent ?? eyebrow}
         </p>
       ) : null}
-      <h2
+      <Heading
         id={id}
-        className="text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl lg:text-5xl"
+        className={cn(
+          "text-3xl font-extrabold leading-tight sm:text-4xl lg:text-5xl",
+          titleClassName ?? "text-slate-900"
+        )}
       >
         {title}
-      </h2>
+      </Heading>
       {subtitle ? (
-        <p className="text-slate-700">{subtitle}</p>
+        <p className={cn("text-base", subtitleClassName ?? "text-slate-700")}>{subtitle}</p>
       ) : null}
     </div>
   );
