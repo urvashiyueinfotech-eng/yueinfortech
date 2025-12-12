@@ -31,7 +31,7 @@ const SectionHeader = ({
       )}
     >
       {eyebrow ? (
-        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-orange-300">
+        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-orange-600">
           {eyebrow}
         </p>
       ) : null}

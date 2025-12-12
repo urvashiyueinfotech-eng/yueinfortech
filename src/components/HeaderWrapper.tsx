@@ -1,5 +1,5 @@
 import Navbar from "./Navbar";
-import Hero from "./Hero";
+import Hero from "../sections/HomePage/Hero";
 
 const HeaderWrapper = () => {
   return (

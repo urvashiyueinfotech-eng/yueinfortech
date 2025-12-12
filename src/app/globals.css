@@ -90,7 +90,8 @@
   }
 
   body {
-    @apply bg-background text-foreground font-body antialiased;
+    @apply text-foreground font-body antialiased;
+    background: linear-gradient(135deg, #fff8f2 0%, #fef3e7 100%);
   }
 
   h1, h2, h3, h4, h5, h6 {

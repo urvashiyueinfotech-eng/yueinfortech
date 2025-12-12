@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, FileText, Megaphone, Monitor, Search, Server } from "lucide-react";
 import { type ReactElement } from "react";
-import SectionHeader from "./SectionHeader";
+import SectionHeader from "../../components/SectionHeader";
 
 type Service = {
   id: string;
@@ -117,7 +117,7 @@ const WhatWeDo = () => {
   return (
     <section
       aria-labelledby="what-we-do-title"
-      className="py-20 lg:py-32 bg-[linear-gradient(to_right,_#fbf0e6_0%,_#fbf0e6_100%)]"
+      className="py-20 lg:py-32"
     >
       <div className="container">
         <SectionHeader
