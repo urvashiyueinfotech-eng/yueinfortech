@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, ChevronDown, Menu, PhoneCall, X } from "lucide-react";
@@ -9,24 +10,24 @@ import { cn } from "@/lib/utils";
 
 // --- Configuration ---
 const navItems = [
-  { label: "Home", href: "/", hasDropdown: true },
-  { label: "Pages", href: "/pages", hasDropdown: true },
-  { label: "Portfolio", href: "/portfolio", hasDropdown: true },
+  { label: "Home", href: "/", hasDropdown: false },
+  { label: "About", href: "/about-us", hasDropdown: false },
   { label: "Services", href: "/services", hasDropdown: true },
-  { label: "Blog", href: "/blog", hasDropdown: true },
-  { label: "Contact", href: "/contact", hasDropdown: false },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/contact-us", hasDropdown: false },
 ];
 
 // --- Sub-components ---
-const Logo = ({ isScrolled }: { isScrolled: boolean }) => (
-  <Link href="/" className="flex items-center gap-3" aria-label="Back to homepage">
-    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary/20 ring-1 ring-primary/30">
-      <span className={cn("text-lg font-bold", isScrolled ? "text-gray-900" : "text-primary")}>S</span>
-    </div>
-    <div className="leading-tight">
-      <p className="text-sm uppercase tracking-[0.14em] text-muted-foreground">Seo Inux</p>
-      <p className="text-lg font-semibold text-foreground">Search Engine Studio</p>
-    </div>
+const Logo = ({ tone }: { tone: "light" | "dark" }) => (
+  <Link href="/" className="flex shrink-0 items-center" aria-label="Back to homepage">
+    <Image
+      src={tone === "dark" ? "/Yueinfotech.com-logo.png" : "/Yueinfotech.com-logo-white.png"}
+      alt="Yue Infotech"
+      width={320}
+      height={64}
+      priority
+      className="h-12 w-auto max-w-none sm:h-14 md:h-16"
+    />
   </Link>
 );
 
@@ -42,26 +43,18 @@ const DesktopNav = ({ isScrolled }: { isScrolled: boolean }) => {
             key={item.label}
             href={item.href}
             className={cn(
-              "group relative flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium transition-all duration-200",
+              "group relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200",
               isScrolled
                 ? isActive
-                  ? "text-primary-foreground bg-primary"
-                  : "text-gray-900 hover:text-gray-900 hover:bg-gray-100"
+                  ? "bg-indigo-600 text-white"
+                  : "text-slate-700 hover:text-slate-900 hover:bg-slate-100"
                 : isActive
-                  ? "text-foreground"
-                  : "text-foreground/75 hover:text-foreground"
+                  ? "text-white bg-white/10"
+                  : "text-slate-200 hover:text-white hover:bg-white/5"
             )}
           >
             <span className="relative z-[1]">{item.label}</span>
             {item.hasDropdown && <ChevronDown className="h-4 w-4" />}
-            {!isScrolled && (
-              <span
-                className={cn(
-                  "absolute inset-0 -z-[1] scale-95 rounded-full bg-white/5 opacity-0 transition-all duration-200",
-                  isActive ? "opacity-100" : "group-hover:opacity-100"
-                )}
-              />
-            )}
           </Link>
         );
       })}
@@ -69,7 +62,7 @@ const DesktopNav = ({ isScrolled }: { isScrolled: boolean }) => {
   );
 };
 
-const MobileMenu = ({ isOpen, setIsOpen, isScrolled }: { isOpen: boolean; setIsOpen: (isOpen: boolean) => void; isScrolled: boolean }) => {
+const MobileMenu = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (isOpen: boolean) => void; }) => {
   const pathname = usePathname();
   
   useEffect(() => {
@@ -96,17 +89,17 @@ const MobileMenu = ({ isOpen, setIsOpen, isScrolled }: { isOpen: boolean; setIsO
           exit={{ x: "100%" }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
           onClick={(e) => e.stopPropagation()}
-          className="fixed right-0 top-0 z-50 flex h-full w-full max-w-sm flex-col overflow-y-auto bg-background/95 shadow-2xl backdrop-blur-xl"
+          className="fixed right-0 top-0 z-50 flex h-full w-full max-w-sm flex-col overflow-y-auto bg-slate-900/95 shadow-2xl backdrop-blur-xl"
           id="mobile-menu"
           role="dialog"
           aria-modal="true"
         >
             <div className="flex items-center justify-between border-b border-white/10 p-5">
-              <Logo isScrolled={isScrolled} />
+              <Logo tone="light" />
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="rounded-full p-2 text-foreground/70 transition-colors hover:bg-white/10 hover:text-primary"
+                className="rounded-full p-2 text-slate-300 transition-colors hover:bg-white/10 hover:text-white"
                 aria-label="Close menu"
               >
                 <X className="h-5 w-5" />
@@ -123,7 +116,7 @@ const MobileMenu = ({ isOpen, setIsOpen, isScrolled }: { isOpen: boolean; setIsO
                       onClick={() => setIsOpen(false)}
                       className={cn(
                         "flex w-full items-center justify-between rounded-xl px-3 py-3 text-left text-base font-medium transition-colors",
-                        isActive ? "bg-white/10 text-primary" : "text-foreground/80 hover:bg-white/5 hover:text-foreground"
+                        isActive ? "bg-indigo-600 text-white" : "text-slate-200 hover:bg-white/5 hover:text-white"
                       )}
                     >
                       {item.label}
@@ -133,14 +126,14 @@ const MobileMenu = ({ isOpen, setIsOpen, isScrolled }: { isOpen: boolean; setIsO
                 })}
               </nav>
               <div className="space-y-4 pt-6">
-                <Link href="/contact" className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-orange-400 px-5 py-3.5 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/25 transition hover:scale-[1.02]">
+                <Link href="/contact-us" className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-3.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition hover:scale-[1.02]">
                   Book Free Consultation
                   <ArrowUpRight className="h-4 w-4" />
                 </Link>
-                <div className="flex items-center gap-3 rounded-xl border border-white/10 px-4 py-3 text-sm text-muted-foreground">
-                  <PhoneCall className="h-4 w-4 text-primary" />
+                <div className="flex items-center gap-3 rounded-xl border border-white/10 px-4 py-3 text-sm text-slate-400">
+                  <PhoneCall className="h-4 w-4 text-indigo-400" />
                   <div>
-                    <p className="font-semibold text-foreground">+1 (803) 555-1991</p>
+                    <a href="tel:8859366292" className="font-semibold text-white">+91 8859366292</a>
                     <p className="text-xs">Talk with a strategist</p>
                   </div>
                 </div>
@@ -184,33 +177,34 @@ const Navbar = () => {
       <header
         className={cn(
           "fixed inset-x-0 top-0 transition-all duration-300 ease-in-out",
-          isScrolled ? "bg-white shadow-sm py-2" : "bg-transparent py-6",
+          isScrolled ? "bg-white shadow-sm py-2" : "bg-transparent py-4",
           isOpen ? "z-30" : "z-50"
         )}
       >
-        <div className="container">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div
             className={cn(
-              "relative transition-all duration-300 ease-in-out",
-              !isScrolled && !isOpen && "rounded-full border border-white/10 bg-background/70 px-4 py-3 shadow-card backdrop-blur-2xl xl:px-6"
+              "relative transition-all duration-300 ease-in-out"
             )}
           >
-            <div className="relative flex items-center justify-center gap-4 xl:justify-between">
+            <div className="relative flex items-center justify-between gap-4">
               <div className={cn("transition-opacity", isOpen && "opacity-0")}>
-                <Logo isScrolled={isScrolled} />
+                <Logo tone={isScrolled ? "dark" : "light"} />
               </div>
               
               <DesktopNav isScrolled={isScrolled} />
               
-              <div className="absolute right-0 flex items-center gap-2 xl:static">
-                <div className="hidden items-center gap-3 rounded-full border border-white/10 px-5 py-2 text-left text-xs text-muted-foreground backdrop-blur-lg xl:flex">
-                  <PhoneCall className={cn("h-4 w-4", isScrolled ? "text-gray-900" : "text-primary")} />
+              <div className="flex items-center gap-2">
+                <div className="hidden items-center gap-3 rounded-full border px-4 py-2 text-left text-xs backdrop-blur-lg xl:flex"
+                  style={isScrolled ? { borderColor: 'rgb(229 231 235)'} : { borderColor: 'rgba(255, 255, 255, 0.1)'}}
+                >
+                  <PhoneCall className={cn("h-4 w-4", isScrolled ? "text-slate-900" : "text-indigo-400")} />
                   <div>
-                    <p className={cn("font-semibold", isScrolled ? "text-gray-900" : "text-foreground")}>+1 (803) 555-1991</p>
-                    <p className={cn("text-[11px]", isScrolled ? "text-gray-600" : "text-muted-foreground")}>Talk with a strategist</p>
+                    <a href="tel:8859366292" className={cn("font-semibold", isScrolled ? "text-slate-900" : "text-white")}>+91 8859366292</a>
+                    <p className={cn("text-[11px]", isScrolled ? "text-slate-600" : "text-slate-300")}>Talk with a strategist</p>
                   </div>
                 </div>
-                <Link href="/contact" className="hidden items-center gap-2 rounded-full bg-gradient-to-r from-primary to-orange-400 px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition hover:scale-105 hover:shadow-primary/40 xl:inline-flex">
+                <Link href="/contact-us" className="hidden items-center gap-2 rounded-full bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition hover:scale-105 hover:bg-indigo-700 xl:inline-flex">
                   Book Free Consultation
                   <ArrowUpRight className="h-4 w-4" />
                 </Link>
@@ -228,14 +222,14 @@ const Navbar = () => {
                         className={cn(
                           "flex h-11 w-11 items-center justify-center rounded-full border transition-colors xl:hidden",
                           isScrolled
-                            ? "border-gray-200 text-gray-700 hover:text-primary"
-                            : "border-white/10 text-foreground hover:text-primary"
+                            ? "border-slate-200 text-slate-700 hover:text-indigo-600"
+                            : "border-white/20 text-white hover:text-white hover:bg-white/10"
                         )}
                         aria-label="Open navigation menu"
                         aria-expanded={isOpen}
                         aria-controls="mobile-menu"
                         >
-                        <Menu className={cn("h-5 w-5", isScrolled && "text-primary")} />
+                        <Menu className={cn("h-5 w-5")} />
                       </button>
                     </motion.div>
                   )}
@@ -245,7 +239,7 @@ const Navbar = () => {
           </div>
         </div>
       </header>
-      <MobileMenu isOpen={isOpen} setIsOpen={setIsOpen} isScrolled={isScrolled} />
+      <MobileMenu isOpen={isOpen} setIsOpen={setIsOpen} />
     </>
   );
 };

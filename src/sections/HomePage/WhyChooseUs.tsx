@@ -43,7 +43,7 @@ const steps = [
 
 export default function WhyChooseUs() {
   return (
-    <section className="relative w-full py-24">
+    <section className="relative w-full py-24 bg-slate-50">
       <div
         className="
           container mx-auto 
@@ -64,7 +64,7 @@ export default function WhyChooseUs() {
 
             <CtaButton
               href="#contact"
-              bgClassName="bg-gradient-to-r from-primary to-orange-400 hover:brightness-110 px-7 py-3"
+              bgClassName="bg-indigo-600 hover:bg-indigo-700 px-7 py-3"
               textClassName="text-white text-[15px]"
               className="w-fit"
             >
@@ -79,7 +79,7 @@ export default function WhyChooseUs() {
           {/* Vertical Line (auto-adjusted position) */}
           <div
             className="
-              absolute left-[22px] top-0 h-full w-[2px] bg-orange-300/40
+              absolute left-[22px] top-0 h-full w-[2px] bg-indigo-200
               md:left-[34%]
             "
           ></div>
@@ -95,8 +95,8 @@ export default function WhyChooseUs() {
                   <div
                     className="
                       absolute left-0 flex h-12 w-12 items-center justify-center 
-                      rounded-full bg-white shadow-md ring-2 ring-orange-300/40 
-                      text-orange-600 font-semibold text-sm 
+                      rounded-full bg-white shadow-md ring-2 ring-indigo-200
+                      text-indigo-600 font-semibold text-sm 
                       md:left-[34%] md:-translate-x-1/2
                     "
                   >
@@ -106,11 +106,11 @@ export default function WhyChooseUs() {
                   {/* Card */}
                   <div
                     className="
-                      ml-16 w-full rounded-2xl bg-white p-7 shadow-sm
+                      ml-16 w-full rounded-2xl bg-white p-7 shadow-sm border border-slate-100
                       md:ml-[calc(34%+48px)] md:w-[74%]
                     "
                   >
-                    <Icon className="mb-3 h-8 w-8 text-orange-500" />
+                    <Icon className="mb-3 h-8 w-8 text-indigo-600" />
 
                     <h3 className="text-xl font-semibold text-slate-900">
                       {step.title}

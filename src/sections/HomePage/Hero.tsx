@@ -2,7 +2,7 @@
 
 import type { CSSProperties } from "react";
 import { useEffect, useState } from "react";
-import { ArrowUpRight, Sparkles } from "lucide-react";
+import { ArrowUpRight, Sparkles, Code2, Share2, Cpu } from "lucide-react";
 import Image from "next/image";
 import SectionHeader from "@/components/SectionHeader";
 import CtaButton from "@/components/CtaButton";
@@ -10,7 +10,6 @@ import CtaButton from "@/components/CtaButton";
 // Image Imports
 import growArrow from "@/assets/theme-images/grow-arrow-theme.png";
 import growArrowSmall from "@/assets/theme-images/grow-arrow2.png";
-import heroBg from "@/assets/theme-images/bg-seo-fast1.png";
 import womanImg from "@/assets/theme-images/women-slider-img-web.webp";
 
 type HeroProps = {
@@ -29,66 +28,57 @@ type Star = {
 };
 
 const Hero = ({
-  heroEyebrow = "",
-  heroHeading = "",
+  heroEyebrow = "Take your business",
+  heroHeading = "Web Development, SEO & IT Solutions That Help You Grow!",
 }: HeroProps) => {
   const [stars, setStars] = useState<Star[]>([]);
 
-  // Generate star positions on the client only to avoid SSR hydration drift
+  // Generate star positions
   useEffect(() => {
-    const generatedStars = [...Array(36)].map(
+    const generatedStars = [...Array(40)].map(
       () =>
         ({
           left: `${Math.random() * 100}%`,
           top: `${Math.random() * 100}%`,
-          opacity: 0.18 + Math.random() * 0.35,
-          duration: 16 + Math.random() * 14, // slower, subtle drift
-          delay: Math.random() * 12, // start at different times
-          drift: (Math.random() - 0.5) * 18, // gentle side-to-side sway
-          scale: 0.8 + Math.random() * 0.4, // subtle size variance
+          opacity: 0.2 + Math.random() * 0.5,
+          duration: 10 + Math.random() * 20,
+          delay: Math.random() * 10,
+          drift: (Math.random() - 0.5) * 30,
+          scale: 0.5 + Math.random() * 0.8,
         } satisfies Star)
     );
     setStars(generatedStars);
   }, []);
 
   return (
-    <section
-      className="relative min-h-screen overflow-hidden text-foreground"
-      style={{ background: "var(--gradient-hero)" }}
-    >
-
-      {/* Background grid */}
+    // Changed: Use h-screen on LG so items-end works correctly to place her at the bottom
+    <section className="relative min-h-[90vh] lg:h-screen overflow-hidden bg-[#0a051e] text-white selection:bg-purple-500/30">
+      
+      {/* =====================================================
+          BACKGROUND ATMOSPHERE (Unchanged)
+      ===================================================== */}
+      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-700/20 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-5%] w-[60%] h-[60%] bg-purple-600/20 blur-[130px] rounded-full pointer-events-none" />
+      <div className="absolute top-[20%] right-[20%] w-[30%] h-[30%] bg-blue-600/10 blur-[100px] rounded-full pointer-events-none" />
       <div
-        className="pointer-events-none absolute inset-0 opacity-12"
+        className="pointer-events-none absolute inset-0 opacity-[0.07]"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)",
-          backgroundSize: "140px 140px",
+            "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
         }}
       />
-
-      {/* Background glow */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-25 mix-blend-screen"
-        style={{
-          backgroundImage: `url(${heroBg.src})`,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-        }}
-      />
-
-      {/* Stars */}
-      <div className="pointer-events-none absolute inset-0">
+      <div className="pointer-events-none absolute inset-0 z-0">
         {stars.map((star, i) => (
           <span
             key={i}
-            className="star-floating absolute h-1 w-1 rounded-full bg-white/80"
+            className="star-floating absolute h-1 w-1 rounded-full bg-blue-200"
             style={
               {
                 left: star.left,
                 top: star.top,
                 opacity: star.opacity,
+                boxShadow: `0 0 ${star.scale * 4}px rgba(139, 92, 246, 0.8)`,
                 animationDuration: `${star.duration}s`,
                 animationDelay: `-${star.delay}s`,
                 "--drift": `${star.drift}px`,
@@ -98,145 +88,158 @@ const Hero = ({
           />
         ))}
       </div>
+      <div className="absolute top-[15%] right-[5%] opacity-40 animate-pulse-slow hidden lg:block">
+         <Share2 className="text-purple-400 w-24 h-24 stroke-[0.5]" />
+      </div>
+      <div className="absolute bottom-[10%] left-[5%] opacity-30 hidden lg:block">
+        <Cpu className="text-indigo-400 w-32 h-32 stroke-[0.5] rotate-12" />
+      </div>
 
-      {/* =====================================================
-          LARGE SCREEN — ARROWS NEAR WOMAN
-      ===================================================== */}
-      {/* Big arrow behind woman, between the two small arrows */}
-      <Image
-        src={growArrow}
-        alt=""
-        className="hidden lg:block pointer-events-none absolute left-[84%] top-[26%] w-[220px] xl:w-[280px] rotate-[-10deg] opacity-90 z-[6]"
-      />
-
-      {/* Left-side small arrow */}
-      <Image
-        src={growArrowSmall}
-        alt=""
-        className="hidden lg:block pointer-events-none absolute left-[96%] top-[20%] w-[20px] xl:w-[20px] rotate-[-10deg] opacity-90 z-[1]"
-      />
-
-      {/* Right-side small arrow */}
-      <Image
-        src={growArrowSmall}
-        alt=""
-        className="hidden lg:block pointer-events-none absolute left-[96%] top-[43%] w-[20px] xl:w-[20px] rotate-[8deg] opacity-90 z-[1]"
-      />
 
       {/* =====================================================
           MAIN CONTENT
       ===================================================== */}
-      <div className="container relative z-10 flex min-h-screen items-center">
+      {/* Changed: items-center -> items-end to push content to the bottom */}
+      <div className="container relative z-10 flex h-full items-end pt-20 lg:pt-0">
+        {/* Changed: Added pb-12 lg:pb-0 to give text some space on mobile, but sit flush on desktop */}
+        <div className="grid h-full w-full flex-1 gap-12 lg:gap-8 grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] items-center lg:items-end pb-12 lg:pb-0">
 
-        <div className="grid h-full w-full flex-1 gap-8 sm:gap-10 lg:gap-16 grid-cols-1 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] items-start">
-
-          {/* LEFT COLUMN */}
-          <div className="relative space-y-6 text-left lg:space-y-8">
+          {/* LEFT COLUMN: TEXT (Unchanged, but will sit higher up) */}
+          <div className="relative space-y-8 text-left z-20 self-center lg:self-center lg:mb-32">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-purple-500/30 bg-purple-900/20 backdrop-blur-md shadow-[0_0_20px_-5px_rgba(168,85,247,0.4)]">
+                <Sparkles className="h-4 w-4 text-purple-300 animate-pulse" />
+                <span className="text-sm font-semibold tracking-wide text-purple-100 uppercase">{heroEyebrow}</span>
+            </div>
             <SectionHeader
               as="h1"
-              eyebrowContent={
-                <span className="inline-flex items-center gap-2">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/15 text-primary">
-                    <Sparkles className="h-4 w-4" />
-                  </span>
-                  {heroEyebrow}
-                </span>
-              }
-              eyebrowClassName="bg-primary/15 text-primary ring-primary/20 px-3 py-2"
               title={heroHeading}
-              titleClassName="text-[1.95rem] sm:text-[2.2rem] md:text-[2.45rem] lg:text-[3rem] xl:text-[3.25rem] leading-[1.14] tracking-[0.5px] text-white"
+              titleClassName="text-[2.5rem] sm:text-[3rem] lg:text-[3.5rem] xl:text-[4rem] leading-[1.1] font-bold tracking-tight text-white drop-shadow-[0_0_25px_rgba(139,92,246,0.2)]"
               subtitle="Yue Infotech builds fast, modern websites, AI-optimized SEO strategies, performance ads, powerful content, and secure IT solutions — everything your business needs to scale."
-              subtitleClassName="text-[15px] text-muted-foreground sm:text-base sm:max-w-xl md:max-w-2xl"
+              subtitleClassName="text-lg text-slate-300/90 leading-relaxed max-w-xl"
               align="left"
-              className="relative isolate z-0"
+              className="relative isolate"
             />
+            <div className="pt-2">
+                <CtaButton
+                href="#contact"
+                bgClassName="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 shadow-[0_0_30px_-5px_rgba(124,58,237,0.5)] border border-white/10"
+                textClassName="text-white font-medium tracking-wide"
+                className="w-full sm:w-auto gap-3 py-4 px-8 rounded-xl transition-all hover:scale-105"
+                >
+                <span>Get a Custom Quote</span>
+                <ArrowUpRight className="h-5 w-5" />
+                </CtaButton>
+            </div>
+          </div>
 
-            {/* SMALL SCREEN ARROWS */}
-            <div className="relative lg:hidden pointer-events-none -z-10">
-              <Image
-                src={growArrow}
-                alt=""
-                className="absolute right-[6px] top-[-70px] w-[240px] sm:w-[300px] md:w-[340px] rotate-[-12deg] opacity-70"
-              />
-              <Image
-                src={growArrowSmall}
-                alt=""
-                className="absolute right-[200px] top-[-50px] w-[22px] rotate-[-10deg] opacity-60"
-              />
-              <Image
-                src={growArrowSmall}
-                alt=""
-                className="absolute right-[24px] top-[90px] w-[22px] rotate-[6deg] opacity-60"
-              />
+          {/* RIGHT COLUMN: WOMAN & TECH GRAPHICS */}
+          {/* Changed: items-center -> items-end to place her at the bottom */}
+          <div className="relative h-full w-full flex items-end justify-center lg:justify-end">
+            
+            {/* 1. The Tech Circle Behind (Unchanged) */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] lg:w-[600px] lg:h-[600px] border border-white/5 rounded-full animate-spin-slow pointer-events-none">
+                 <div className="absolute top-0 left-1/2 w-2 h-2 bg-purple-500 rounded-full shadow-[0_0_10px_rgba(168,85,247,1)]"></div>
+            </div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] lg:w-[450px] lg:h-[450px] border border-dashed border-indigo-500/20 rounded-full pointer-events-none"></div>
+
+            {/* 2. Floating "Glass" Code Cards (Behind Woman) (Unchanged) */}
+            <div className="absolute top-[20%] left-[-5%] lg:left-[5%] z-0 animate-float-slow hidden sm:block">
+                <div className="bg-slate-900/60 backdrop-blur-xl border border-white/10 p-4 rounded-xl shadow-2xl w-48 transform -rotate-6">
+                    <div className="flex gap-2 mb-2">
+                        <div className="w-2 h-2 rounded-full bg-red-500/50"></div>
+                        <div className="w-2 h-2 rounded-full bg-yellow-500/50"></div>
+                        <div className="w-2 h-2 rounded-full bg-green-500/50"></div>
+                    </div>
+                    <div className="space-y-2">
+                        <div className="h-2 w-3/4 bg-white/10 rounded"></div>
+                        <div className="h-2 w-1/2 bg-white/10 rounded"></div>
+                        <div className="h-2 w-full bg-white/5 rounded"></div>
+                    </div>
+                </div>
             </div>
 
-            {/* CTA */}
-            <CtaButton
-              href="#contact"
-              bgClassName="bg-gradient-to-r from-primary to-orange-400 hover:brightness-110"
-              textClassName="text-primary-foreground hover:text-white"
-              className="w-full sm:w-auto gap-2 relative z-10 border border-primary"
-            >
-              <span>Get a Custom Quote</span>
-              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </CtaButton>
+            {/* Changed: Moved Arrow Images HERE, before the woman image, so they are behind her. */}
+            {/* Big Arrow */}
+            <div className="absolute -right-4 top-[10%] lg:right-[0%] lg:top-[15%] z-0 animate-pulse-slow">
+                <Image
+                    src={growArrow}
+                    alt=""
+                    className="w-[180px] sm:w-[220px] lg:w-[260px] opacity-90 rotate-[-15deg] filter hue-rotate-[160deg] brightness-125 saturate-150 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)]"
+                />
+            </div>
+            {/* Small Arrow 1 */}
+            <div className="absolute right-[20%] top-[40%] z-0">
+                <Image
+                    src={growArrowSmall}
+                    alt=""
+                    className="w-[25px] opacity-80 filter hue-rotate-[160deg] brightness-125 saturate-150 drop-shadow-[0_0_10px_rgba(234,179,8,0.6)]"
+                />
+            </div>
+             {/* Small Arrow 2 */}
+             <div className="absolute right-[5%] bottom-[50%] z-0">
+                <Image
+                    src={growArrowSmall}
+                    alt=""
+                    className="w-[30px] opacity-80 rotate-12 filter hue-rotate-[160deg] brightness-125 saturate-150 drop-shadow-[0_0_10px_rgba(234,179,8,0.6)]"
+                />
+            </div>
+
+            {/* 3. The Woman Image (Now comes AFTER arrows) */}
+            {/* Changed: Added self-end to ensure she sits at the bottom */}
+            <div className="relative z-10 self-end">
+                <Image
+                src={womanImg}
+                alt="Digital Growth Expert"
+                // Changed: Removed relative positioning and object-contain to allow it to sit flush at bottom
+                className="w-[300px] sm:w-[380px] lg:w-[480px] xl:w-[550px] drop-shadow-2xl"
+                priority
+                />
+            </div>
+
+            {/* 4. Code card in front (Unchanged) */}
+            <div className="absolute bottom-[25%] right-[-5%] z-20 animate-float-delayed hidden sm:block">
+                <div className="bg-indigo-900/60 backdrop-blur-xl border border-indigo-500/20 p-4 rounded-xl shadow-2xl w-40 transform rotate-3">
+                     <Code2 className="w-8 h-8 text-indigo-400 mb-2" />
+                     <div className="h-2 w-2/3 bg-indigo-400/20 rounded"></div>
+                </div>
+            </div>
+
           </div>
         </div>
       </div>
 
-      {/* =====================================================
-          WOMAN IMAGE (large screens)
-      ===================================================== */}
-      <div className="pointer-events-none absolute bottom-0 right-0 hidden lg:flex items-end justify-end w-[45%] xl:w-[42%]">
-        {/* Rings */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          {[1, 2, 3].map((i) => (
-            <div
-              key={i}
-              className="absolute rounded-full border border-orange-400/20"
-              style={{
-                width: "90%",
-                height: "90%",
-                transform: `scale(${1 - i * 0.1})`,
-              }}
-            />
-          ))}
-        </div>
-
-        <Image
-          src={womanImg}
-          alt="Customer holding laptop"
-          className="relative z-10 w-[340px] sm:w-[400px] lg:w-[460px] xl:w-[520px] object-contain"
-          priority
-        />
-      </div>
-
       <style jsx global>{`
         @keyframes starFloat {
-          0% {
-            transform: translate3d(0, 0, 0) scale(var(--scale, 1));
-            opacity: 0.3;
-          }
-          35% {
-            transform: translate3d(calc(var(--drift, 8px) * 0.6), 10px, 0) scale(var(--scale, 1));
-            opacity: 0.55;
-          }
-          65% {
-            transform: translate3d(calc(var(--drift, 8px) * 1), 18px, 0) scale(calc(var(--scale, 1) * 1.05));
-            opacity: 0.7;
-          }
-          100% {
-            transform: translate3d(calc(var(--drift, 8px) * 0.2), 26px, 0) scale(var(--scale, 1));
-            opacity: 0.35;
-          }
+          0% { transform: translate3d(0, 0, 0) scale(var(--scale, 1)); opacity: 0.3; }
+          50% { opacity: 0.8; }
+          100% { transform: translate3d(calc(var(--drift, 8px) * 2), 26px, 0) scale(var(--scale, 1)); opacity: 0.3; }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(-6deg); }
+            50% { transform: translateY(-20px) rotate(-3deg); }
+        }
+        @keyframes floatDelayed {
+            0%, 100% { transform: translateY(0) rotate(3deg); }
+            50% { transform: translateY(-15px) rotate(6deg); }
         }
 
         .star-floating {
           animation-name: starFloat;
-          animation-timing-function: ease-in-out;
+          animation-timing-function: linear;
           animation-iteration-count: infinite;
-          animation-direction: alternate;
-          will-change: transform, opacity;
+        }
+        .animate-float-slow {
+            animation: float 6s ease-in-out infinite;
+        }
+        .animate-float-delayed {
+            animation: floatDelayed 7s ease-in-out infinite;
+        }
+        .animate-spin-slow {
+            animation: spin 20s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
         }
       `}</style>
     </section>

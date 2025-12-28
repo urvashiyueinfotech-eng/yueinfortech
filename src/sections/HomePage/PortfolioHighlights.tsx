@@ -33,7 +33,7 @@ const PORTFOLIO_ITEMS = [
 
 export default function PortfolioHighlights() {
   return (
-    <section className="relative py-24 lg:py-32 bg-[var(--gradient-body)]">
+    <section className="relative py-24 lg:py-32 bg-white">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
 
         {/* HEADER */}
@@ -60,7 +60,8 @@ export default function PortfolioHighlights() {
                 flex-col
                 overflow-hidden
                 rounded-3xl
-                bg-white
+                bg-slate-50
+                border border-slate-200
                 shadow-sm
                 transition-all
                 hover:-translate-y-1
@@ -87,7 +88,7 @@ export default function PortfolioHighlights() {
                   {item.description}
                 </p>
 
-                <span className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary">
+                <span className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-indigo-600">
                   View Project →
                 </span>
               </div>
@@ -99,7 +100,7 @@ export default function PortfolioHighlights() {
         <div className="mt-20 text-center">
           <CtaButton
             href="/portfolio"
-            bgClassName="bg-gradient-to-r from-primary to-orange-400 hover:brightness-110"
+            bgClassName="bg-indigo-600 hover:bg-indigo-700"
             textClassName="text-white"
             className="px-8 py-4 text-base"
           >

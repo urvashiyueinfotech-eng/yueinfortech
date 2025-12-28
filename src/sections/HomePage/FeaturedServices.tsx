@@ -20,7 +20,7 @@ const FEATURED_SERVICES: Feature[] = [
 const col1 = [FEATURED_SERVICES[0], FEATURED_SERVICES[1]];
 const col2 = [FEATURED_SERVICES[2], FEATURED_SERVICES[3]];
 const col3 = [FEATURED_SERVICES[4]];
-const highlightedIds = new Set([col1[0].id, col2[0].id]);
+const highlightedIds = new Set([col1[0].id, col2[0].id, col3[0].id]);
 
 export default function FeaturedServices() {
   return (
@@ -34,14 +34,12 @@ export default function FeaturedServices() {
             title="Empowering Your Digital Growth"
             subtitle="Modern services purpose-built for AI search, UX optimization, and secure infrastructure — designed to help your business scale with confidence."
             align="left"
-            titleClassName="text-white"
-            subtitleClassName="text-white/80"
           />
 
           <div className="mt-8">
             <CtaButton
               href="/services"
-              bgClassName="bg-gradient-to-r from-primary to-orange-400 hover:brightness-110"
+              bgClassName="bg-indigo-600 hover:bg-indigo-700"
               textClassName="text-white"
               className="gap-2"
             >
@@ -58,7 +56,7 @@ export default function FeaturedServices() {
           <div className="flex flex-wrap gap-4 justify-center lg:hidden">
             {FEATURED_SERVICES.map((svc) => (
               <div key={svc.id} className="w-[47%] min-w-[150px]">
-                <ServiceCard service={svc} highlight={false} />
+                <ServiceCard service={svc} highlight={highlightedIds.has(svc.id)} />
               </div>
             ))}
           </div>
@@ -88,16 +86,14 @@ export default function FeaturedServices() {
 
 function ServiceCard({ service, highlight = false }: { service: Feature; highlight?: boolean }) {
   const Icon = service.icon;
-  const cardStyle = highlight ? undefined : { background: "var(--gradient-body)" };
   return (
     <div
       className={`w-full h-[160px] rounded-2xl px-2 shadow-lg border flex flex-col items-center justify-center text-center transition-transform hover:-translate-y-1 hover:shadow-xl ${
-        highlight ? "bg-primary text-white border-secondary" : "text-slate-900 border-primary/15"
+        highlight ? "bg-indigo-600 text-white border-indigo-700" : "bg-white text-slate-900 border-slate-200"
       }`}
-      style={cardStyle}
     >
       <div className="mb-2">
-        <Icon className={`h-9 w-9 ${highlight ? "text-white" : "text-primary"}`} />
+        <Icon className={`h-9 w-9 ${highlight ? "text-white" : "text-indigo-600"}`} />
       </div>
 
       <h3 className={`text-sm font-semibold leading-tight ${highlight ? "text-white" : "text-slate-900"}`}>

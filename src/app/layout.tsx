@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Figtree } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import { MessageCircle } from "lucide-react";
 
 const figtree = Figtree({
   subsets: ["latin"],
@@ -39,9 +42,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={figtree.variable}>
-      <body className={`${figtree.className} font-body antialiased`}>
+      <body
+        className={`${figtree.className} font-body antialiased text-slate-600 bg-slate-50 min-h-screen`}
+      >
         <Providers>
+          <Navbar />
           {children}
+          <a
+            href="https://wa.me/918859366292"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="fixed bottom-5 right-5 z-50 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-3 text-sm font-semibold text-white shadow-lg transition hover:scale-105 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#128C7E] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            aria-label="Chat with us on WhatsApp"
+          >
+            <MessageCircle className="h-5 w-5" />
+            <span className="hidden sm:inline">Chat on WhatsApp</span>
+          </a>
+          <Footer />
         </Providers>
       </body>
     </html>

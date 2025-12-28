@@ -45,34 +45,34 @@ export const SERVICES: Service[] = [
 
 const ServiceCard = ({ service, className }: { service: Service; className?: string }) => (
   <article
-    className={`relative rounded-2xl border border-orange-100 bg-white/95 p-6 shadow-lg transition-transform duration-200 hover:-translate-y-1 hover:shadow-xl sm:p-7 ${className ?? ""}`}
+    className={`relative rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg sm:p-7 ${className ?? ""}`}
   >
     <div className="flex items-center gap-4">
-      <div className="flex h-14 w-14 min-h-[3.5rem] min-w-[3.5rem] items-center justify-center rounded-full bg-orange-100 ring-1 ring-orange-200">
-        <span className="text-orange-500">{service.icon}</span>
+      <div className="flex h-14 w-14 min-h-[3.5rem] min-w-[3.5rem] items-center justify-center rounded-full bg-indigo-100 ring-1 ring-indigo-200">
+        <span className="text-indigo-600">{service.icon}</span>
       </div>
       <h3 className="text-lg font-semibold text-slate-900">{service.title}</h3>
     </div>
 
-    <p className="mt-4 text-sm text-slate-700">{service.subtitle}</p>
+    <p className="mt-4 text-sm text-slate-600">{service.subtitle}</p>
 
     <div className="mt-6 flex items-center gap-3">
       <Link
         href={`/#${service.id}`}
-        className="inline-flex items-center gap-2 text-sm font-semibold text-orange-700 transition-colors hover:text-orange-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+        className="inline-flex items-center gap-2 text-sm font-semibold text-indigo-700 transition-colors hover:text-indigo-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
       >
         Learn more
         <ArrowUpRight className="h-4 w-4" aria-hidden />
       </Link>
-      <div className="ml-auto hidden items-center gap-2 rounded-full bg-orange-50 px-3 py-1 text-xs text-orange-700 sm:flex">
-        <span className="text-orange-500 font-semibold">★</span>
-        <span className="text-orange-700">Trusted</span>
+      <div className="ml-auto hidden items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-xs text-indigo-700 sm:flex">
+        <span className="text-indigo-500 font-semibold">★</span>
+        <span className="text-indigo-700">Trusted</span>
       </div>
     </div>
 
     <div
       aria-hidden
-      className="pointer-events-none absolute -right-8 -bottom-8 hidden h-24 w-24 rounded-full border border-orange-400/10 opacity-40 xl:block"
+      className="pointer-events-none absolute -right-8 -bottom-8 hidden h-24 w-24 rounded-full border border-indigo-400/10 opacity-40 xl:block"
     />
   </article>
 );
@@ -91,18 +91,18 @@ const HorizontalScroller = () => (
       {SERVICES.map((service) => (
         <article
           key={service.id}
-          className="relative min-w-[240px] flex-shrink-0 rounded-2xl border border-orange-100 bg-white/95 p-5 shadow-sm"
+          className="relative min-w-[240px] flex-shrink-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
         >
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-100 ring-1 ring-orange-200">
-              <span className="text-orange-500">{service.icon}</span>
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 ring-1 ring-indigo-200">
+              <span className="text-indigo-600">{service.icon}</span>
             </div>
             <h3 className="text-base font-semibold text-slate-900">{service.title}</h3>
           </div>
-          <p className="mt-3 text-sm text-slate-700">{service.subtitle}</p>
+          <p className="mt-3 text-sm text-slate-600">{service.subtitle}</p>
           <Link
             href={`/#${service.id}`}
-            className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-orange-700 transition-colors hover:text-orange-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-indigo-700 transition-colors hover:text-indigo-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           >
             Learn more
             <ArrowUpRight className="h-4 w-4" aria-hidden />
@@ -131,7 +131,7 @@ const WhatWeDo = () => {
         <ServicesGrid />
 
         <div className="mt-8 md:hidden">
-          <p className="text-center text-xs text-muted-foreground">Swipe to explore services</p>
+          <p className="text-center text-xs text-slate-500">Swipe to explore services</p>
           <HorizontalScroller />
         </div>
       </div>

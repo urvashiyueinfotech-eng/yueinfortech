@@ -46,7 +46,7 @@ const SectionHeader = ({
       {eyebrow || eyebrowContent ? (
         <p
           className={cn(
-            "inline-flex w-fit items-center rounded-full bg-primary/10 px-3 py-1 text-[12px] font-semibold uppercase tracking-[0.22em] text-primary ring-1 ring-primary/15",
+            "inline-flex w-fit items-center rounded-full bg-indigo-100 px-3 py-1 text-[12px] font-semibold uppercase tracking-[0.22em] text-indigo-600 ring-1 ring-indigo-200",
             eyebrowClassName
           )}
         >

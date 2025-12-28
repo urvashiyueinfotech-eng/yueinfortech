@@ -1,36 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import SectionHeader from "@/components/SectionHeader";
 import FaqItem from "@/components/ui/FaqItem";
 import CtaButton from "@/components/CtaButton";
 import { ArrowUpRight } from "lucide-react";
 
-const FAQS = [
-  {
-    question: "What services does Yue Infotech provide?",
-    answer:
-      "We offer Web Development, SEO, Digital Marketing, PPC, Content Strategy, and IT Infrastructure services tailored for growth-focused businesses.",
-  },
-  {
-    question: "Do you handle full website revamps?",
-    answer:
-      "Yes. We redesign and rebuild high-performance websites optimized for SEO, UX, speed, and conversions.",
-  },
-  {
-    question: "Can you help with ranking on Google & AI Overviews?",
-    answer:
-      "Absolutely. We use AEO, GEO, SXO, and advanced SEO systems to improve visibility across search engines and AI-driven results.",
-  },
-  {
-    question: "Do you provide managed IT services?",
-    answer:
-      "Yes. We offer cloud hosting, server management, cybersecurity, VOIP, and ongoing IT support.",
-  },
-];
+type FaqItemType = {
+  question: string;
+  answer: string;
+};
 
-export default function FaqSection() {
+export default function FaqSection({ faqs }: { faqs?: FaqItemType[] }) {
+  const items = useMemo(() => (faqs && faqs.length ? faqs : []), [faqs]);
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
@@ -55,7 +38,7 @@ export default function FaqSection() {
           {/* RIGHT — FAQ LIST */}
           <div className="lg:w-[60%]">
             <div className="space-y-4">
-              {FAQS.map((faq, index) => {
+              {items.map((faq, index) => {
                 const isOpen = openIndex === index;
 
                 return (
@@ -74,7 +57,7 @@ export default function FaqSection() {
             <div className="mt-10">
               <CtaButton
                 href="/faqs"
-                bgClassName="bg-gradient-to-r from-primary to-orange-400 hover:brightness-110 px-6 py-3"
+                bgClassName="bg-indigo-600 hover:bg-indigo-700 px-6 py-3"
                 textClassName="text-white text-sm"
                 className="w-fit gap-2"
               >

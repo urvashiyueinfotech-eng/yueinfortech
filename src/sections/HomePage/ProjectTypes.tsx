@@ -32,8 +32,6 @@ export default function ProjectTypes() {
           subtitle="From early-stage startups to enterprise infrastructure, we design, optimize, and scale projects that perform."
           align="center"
           className="max-w-3xl mx-auto"
-          titleClassName="text-white"
-          subtitleClassName="text-white/80"
         />
 
         {/* FLOATING RAILS */}
@@ -42,10 +40,8 @@ export default function ProjectTypes() {
           {/* RAIL 1 */}
           <Rail items={rail1} />
 
-          {/* RAIL 2 (offset for staircase feel) */}
-          <div className="lg:pl-20">
-            <Rail items={rail2} />
-          </div>
+          {/* RAIL 2 */}
+          <Rail items={rail2} />
 
           {/* RAIL 3 */}
           <Rail items={rail3} />
@@ -56,7 +52,7 @@ export default function ProjectTypes() {
         <div className="mt-14 text-center">
           <CtaButton
             href="/contact"
-            bgClassName="bg-gradient-to-r from-primary to-orange-400 hover:brightness-110"
+            bgClassName="bg-indigo-600 hover:bg-indigo-700"
             textClassName="text-white"
             className="gap-2"
           >
@@ -93,14 +89,14 @@ function Rail({ items }: { items: string[] }) {
           className="
             flex-shrink-0
             rounded-full
-            bg-white/90
+            bg-white
             px-6 py-3
             text-sm font-medium
-            text-slate-900
-            shadow-lg
-            border border-primary/25
+            text-slate-700
+            shadow-md
+            border border-slate-200
             transition-all
-            hover:-translate-y-1 hover:shadow-xl hover:bg-white
+            hover:-translate-y-1 hover:shadow-lg hover:bg-slate-50
             cursor-default
           "
         >

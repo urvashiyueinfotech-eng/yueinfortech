@@ -12,15 +12,15 @@ type FaqItemProps = {
 
 const FaqItem = ({ question, answer, isOpen, onToggle }: FaqItemProps) => {
   return (
-    <div className="rounded-2xl bg-[var(--surface-panel,#0f172a)] transition-colors">
+    <div className="rounded-2xl bg-white border border-slate-200 transition-colors">
       <button
         onClick={onToggle}
         className="flex w-full items-center justify-between gap-6 px-6 py-5 text-left"
       >
-        <span className="text-base font-medium text-white">{question}</span>
+        <span className="text-base font-medium text-slate-900">{question}</span>
         <ChevronDown
           className={cn(
-            "h-5 w-5 flex-shrink-0 text-primary transition-transform duration-300",
+            "h-5 w-5 flex-shrink-0 text-indigo-600 transition-transform duration-300",
             isOpen && "rotate-180"
           )}
         />
@@ -32,7 +32,7 @@ const FaqItem = ({ question, answer, isOpen, onToggle }: FaqItemProps) => {
         )}
       >
         <div className="overflow-hidden px-6 pb-5">
-          <p className="text-sm text-slate-300 leading-relaxed">{answer}</p>
+          <p className="text-sm text-slate-600 leading-relaxed">{answer}</p>
         </div>
       </div>
     </div>

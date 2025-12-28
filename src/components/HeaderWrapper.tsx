@@ -1,4 +1,3 @@
-import Navbar from "./Navbar";
 import Hero from "../sections/HomePage/Hero";
 
 type HeaderWrapperProps = {
@@ -9,7 +8,6 @@ type HeaderWrapperProps = {
 const HeaderWrapper = ({ heroEyebrow, heroHeading }: HeaderWrapperProps) => {
   return (
     <header className="relative">
-      <Navbar />
       <Hero heroEyebrow={heroEyebrow} heroHeading={heroHeading} />
     </header>
   );
