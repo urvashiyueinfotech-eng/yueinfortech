@@ -43,7 +43,7 @@ const steps = [
 
 export default function WhyChooseUs() {
   return (
-    <section className="relative w-full py-24 bg-slate-50">
+    <section className="relative w-full pt-10 pb-10 bg-slate-50">
       <div
         className="
           container mx-auto 

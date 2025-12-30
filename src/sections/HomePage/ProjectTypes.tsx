@@ -22,7 +22,7 @@ const rail3 = PROJECT_TYPES.slice(8);
 
 export default function ProjectTypes() {
   return (
-    <section className="relative w-full overflow-hidden py-20 lg:py-28">
+    <section className="relative w-full overflow-hidden pt-6 pb-14 lg:pt-6 lg:pb-14">
       <div className="container mx-auto">
 
         {/* HEADER */}

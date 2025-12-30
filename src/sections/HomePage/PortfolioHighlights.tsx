@@ -33,7 +33,7 @@ const PORTFOLIO_ITEMS = [
 
 export default function PortfolioHighlights() {
   return (
-    <section className="relative py-24 lg:py-32 bg-white">
+    <section className="relative py-16 lg:py-16 bg-white">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
 
         {/* HEADER */}

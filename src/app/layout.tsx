@@ -5,6 +5,7 @@ import { Providers } from "@/components/Providers";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { MessageCircle } from "lucide-react";
+import NextTopLoader from 'nextjs-toploader';
 
 const figtree = Figtree({
   subsets: ["latin"],
@@ -47,6 +48,17 @@ export default function RootLayout({
       >
         <Providers>
           <Navbar />
+          <NextTopLoader
+          color="#4f46e5"   // Your brand indigo color
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={6}        // Height of the bar
+          crawl={true}
+          showSpinner={false} // Hides the spinner circle (cleaner look)
+          easing="ease"
+          speed={200}
+          shadow="0 0 10px #4f46e5,0 0 5px #4f46e5" // Glowing shadow effect
+        />
           {children}
           <a
             href="https://wa.me/918859366292"

@@ -43,7 +43,7 @@ const DesktopNav = ({ isScrolled, services }: { isScrolled: boolean; services: M
         const isActive = pathname === item.href;
         if (item.label === "Services") {
           return (
-            <div key={item.label} className="group relative">
+            <div key={item.label} className="group relative h-full flex items-center">
               <Link
                 href={item.href}
                 className={cn(
@@ -60,7 +60,13 @@ const DesktopNav = ({ isScrolled, services }: { isScrolled: boolean; services: M
                 <span className="relative z-[1]">{item.label}</span>
                 <ChevronDown className="h-4 w-4" />
               </Link>
-              <div className="pointer-events-none absolute left-1/2 top-full z-30 mt-2 w-80 -translate-x-1/2 opacity-0 transition duration-200 group-hover:pointer-events-auto group-hover:opacity-100">
+              
+              {/* FIX APPLIED HERE:
+                 1. Removed 'mt-2' (which created the dead zone).
+                 2. Added 'pt-4' (padding-top) to bridge the gap while keeping visual spacing.
+                 3. Added 'pb-2' for symmetry/safety.
+              */}
+              <div className="pointer-events-none absolute left-1/2 top-full z-30 w-80 -translate-x-1/2 pt-4 opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:opacity-100">
                 <div className="overflow-hidden rounded-2xl border border-black/5 bg-white/95 shadow-xl backdrop-blur-sm">
                   <div className="grid gap-1 p-3">
                     {services.map((svc) => (

@@ -18,7 +18,7 @@ export default function BlogHighlights({ posts }: BlogHighlightsProps) {
   const listPosts = normalized.slice(1, 4);
 
   return (
-    <section className="relative py-24 lg:py-32">
+    <section className="relative py-24 lg:py-18">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <SectionHeader
           eyebrow="Our Blog"
