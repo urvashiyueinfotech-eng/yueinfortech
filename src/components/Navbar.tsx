@@ -20,6 +20,41 @@ const navItems = [
   { label: "Contact", href: "/contact-us", hasDropdown: false },
 ];
 
+// Simple in-module cache to avoid repeated Firestore calls for nav services
+let servicesCache: MainService[] | null = null;
+let servicesPromise: Promise<MainService[]> | null = null;
+
+async function fetchServicesOnce(): Promise<MainService[]> {
+  if (servicesCache) return servicesCache;
+  if (servicesPromise) return servicesPromise;
+
+  servicesPromise = (async () => {
+    const snap = await getDocs(collection(db, "services"));
+    const fetched = snap.docs.map((d) => {
+      const data = d.data() as any;
+      return {
+        id: data.slug ?? d.id,
+        eyebrow: (data.hero as any)?.eyebrow ?? "",
+        title: data.hero?.heading ?? data.title ?? d.id,
+        description: data.hero?.description ?? "",
+        image: data.hero?.backgroundImage ?? data.image ?? "",
+        services: [],
+        primaryHref: `/services/${data.slug ?? d.id}`,
+        slug: data.slug ?? d.id,
+      } as MainService;
+    });
+    servicesCache = fetched;
+    servicesPromise = null;
+    return fetched;
+  })().catch((err) => {
+    servicesPromise = null;
+    console.warn("Failed to load services for navbar dropdown", err);
+    return [];
+  });
+
+  return servicesPromise;
+}
+
 // --- Sub-components ---
 const Logo = ({ tone }: { tone: "light" | "dark" }) => (
   <Link href="/" className="flex shrink-0 items-center" aria-label="Back to homepage">
@@ -76,7 +111,6 @@ const DesktopNav = ({ isScrolled, services }: { isScrolled: boolean; services: M
                         className="flex flex-col rounded-xl px-3 py-2.5 text-left text-sm font-medium text-slate-900 transition hover:bg-gray-50"
                       >
                         <span>{svc.title}</span>
-                        <span className="text-xs font-normal text-slate-500 line-clamp-2">{svc.description}</span>
                       </Link>
                     ))}
                   </div>
@@ -237,10 +271,14 @@ const MobileMenu = ({
 };
 
 // --- Main Component ---
-const Navbar = () => {
+type NavbarProps = {
+  servicesFromServer?: MainService[];
+};
+
+const Navbar = ({ servicesFromServer = [] }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [services, setServices] = useState<MainService[]>([]);
+  const [services, setServices] = useState<MainService[]>(servicesFromServer);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -251,32 +289,16 @@ const Navbar = () => {
 
   useEffect(() => {
     let mounted = true;
-    const load = async () => {
-      try {
-        const snap = await getDocs(collection(db, "services"));
-        const fetched = snap.docs.map((d) => {
-          const data = d.data() as any;
-          return {
-            id: data.slug ?? d.id,
-            eyebrow: (data.hero as any)?.eyebrow ?? "",
-            title: data.hero?.heading ?? data.title ?? d.id,
-            description: data.hero?.description ?? "",
-            image: data.hero?.backgroundImage ?? data.image ?? "",
-            services: [],
-            primaryHref: `/services/${data.slug ?? d.id}`,
-            slug: data.slug ?? d.id,
-          } as MainService;
-        });
+    // If server provided services, reuse them; otherwise fetch once on client.
+    if (!servicesFromServer.length) {
+      fetchServicesOnce().then((fetched) => {
         if (mounted && fetched.length) setServices(fetched);
-      } catch (error) {
-        console.warn("Failed to load services for navbar dropdown", error);
-      }
-    };
-    load();
+      });
+    }
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [servicesFromServer]);
 
   useEffect(() => {
     const handleKeydown = (event: KeyboardEvent) => {

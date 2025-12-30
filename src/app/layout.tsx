@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { MessageCircle } from "lucide-react";
 import NextTopLoader from 'nextjs-toploader';
+import type { MainService } from "@/data/main-services.data";
 
 const figtree = Figtree({
   subsets: ["latin"],
@@ -36,18 +37,54 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  async function fetchNavServices(): Promise<MainService[]> {
+    const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
+    if (!projectId) return [];
+
+    try {
+      // List documents to get only the doc names (slugs)
+      const res = await fetch(
+        `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/services?pageSize=100`,
+        { next: { revalidate: 86400 } }
+      );
+      if (!res.ok) return [];
+      const rows = await res.json();
+      return rows
+        .map((doc: any) => {
+          const slug = doc.name?.split("/").pop() ?? "";
+          if (!slug) return null;
+          const title = slug.replace(/-/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase());
+          return {
+            id: slug,
+            eyebrow: "",
+            title,
+            description: "",
+            image: "",
+            services: [],
+            primaryHref: `/services/${slug}`,
+            slug,
+          } as MainService;
+        })
+        .filter(Boolean) as MainService[];
+    } catch {
+      return [];
+    }
+  }
+
+  const servicesFromServer = await fetchNavServices();
+
   return (
     <html lang="en" className={figtree.variable}>
       <body
         className={`${figtree.className} font-body antialiased text-slate-600 bg-slate-50 min-h-screen`}
       >
         <Providers>
-          <Navbar />
+          <Navbar servicesFromServer={servicesFromServer} />
           <NextTopLoader
           color="#4f46e5"   // Your brand indigo color
           initialPosition={0.08}
