@@ -186,13 +186,56 @@ const Hero = ({
 
             {/* 3. The Woman Image */}
             {/* Added 'self-end' and removed padding/margin blockers */}
-            <div className="relative z-10 self-end">
-                <Image
+            {/* 3. The Woman Image */}
+            <div className="relative z-10 self-end group">
+              
+              {/* OPTIONAL: Glow behind her (This can stay rectangular as it's a soft blur) */}
+              <div className="absolute inset-0 bg-purple-600/20 blur-3xl -z-10 rounded-full scale-90 translate-y-10"></div>
+
+              {/* The Main Image */}
+              <Image
                 src={womanImg}
                 alt="Digital Growth Expert"
-                className="w-[300px] sm:w-[380px] lg:w-[480px] xl:w-[550px] drop-shadow-2xl"
+                className="w-[300px] sm:w-[380px] lg:w-[480px] xl:w-[550px] 
+                           drop-shadow-2xl 
+                           brightness-[0.9] contrast-[1.1] saturate-[0.8]"
                 priority
-                />
+              />
+
+              {/* LAYER 1: Purple Tint (Now Masked!) 
+                  Added 'maskImage' style to cut the purple box into the shape of the woman */}
+              <div 
+                className="absolute inset-0 pointer-events-none mix-blend-overlay bg-gradient-to-tr from-indigo-900/80 via-purple-900/50 to-transparent z-20"
+                style={{
+                    maskImage: `url(${womanImg.src})`,
+                    WebkitMaskImage: `url(${womanImg.src})`,
+                    maskSize: 'contain',
+                    WebkitMaskSize: 'contain',
+                    maskRepeat: 'no-repeat',
+                    WebkitMaskRepeat: 'no-repeat',
+                    maskPosition: 'center',
+                    WebkitMaskPosition: 'center'
+                }}
+              />
+
+              {/* LAYER 2: Rim Light (Also Masked) */}
+              <div 
+                className="absolute inset-0 pointer-events-none mix-blend-color-dodge opacity-40 bg-gradient-to-l from-blue-500/40 to-transparent z-20"
+                style={{
+                    maskImage: `url(${womanImg.src})`,
+                    WebkitMaskImage: `url(${womanImg.src})`,
+                    maskSize: 'contain',
+                    WebkitMaskSize: 'contain',
+                    maskRepeat: 'no-repeat',
+                    WebkitMaskRepeat: 'no-repeat',
+                    maskPosition: 'center',
+                    WebkitMaskPosition: 'center'
+                }}
+              />
+
+              {/* LAYER 3: Bottom Fade 
+                  This stays rectangular to blend the bottom cut-off into the floor smoothly */}
+              <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#0a051e] via-[#0a051e]/80 to-transparent z-30" />
             </div>
 
             {/* 4. Code card in front */}

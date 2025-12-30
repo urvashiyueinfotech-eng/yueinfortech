@@ -14,7 +14,7 @@ export default function AboutUs() {
       </div> */}
 
       <PageHero
-        title="Contact Us"
+        title="About Us"
         backgroundImage="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1920"
         breadcrumbs={[
           { label: "Home", href: "/" },
