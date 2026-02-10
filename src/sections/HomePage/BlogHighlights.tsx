@@ -4,6 +4,7 @@ import SectionHeader from "@/components/SectionHeader";
 import Card, { type CardProps } from "@/components/ui/Card";
 import Image from "next/image";
 import { buildCloudinaryUrl } from "@/lib/cloudinary";
+import Link from "next/link";
 
 type BlogHighlightsProps = {
   posts?: CardProps[] | unknown;
@@ -43,6 +44,9 @@ export default function BlogHighlights({ posts }: BlogHighlightsProps) {
           {/* RIGHT — BLOG LIST */}
           <div className="flex w-full flex-col justify-start lg:w-[42%]">
             {listPosts.map((post, index) => (
+              <Link
+                key={index}
+                href={post?.slug}>
               <div
                 key={index}
                 className="flex items-start gap-5 py-6 first:pt-0 last:pb-0 border-b border-slate-200 last:border-none"
@@ -79,6 +83,7 @@ export default function BlogHighlights({ posts }: BlogHighlightsProps) {
                   </span>
                 </div>
               </div>
+              </Link>
             ))}
           </div>
         </div>

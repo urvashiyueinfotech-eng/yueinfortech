@@ -22,6 +22,14 @@ export const metadata: Metadata = {
     default: "Yue Infotech | Web, SEO & IT Solutions",
     template: "%s | Yue Infotech",
   },
+  verification: {
+    google: "gsewmkCfzU4gMRkf-liHZ04BQaHf3B3vwT_W2YlQEmc",
+  },
+  icons:{
+    icon: "/ylogo.png",
+    shortcut: "/ylogo.png",
+    apple: "/ylogo.png",
+  },
   description: "Fast, modern websites, AI-optimized SEO, performance ads, powerful content, and secure IT solutions to help your business grow.",
   openGraph: {
     title: "Yue Infotech | Web, SEO & IT Solutions",
@@ -76,7 +84,13 @@ export default async function RootLayout({
     }
   }
 
-  const servicesFromServer = await fetchNavServices();
+  let servicesFromServer: MainService[] = [];
+  try {
+    servicesFromServer = await fetchNavServices();
+  } catch (err) {
+    console.warn("Nav services fetch skipped:", err);
+    servicesFromServer = [];
+  }
 
   return (
     <html lang="en" className={figtree.variable}>
