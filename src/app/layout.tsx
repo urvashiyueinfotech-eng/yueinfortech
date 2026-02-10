@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Figtree } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
@@ -121,7 +122,9 @@ export default async function RootLayout({
         className={`${figtree.className} font-body antialiased text-slate-600 bg-slate-50 min-h-screen`}
       >
         <Providers>
-          <GoogleAnalytics />
+          <Suspense fallback={null}>
+            <GoogleAnalytics />
+          </Suspense>
           <Navbar servicesFromServer={servicesFromServer} />
           <NextTopLoader
           color="#4f46e5"   // Your brand indigo color
