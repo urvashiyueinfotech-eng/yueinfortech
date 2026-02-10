@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Figtree } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { MessageCircle } from "lucide-react";
@@ -44,6 +46,9 @@ export const metadata: Metadata = {
     description: "Fast, modern websites, AI-optimized SEO, performance ads, powerful content, and secure IT solutions to help your business grow.",
   },
 };
+
+const GA_MEASUREMENT_ID = "G-C7F2MF1Q0J";
+const SHOULD_LOAD_GA = process.env.NODE_ENV === "production";
 
 export default async function RootLayout({
   children,
@@ -94,10 +99,29 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className={figtree.variable}>
+      <head>
+        {SHOULD_LOAD_GA && (
+          <>
+            <Script id="gtag-stub" strategy="beforeInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                window.gtag = gtag;
+                gtag('js', new Date());
+              `}
+            </Script>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+              strategy="lazyOnload"
+            />
+          </>
+        )}
+      </head>
       <body
         className={`${figtree.className} font-body antialiased text-slate-600 bg-slate-50 min-h-screen`}
       >
         <Providers>
+          <GoogleAnalytics />
           <Navbar servicesFromServer={servicesFromServer} />
           <NextTopLoader
           color="#4f46e5"   // Your brand indigo color
