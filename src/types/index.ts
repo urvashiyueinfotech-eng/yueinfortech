@@ -17,6 +17,7 @@ export type LinkAction = {
   export type ServiceDoc = {
     id: string;
     slug: string;
+    displayOrder: number;
     seo: {
       metaTitle: string;
       metaDescription: string;

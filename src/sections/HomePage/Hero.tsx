@@ -122,12 +122,12 @@ const Hero = ({
               className="relative isolate"
             />
             <div className="pt-2">
-                <CtaButton
-                href="#contact"
-                bgClassName="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 shadow-[0_0_30px_-5px_rgba(124,58,237,0.5)] border border-white/10"
-                textClassName="text-white font-medium tracking-wide"
-                className="w-full sm:w-auto gap-3 py-4 px-8 rounded-xl transition-all hover:scale-105"
-                >
+	                <CtaButton
+	                href="/contact-us"
+	                bgClassName="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 shadow-[0_0_30px_-5px_rgba(124,58,237,0.5)] border border-white/10"
+	                textClassName="text-white font-medium tracking-wide"
+	                className="w-full sm:w-auto gap-3 py-4 px-8 rounded-xl transition-all hover:scale-105"
+	                >
                 <span>Get a Custom Quote</span>
                 <ArrowUpRight className="h-5 w-5" />
                 </CtaButton>

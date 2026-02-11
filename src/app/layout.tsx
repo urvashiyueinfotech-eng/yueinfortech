@@ -19,6 +19,8 @@ const figtree = Figtree({
   adjustFontFallback: true,
 });
 
+const DISABLE_INDEXING = process.env.DISABLE_INDEXING === "true";
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://yueinfotech.com"),
   title: {
@@ -28,6 +30,20 @@ export const metadata: Metadata = {
   verification: {
     google: "gsewmkCfzU4gMRkf-liHZ04BQaHf3B3vwT_W2YlQEmc",
   },
+  ...(DISABLE_INDEXING
+    ? {
+        robots: {
+          index: false,
+          follow: true,
+          nocache: true,
+        },
+        googleBot: {
+          index: false,
+          follow: true,
+          noimageindex: true,
+        },
+      }
+    : {}),
   icons:{
     icon: "/ylogo.png",
     shortcut: "/ylogo.png",

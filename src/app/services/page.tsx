@@ -1,4 +1,4 @@
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { ServiceDoc } from "@/types";
 
@@ -12,7 +12,8 @@ export const revalidate = 3600;
 async function getAllServices() {
   try {
     const servicesRef = collection(db, "services");
-    const snapshot = await getDocs(servicesRef);
+    const q = query(servicesRef, orderBy("displayOrder", "asc"));
+    const snapshot = await getDocs(q);
     if (snapshot.empty) return [];
 
     // We map the complex Firestore data to a structure that matches the `MainService` type
