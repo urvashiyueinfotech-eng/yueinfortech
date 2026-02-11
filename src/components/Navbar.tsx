@@ -7,7 +7,8 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, ChevronDown, Menu, PhoneCall, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { collection, getDocs } from "firebase/firestore";
+// 1. Import query and orderBy
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import type { MainService } from "@/data/main-services.data";
 
@@ -29,7 +30,13 @@ async function fetchServicesOnce(): Promise<MainService[]> {
   if (servicesPromise) return servicesPromise;
 
   servicesPromise = (async () => {
-    const snap = await getDocs(collection(db, "services"));
+    // 2. Create the ordered query
+    const servicesRef = collection(db, "services");
+    const q = query(servicesRef, orderBy("displayOrder", "asc"));
+    
+    // 3. Fetch using the ordered query
+    const snap = await getDocs(q);
+    
     const fetched = snap.docs.map((d) => {
       const data = d.data() as any;
       return {
@@ -96,14 +103,10 @@ const DesktopNav = ({ isScrolled, services }: { isScrolled: boolean; services: M
                 <ChevronDown className="h-4 w-4" />
               </Link>
               
-              {/* FIX APPLIED HERE:
-                 1. Removed 'mt-2' (which created the dead zone).
-                 2. Added 'pt-4' (padding-top) to bridge the gap while keeping visual spacing.
-                 3. Added 'pb-2' for symmetry/safety.
-              */}
               <div className="pointer-events-none absolute left-1/2 top-full z-30 w-80 -translate-x-1/2 pt-4 opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:opacity-100">
                 <div className="overflow-hidden rounded-2xl border border-black/5 bg-white/95 shadow-xl backdrop-blur-sm">
                   <div className="grid gap-1 p-3">
+                    {/* Render services sorted by order */}
                     {services.map((svc) => (
                       <Link
                         key={svc.slug}
@@ -289,7 +292,6 @@ const Navbar = ({ servicesFromServer = [] }: NavbarProps) => {
 
   useEffect(() => {
     let mounted = true;
-    // If server provided services, reuse them; otherwise fetch once on client.
     if (!servicesFromServer.length) {
       fetchServicesOnce().then((fetched) => {
         if (mounted && fetched.length) setServices(fetched);
@@ -324,11 +326,7 @@ const Navbar = ({ servicesFromServer = [] }: NavbarProps) => {
         )}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div
-            className={cn(
-              "relative transition-all duration-300 ease-in-out"
-            )}
-          >
+          <div className={cn("relative transition-all duration-300 ease-in-out")}>
             <div className="relative flex items-center justify-between gap-4">
               <div className={cn("transition-opacity", isOpen && "opacity-0")}>
                 <Logo tone={isScrolled ? "dark" : "light"} />
@@ -381,7 +379,7 @@ const Navbar = ({ servicesFromServer = [] }: NavbarProps) => {
           </div>
         </div>
       </header>
-              <MobileMenu isOpen={isOpen} setIsOpen={setIsOpen} services={services} />
+      <MobileMenu isOpen={isOpen} setIsOpen={setIsOpen} services={services} />
     </>
   );
 };
