@@ -1,47 +1,8 @@
 import Link from "next/link";
-import { ArrowUpRight, FileText, Megaphone, Monitor, Search, Server } from "lucide-react";
-import { type ReactElement } from "react";
+import { ArrowUpRight } from "lucide-react";
 import SectionHeader from "../../components/SectionHeader";
-
-type Service = {
-  id: string;
-  title: string;
-  subtitle: string;
-  icon: ReactElement;
-};
-
-export const SERVICES: Service[] = [
-  {
-    id: "web",
-    title: "Web Design & Development",
-    subtitle: "Fast, responsive sites and PWAs built for performance.",
-    icon: <Monitor className="h-6 w-6" aria-hidden />,
-  },
-  {
-    id: "seo",
-    title: "SEO & AI Search Optimization",
-    subtitle: "Data-driven SEO + AI tooling to boost organic traffic.",
-    icon: <Search className="h-6 w-6" aria-hidden />,
-  },
-  {
-    id: "ads",
-    title: "Digital Marketing & Ads",
-    subtitle: "Performance ads, targeting, and conversion optimisation.",
-    icon: <Megaphone className="h-6 w-6" aria-hidden />,
-  },
-  {
-    id: "content",
-    title: "Content & Copywriting",
-    subtitle: "Conversion-first content, landing copy & blog funnels.",
-    icon: <FileText className="h-6 w-6" aria-hidden />,
-  },
-  {
-    id: "it",
-    title: "IT & Infrastructure Services",
-    subtitle: "Secure infrastructure, monitoring, backup & cloud ops.",
-    icon: <Server className="h-6 w-6" aria-hidden />,
-  },
-];
+import { type Service } from "@/types";
+import { SERVICES } from "@/utils/data/services.data";
 
 const ServiceCard = ({ service, className }: { service: Service; className?: string }) => (
   <article
@@ -123,7 +84,8 @@ const WhatWeDo = () => {
         <SectionHeader
           id="what-we-do-title"
           eyebrow="What We Do"
-          title="End-to-End Digital, Creative & IT Services"
+          as="h2"
+          title="End-to-End Digital, Marketing & IT Solutions"
           subtitle="We combine design, data, and technology to build digital products that scale — from launch-ready websites to fully managed infrastructure."
           align="center"
         />

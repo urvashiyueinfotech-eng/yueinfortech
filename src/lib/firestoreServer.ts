@@ -331,7 +331,7 @@ export async function fetchBlogs({ limit = 4, revalidate = 300 } = {}): Promise<
   if (!res.ok) {
     const text = await res.text();
     if (text.includes("create_composite") || text.includes("index")) {
-      console.warn("Missing index for blogs createdAt ordering, retrying without order.");
+      console.warn("Missing index for blogs createdAt ordering, retrying without order. Details:", text);
       res = await run(false);
     } else {
       console.error("Failed to fetch blogs", text);

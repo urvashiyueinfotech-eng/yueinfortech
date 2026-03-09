@@ -1,3 +1,12 @@
+import { type ReactNode } from "react";
+
+export type Service = {
+  id: string;
+  title: string;
+  subtitle: string;
+  icon: ReactNode;
+};
+
 export type LinkAction = {
     text: string;
     href: string;
