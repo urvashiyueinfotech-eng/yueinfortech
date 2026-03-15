@@ -32,7 +32,7 @@ export default function FeaturedServices() {
           <SectionHeader
             eyebrow="Featured Services"
             title="Empowering Your Digital Growth"
-            subtitle="Modern services purpose-built for AI search, UX optimization, and secure infrastructure — designed to help your business scale with confidence."
+            subtitle="Modern services built for evolving search systems, optimized user experiences, and enterprise-ready infrastructure."
             align="left"
           />
 

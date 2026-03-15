@@ -6,7 +6,7 @@ import { SERVICES } from "@/utils/data/services.data";
 
 const ServiceCard = ({ service, className }: { service: Service; className?: string }) => (
   <article
-    className={`relative rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg sm:p-7 ${className ?? ""}`}
+    className={`relative flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg sm:p-7 ${className ?? ""}`}
   >
     <div className="flex items-center gap-4">
       <div className="flex h-14 w-14 min-h-[3.5rem] min-w-[3.5rem] items-center justify-center rounded-full bg-indigo-100 ring-1 ring-indigo-200">
@@ -17,18 +17,14 @@ const ServiceCard = ({ service, className }: { service: Service; className?: str
 
     <p className="mt-4 text-sm text-slate-600">{service.subtitle}</p>
 
-    <div className="mt-6 flex items-center gap-3">
+    <div className="mt-auto flex items-center gap-3 pt-6">
       <Link
-        href={`/#${service.id}`}
-        className="inline-flex items-center gap-2 text-sm font-semibold text-indigo-700 transition-colors hover:text-indigo-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+        href="/services"
+        className="inline-flex items-center gap-2 whitespace-nowrap text-sm font-semibold text-indigo-700 transition-colors hover:text-indigo-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
       >
-        Learn more
+        Explore services
         <ArrowUpRight className="h-4 w-4" aria-hidden />
       </Link>
-      <div className="ml-auto hidden items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-xs text-indigo-700 sm:flex">
-        <span className="text-indigo-500 font-semibold">★</span>
-        <span className="text-indigo-700">Trusted</span>
-      </div>
     </div>
 
     <div
@@ -39,7 +35,7 @@ const ServiceCard = ({ service, className }: { service: Service; className?: str
 );
 
 const ServicesGrid = () => (
-  <div className="mt-12 hidden grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 md:grid">
+  <div className="mt-12 hidden grid-cols-1 gap-6 md:grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5">
     {SERVICES.map((service) => (
       <ServiceCard key={service.id} service={service} />
     ))}
@@ -47,12 +43,12 @@ const ServicesGrid = () => (
 );
 
 const HorizontalScroller = () => (
-  <div className="-mx-6 mt-6 overflow-x-auto px-6 md:hidden">
+  <div className="-mx-6 mt-3 overflow-x-auto px-6 md:hidden">
     <div className="flex w-max gap-4">
       {SERVICES.map((service) => (
         <article
           key={service.id}
-          className="relative min-w-[240px] flex-shrink-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+          className="relative flex min-w-[240px] flex-shrink-0 flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
         >
           <div className="flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 ring-1 ring-indigo-200">
@@ -62,10 +58,10 @@ const HorizontalScroller = () => (
           </div>
           <p className="mt-3 text-sm text-slate-600">{service.subtitle}</p>
           <Link
-            href={`/#${service.id}`}
-            className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-indigo-700 transition-colors hover:text-indigo-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            href="/services"
+            className="mt-5 inline-flex items-center gap-2 whitespace-nowrap text-sm font-semibold text-indigo-700 transition-colors hover:text-indigo-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           >
-            Learn more
+            Explore services
             <ArrowUpRight className="h-4 w-4" aria-hidden />
           </Link>
         </article>
@@ -78,7 +74,7 @@ const WhatWeDo = () => {
   return (
     <section
       aria-labelledby="what-we-do-title"
-      className="py-20 lg:py-32"
+      className="py-12 md:py-20 lg:py-32"
     >
       <div className="container">
         <SectionHeader
@@ -86,13 +82,13 @@ const WhatWeDo = () => {
           eyebrow="What We Do"
           as="h2"
           title="End-to-End Digital, Marketing & IT Solutions"
-          subtitle="We combine design, data, and technology to build digital products that scale — from launch-ready websites to fully managed infrastructure."
+          subtitle="We combine strategy, design, AI-driven optimization, performance marketing, and secure infrastructure into scalable systems that help businesses grow globally."
           align="center"
         />
 
         <ServicesGrid />
 
-        <div className="mt-8 md:hidden">
+        <div className="mt-4 md:hidden">
           <p className="text-center text-xs text-slate-500">Swipe to explore services</p>
           <HorizontalScroller />
         </div>

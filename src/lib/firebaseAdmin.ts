@@ -1,8 +1,23 @@
+import "server-only";
 import admin from "firebase-admin";
 
-const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT
-  ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
-  : null;
+function readServiceAccount() {
+  const rawServiceAccount =
+    process.env.FIREBASE_SERVICE_ACCOUNT ?? process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
+
+  if (!rawServiceAccount) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(rawServiceAccount);
+  } catch (error) {
+    console.error("Failed to parse Firebase service account JSON.", error);
+    return null;
+  }
+}
+
+const serviceAccount = readServiceAccount();
 
 if (!admin.apps.length && serviceAccount) {
   admin.initializeApp({

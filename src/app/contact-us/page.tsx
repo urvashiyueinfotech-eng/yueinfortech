@@ -1,9 +1,10 @@
- "use client";
+"use client";
 
 import { useState } from "react";
 import PageHero from "@/components/ui/PageHero";
 import SectionHeader from "@/components/SectionHeader";
 import Image from "next/image";
+import type { ContactSubmissionRequest } from "@/lib/contactSubmission";
 
 export default function ContactPage() {
   const [loading, setLoading] = useState(false);
@@ -27,19 +28,32 @@ export default function ContactPage() {
     try {
       setLoading(true);
       setStatus(null);
+      const payload: ContactSubmissionRequest = {
+        name,
+        phone,
+        email,
+        subject,
+        message,
+        source: "contact-page",
+        context: { page: "contact", route: "/contact-us", section: "contact-form", trigger: "page-form" },
+      };
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, phone, email, subject, message }),
+        body: JSON.stringify(payload),
       });
       const json = await res.json();
       if (!res.ok) {
         throw new Error(json.error || "Failed to submit");
       }
-      setStatus("Thank you! We received your message and will respond soon.");
+      setStatus(
+        typeof json.message === "string"
+          ? json.message
+          : "Thank you! We received your message and will respond soon."
+      );
       form.reset();
-    } catch (error: any) {
-      setStatus(error.message || "Something went wrong. Please try again.");
+    } catch (error: unknown) {
+      setStatus(error instanceof Error ? error.message : "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }

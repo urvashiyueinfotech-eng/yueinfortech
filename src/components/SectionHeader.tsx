@@ -38,7 +38,7 @@ const SectionHeader = ({
   return (
     <div
       className={cn(
-        "mx-auto flex w-full max-w-3xl flex-col gap-3",
+        "mx-auto flex w-full max-w-3xl flex-col gap-3 md:gap-4",
         alignmentStyles[align],
         className
       )}

@@ -1,3 +1,5 @@
+@import "react-phone-number-input/style.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -85,4 +87,53 @@
 
 .animate-pulse-glow {
   animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.popup-phone-input .PhoneInput {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+}
+
+.popup-phone-input .PhoneInputCountry {
+  margin-right: 0;
+  padding: 0.875rem 0.75rem;
+  border-right: 1px solid rgb(226 232 240);
+  background: transparent;
+}
+
+.popup-phone-input .PhoneInputCountrySelect {
+  min-width: 5.75rem;
+  background: transparent;
+  border: 0;
+  color: rgb(71 85 105);
+  font-size: 0.875rem;
+  outline: none;
+}
+
+.popup-phone-input .PhoneInputCountryIcon {
+  width: 1.25rem;
+  height: 1rem;
+  box-shadow: none;
+}
+
+.popup-phone-input .PhoneInputCountrySelectArrow {
+  margin-left: 0.35rem;
+  color: rgb(100 116 139);
+  opacity: 1;
+}
+
+.popup-phone-input .PhoneInputInput {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 0.875rem 1rem;
+  color: rgb(15 23 42);
+  font-size: 0.875rem;
+  outline: none;
+}
+
+.popup-phone-input .PhoneInputInput::placeholder {
+  color: rgb(148 163 184);
 }

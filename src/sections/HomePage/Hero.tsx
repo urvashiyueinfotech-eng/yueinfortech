@@ -4,6 +4,7 @@ import { ArrowUpRight, Sparkles } from "lucide-react";
 import Image from "next/image";
 import SectionHeader from "@/components/SectionHeader";
 import CtaButton from "@/components/CtaButton";
+import CustomSolutionPopup from "@/components/CustomSolutionPopup";
 
 type HeroProps = {
   heroEyebrow?: string;
@@ -64,19 +65,33 @@ const Hero = ({
                 <ArrowUpRight className="h-5 w-5" />
               </CtaButton>
 
-              <CtaButton
-              href="/contact-us"
-              bgClassName="bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/20"
-              textClassName="text-white font-bold tracking-wide"
-              className="w-full sm:w-auto gap-3 py-5 px-10 rounded-xl transition-all hover:scale-105 active:scale-95"
-              >
-                <div className="flex items-center gap-2">
-                  <span>Get a Custom Quote</span>
-                  <svg className="h-5 w-5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                  </svg>
-                </div>
-              </CtaButton>
+              <CustomSolutionPopup
+                source="hero-secondary-cta"
+                context={{ page: "home", route: "/", section: "hero", trigger: "secondary-cta" }}
+                trigger={
+                  <button
+                    type="button"
+                    className="group inline-flex w-full items-center justify-center gap-3 rounded-xl border border-white/20 bg-white/5 px-10 py-5 text-white backdrop-blur-md transition-all hover:scale-105 hover:bg-white/10 active:scale-95 sm:w-auto"
+                  >
+                    <div className="flex items-center gap-2 font-bold tracking-wide">
+                      <span>Get a Custom Quote</span>
+                      <svg
+                        className="h-5 w-5 opacity-70"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                        />
+                      </svg>
+                    </div>
+                  </button>
+                }
+              />
           </div>
         </div>
       </div>

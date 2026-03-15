@@ -6,37 +6,37 @@ const steps = [
   {
     id: "01.",
     title: "Data-Driven Strategies",
-    desc: "We rely on analytics, market signals, and real user behavior to guide every decision—removing guesswork and improving ROI.",
+    desc: "Every strategy is guided by analytics, search intent, and user behavior.",
     icon: ShieldCheck,
   },
   {
     id: "02.",
-    title: "AI + Human Expertise",
-    desc: "A powerful blend of artificial intelligence and expert insight ensures accuracy, innovation, and long-term performance.",
+    title: "AI + Human Strategy",
+    desc: "We combine advanced AI tools with expert execution for scalable growth.",
     icon: BrainCircuit,
   },
   {
     id: "03.",
-    title: "E-E-A-T Focused Execution",
-    desc: "Our approach aligns with Google’s Experience, Expertise, Authoritativeness & Trustworthiness guidelines for better rankings.",
+    title: "Authority & Trust-Focused Execution",
+    desc: "We align with search quality standards and long-term credibility.",
     icon: UsersRound,
   },
   {
     id: "04.",
-    title: "Secure IT Infrastructure",
-    desc: "Your digital presence is built on strong, reliable, and scalable infrastructure—optimized for speed and protected 24/7.",
+    title: "Secure & Scalable Infrastructure",
+    desc: "Reliable systems built for speed, uptime, and business continuity.",
     icon: ShieldCheck,
   },
   {
     id: "05.",
-    title: "High-Conversion Web Experiences",
-    desc: "We create seamless, intuitive customer journeys that boost engagement, trust, and conversions across devices.",
+    title: "Conversion-Focused Experiences",
+    desc: "Every user journey is engineered to increase engagement and action.",
     icon: Target,
   },
   {
     id: "06.",
-    title: "Transparent, Ethical, Google-Compliant Work",
-    desc: "No shortcuts, no risks. You get honest reporting, ethical methods, and long-term sustainable growth.",
+    title: "Transparent & Ethical Work",
+    desc: "Clear reporting, sustainable methods, and long-term performance.",
     icon: ShieldCheck,
   },
 ];
@@ -57,7 +57,7 @@ export default function WhyChooseUs() {
             <SectionHeader
               eyebrow="Why Choose Us"
               title="Your Growth Partner for Performance, Security & Scalability"
-              subtitle="We combine strategy, technology, and creativity to drive long-term results. Every solution is data-powered, secure, and aligned with your business goals."
+              subtitle="We align technology, marketing, AI optimization, and business strategy to build long-term, sustainable digital growth systems."
               align="left"
               className="max-w-xl"
             />
