@@ -1,8 +1,5 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import { doc, getDoc, getDocs, collection } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import { ServiceDoc } from "@/types";
 
 import PageHero from "@/components/ui/PageHero";
 import HeroSection from "@/sections/ServicesPage/HeroSection";
@@ -11,45 +8,12 @@ import SubServicesGrid from "@/sections/ServicesPage/SubServicesGrid";
 import { ProcessSection, FAQSection } from "@/sections/ServicesPage/ExtraSection";
 import SectionHeader from "@/components/SectionHeader";
 import MainServiceCard from "@/components/ui/MainServiceCard";
-import { type MainService } from "@/data/main-services.data";
 import CtaButton from "@/components/CtaButton";
-
-async function getServiceData(slug: string): Promise<ServiceDoc | null> {
-  try {
-    const snap = await getDoc(doc(db, "services", slug));
-    return snap.exists() ? (snap.data() as ServiceDoc) : null;
-  } catch {
-    return null;
-  }
-}
-
-async function getRelatedServices(excludeSlug: string): Promise<MainService[]> {
-  try {
-    const snap = await getDocs(collection(db, "services"));
-    const services = snap.docs
-      .map((d) => d.data() as ServiceDoc)
-      .filter((svc) => svc.slug !== excludeSlug)
-      .slice(0, 3)
-      .map((svc) => ({
-        id: svc.slug,
-        eyebrow: svc.hero.subheading,
-        title: svc.hero.heading,
-        description: svc.hero.description,
-        image: svc.hero.backgroundImage || "",
-        services: svc.intro_section.features || [],
-        primaryHref: `/services/${svc.slug}`,
-        slug: svc.slug,
-      } satisfies MainService));
-    return services;
-  } catch (error) {
-    console.error("Failed to fetch related services", error);
-    return [];
-  }
-}
+import { getRelatedMainServices, getServiceBySlug } from "@/lib/services.service";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const data = await getServiceData(slug);
+  const data = await getServiceBySlug(slug);
   if (!data) return { title: "Service Not Found" };
 
   return {
@@ -61,8 +25,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ServicePage({ params }: { params: Promise<{ slug:string }> }) {
   const { slug } = await params;
-  const data = await getServiceData(slug);
-  const related = await getRelatedServices(slug);
+  const data = await getServiceBySlug(slug);
+  const related = await getRelatedMainServices(slug);
   if (!data) return notFound();
 
   return (

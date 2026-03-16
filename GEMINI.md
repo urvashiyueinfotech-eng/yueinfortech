@@ -1,55 +1,51 @@
-# Gemini Project Context: seo-inux-header-next
+# Project Overview: SEO Linux Header Next
 
-This project is a high-performance, SEO-optimized web application built with **Next.js 16 (React 19)**. It serves as a professional platform for Yue Infotech, featuring dynamic services, a blog, and integrated contact solutions.
+This project is a high-performance, SEO-optimized web application built with **Next.js 16 (App Router)**, **TypeScript**, and **Tailwind CSS**. It serves as a professional platform (likely for Yueinfotech) featuring services, blogs, and contact capabilities, integrated with **Firebase** and **AWS S3**.
 
-## 🚀 Project Overview
+## Core Technologies
+- **Framework:** Next.js 16 (React 19)
+- **Styling:** Tailwind CSS with `framer-motion` for animations.
+- **Backend/Database:** Firebase (Firestore) & Firebase Admin SDK.
+- **File Storage:** AWS S3 (via `@aws-sdk/client-s3`).
+- **UI Components:** Radix UI primitives, Lucide React icons, and custom components in `src/components`.
+- **Forms & Communication:** Nodemailer for email handling, `react-phone-number-input` for validated inputs.
+- **State & Data Fetching:** TanStack Query (React Query) for client-side state, native `fetch` with Next.js caching for server-side.
 
-*   **Framework:** Next.js (App Router)
-*   **Language:** TypeScript
-*   **Styling:** Tailwind CSS, Framer Motion (animations)
-*   **UI Components:** Radix UI, Lucide React (icons), Sonner (toasts)
-*   **Backend & Data:**
-    *   **Firebase Firestore:** Primary database, accessed via REST API for optimized Next.js Data Caching.
-    *   **Cloudinary:** Image hosting and optimization.
-    *   **AWS S3:** Used for secure asset signing (`s3-sign` route).
-    *   **NodeMailer:** Handles contact form submissions.
-*   **Data Fetching:** TanStack React Query (client-side), Native `fetch` with `revalidate` (server-side).
+## Project Structure
+- `src/app/`: App Router directory containing pages (`page.tsx`), layouts (`layout.tsx`), and API routes (`api/`).
+- `src/components/`: Reusable UI components. `src/components/ui/` contains low-level primitives (buttons, toasts, etc.).
+- `src/sections/`: Large, page-specific UI blocks (e.g., `Hero`, `AboutHero`, `ServicesGrid`).
+- `src/lib/`: Core logic including Firebase configuration (`firebase.ts`, `firebaseAdmin.ts`), Firestore fetching (`firestoreServer.ts`), and Cloudinary/S3 utilities.
+- `src/types/`: Centralized TypeScript interfaces and types.
+- `src/data/` & `src/utils/data/`: Static data and constants used across the site.
+- `firebase/`: Contains `firestore.rules` and `firestore.indexes.json`.
+- `public/`: Static assets like images and SVGs.
 
-## 🛠 Building and Running
+## Building and Running
+- **Development:** `npm run dev` (Starts server at `http://localhost:3000`)
+- **Production Build:** `npm run build`
+- **Production Start:** `npm run start`
+- **Linting:** `npm run lint`
 
-*   **Install Dependencies:** `npm install`
-*   **Development Server:** `npm run dev` (runs on `http://localhost:3000`)
-*   **Production Build:** `npm run build`
-*   **Start Production:** `npm start`
-*   **Linting:** `npm run lint`
+## Development Conventions & Standards
+- **Component Pattern:** Prefer functional components with TypeScript. Use `src/sections` for large page blocks to keep `src/app` pages clean.
+- **Data Fetching:**
+    - Use Server Components for initial data fetching from Firestore.
+    - Follow the **Repository/Adapter Pattern** (as suggested in `ARCHITECTURAL_REVIEW.md`) to decouple Firestore logic from UI.
+    - Use `Suspense` boundaries for data-heavy sections to improve perceived performance.
+- **SEO:**
+    - Always implement `generateMetadata` for dynamic routes (`blog/[slug]`, `services/[slug]`).
+    - Use JSON-LD for structured data (Articles/Services).
+    - Ensure images in the Hero section use the `priority` attribute.
+- **Styling:**
+    - Use Tailwind CSS classes.
+    - Follow the responsive breakpoints defined in `how-to-test.md` (320px to 1440px).
+    - Use `framer-motion` for entry animations and interactive elements.
+- **Security:**
+    - Validate all form inputs on both client and server using Zod (recommended).
+    - Keep sensitive keys in `.env` and never commit them.
+    - Use `firebase-admin` for secure server-side operations.
 
-## 📂 Directory Structure
-
-*   `src/app/`: Next.js App Router pages and layouts.
-*   `src/components/`: Reusable UI elements (`ui/`) and layout components.
-*   `src/sections/`: Large-scale page sections (e.g., `Hero`, `FeaturedServices`).
-*   `src/lib/`: Backend logic, Firebase configuration, and data fetching utilities (`firestoreServer.ts`).
-*   `src/data/` & `src/utils/data/`: Static and fallback data constants.
-*   `src/types/`: Centralized TypeScript definitions.
-*   `public/`: Static assets and theme images.
-
-## 📏 Development Conventions
-
-1.  **Architecture:** Aim for the **Repository Pattern**. Avoid mixing data fetching and transformation logic in components. Refer to `ARCHITECTURAL_REVIEW.md` for specific refactoring goals.
-2.  **Data Fetching:**
-    *   Prefer Server Components for initial data fetching to leverage the Next.js Data Cache.
-    *   Use `decodeDocument` and `decodeValue` in `firestoreServer.ts` to handle Firestore's REST JSON format.
-3.  **Styling:**
-    *   Use Tailwind CSS utility classes.
-    *   Maintain consistent spacing and responsive design (tested at 320px to 1440px).
-    *   Use the `figtree` font family (defined as `--font-body`).
-4.  **SEO:**
-    *   Utilize `generateMetadata` for dynamic routes (`/blog/[slug]`, `/services/[slug]`).
-    *   Ensure important images in the Hero section use the `priority` attribute.
-5.  **Icons:** Always use `lucide-react` icons for consistency.
-
-## 🧪 Testing & Validation
-
-*   **Manual Testing:** Follow the guidelines in `how-to-test.md` for responsiveness and interactive elements (navbar, header transitions).
-*   **Production Sanity:** Always run `npm run build` before final confirmation to catch TypeScript or build-time errors.
-*   **Performance:** Aim for high Lighthouse scores, focusing on LCP and CLS.
+## Testing & Validation
+- **Manual UI Testing:** Refer to `how-to-test.md` for specific manual check procedures, including navbar toggles, scroll transitions, and hero readability across devices.
+- **Performance:** Use Lighthouse to monitor LCP (Largest Contentful Paint) and CLS (Cumulative Layout Shift).

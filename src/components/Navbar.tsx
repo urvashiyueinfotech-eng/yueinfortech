@@ -7,9 +7,6 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, ChevronDown, Menu, PhoneCall, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-// 1. Import query and orderBy
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import type { MainService } from "@/data/main-services.data";
 
 // --- Configuration ---
@@ -30,26 +27,29 @@ async function fetchServicesOnce(): Promise<MainService[]> {
   if (servicesPromise) return servicesPromise;
 
   servicesPromise = (async () => {
-    // 2. Create the ordered query
-    const servicesRef = collection(db, "services");
-    const q = query(servicesRef, orderBy("displayOrder", "asc"));
-    
-    // 3. Fetch using the ordered query
-    const snap = await getDocs(q);
-    
-    const fetched = snap.docs.map((d) => {
-      const data = d.data() as any;
-      return {
-        id: data.slug ?? d.id,
-        eyebrow: (data.hero as any)?.eyebrow ?? "",
-        title: data.hero?.heading ?? data.title ?? d.id,
-        description: data.hero?.description ?? "",
-        image: data.hero?.backgroundImage ?? data.image ?? "",
-        services: [],
-        primaryHref: `/services/${data.slug ?? d.id}`,
-        slug: data.slug ?? d.id,
-      } as MainService;
-    });
+    const response = await fetch("/api/services/nav", { cache: "force-cache" });
+    if (!response.ok) {
+      throw new Error("Failed to load nav services");
+    }
+
+    const rows = (await response.json()) as Array<{
+      id: string;
+      title: string;
+      slug: string;
+      primaryHref?: string;
+    }>;
+
+    const fetched = rows.map((row) => ({
+      id: row.id,
+      eyebrow: "",
+      title: row.title,
+      description: "",
+      image: "",
+      services: [],
+      primaryHref: row.primaryHref ?? `/services/${row.slug}`,
+      slug: row.slug,
+    }));
+
     servicesCache = fetched;
     servicesPromise = null;
     return fetched;

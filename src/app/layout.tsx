@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import { MessageCircle } from "lucide-react";
 import NextTopLoader from 'nextjs-toploader';
 import type { MainService } from "@/data/main-services.data";
+import { getAllMainServices } from "@/lib/services.service";
 
 const figtree = Figtree({
   subsets: ["latin"],
@@ -72,43 +73,9 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  async function fetchNavServices(): Promise<MainService[]> {
-    const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
-    if (!projectId) return [];
-
-    try {
-      // List documents to get only the doc names (slugs)
-      const res = await fetch(
-        `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/services?pageSize=100`,
-        { next: { revalidate: 86400 } }
-      );
-      if (!res.ok) return [];
-      const rows = await res.json();
-      return rows
-        .map((doc: any) => {
-          const slug = doc.name?.split("/").pop() ?? "";
-          if (!slug) return null;
-          const title = slug.replace(/-/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase());
-          return {
-            id: slug,
-            eyebrow: "",
-            title,
-            description: "",
-            image: "",
-            services: [],
-            primaryHref: `/services/${slug}`,
-            slug,
-          } as MainService;
-        })
-        .filter(Boolean) as MainService[];
-    } catch {
-      return [];
-    }
-  }
-
   let servicesFromServer: MainService[] = [];
   try {
-    servicesFromServer = await fetchNavServices();
+    servicesFromServer = await getAllMainServices();
   } catch (err) {
     console.warn("Nav services fetch skipped:", err);
     servicesFromServer = [];
