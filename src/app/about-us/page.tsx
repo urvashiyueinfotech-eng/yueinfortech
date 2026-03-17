@@ -2,6 +2,7 @@ import Image from 'next/image';
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import PageHero from '@/components/ui/PageHero';
+import CustomSolutionPopup from '@/components/CustomSolutionPopup';
 
 type ServiceColor = 'blue' | 'green' | 'purple' | 'pink' | 'cyan';
 type StepColor = 'bg-indigo-600' | 'bg-purple-600' | 'bg-blue-600' | 'bg-pink-600' | 'bg-cyan-600';
@@ -179,9 +180,23 @@ export default function AboutUs() {
                 <Link href="#services" className="px-8 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition shadow-lg shadow-indigo-500/30">
                   Explore Services
                 </Link>
-                <Link href="#story" className="px-8 py-3 bg-white text-slate-700 border border-slate-200 rounded-lg font-semibold hover:bg-slate-50 transition">
-                  Talk with a Strategist 
-                </Link>
+                <CustomSolutionPopup
+                  source="about-hero-strategist-cta"
+                  context={{
+                    page: "about",
+                    route: "/about-us",
+                    section: "hero",
+                    trigger: "talk-with-a-strategist-cta",
+                  }}
+                  trigger={
+                    <button
+                      type="button"
+                      className="px-8 py-3 bg-white text-slate-700 border border-slate-200 rounded-lg font-semibold hover:bg-slate-50 transition"
+                    >
+                      Talk with a Strategist
+                    </button>
+                  }
+                />
               </div>
             </div>
             

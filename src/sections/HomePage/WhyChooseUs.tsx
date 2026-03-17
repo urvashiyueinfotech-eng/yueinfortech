@@ -1,6 +1,9 @@
+"use client";
+
 import { ShieldCheck, BrainCircuit, UsersRound, Target } from "lucide-react";
 import SectionHeader from "@/components/SectionHeader";
 import CtaButton from "@/components/CtaButton";
+import CustomSolutionPopup from "@/components/CustomSolutionPopup";
 
 const steps = [
   {
@@ -62,14 +65,25 @@ export default function WhyChooseUs() {
               className="max-w-xl"
             />
 
-            <CtaButton
-              href="#contact"
-              bgClassName="bg-indigo-600 hover:bg-indigo-700 px-7 py-3"
-              textClassName="text-white text-[15px]"
-              className="w-fit"
-            >
-              Get a Strategy Recommendation →
-            </CtaButton>
+            <CustomSolutionPopup
+              source="why-choose-us-cta"
+              context={{
+                page: "home",
+                route: "/",
+                section: "why-choose-us",
+                trigger: "strategy-recommendation-cta",
+              }}
+              trigger={
+                <CtaButton
+                  href="#"
+                  bgClassName="bg-indigo-600 hover:bg-indigo-700 px-7 py-3"
+                  textClassName="text-white text-[15px]"
+                  className="w-fit"
+                >
+                  Get a Strategy Recommendation →
+                </CtaButton>
+              }
+            />
           </div>
         </div>
 

@@ -88,9 +88,9 @@ export default function PortfolioHighlights() {
                   {item.description}
                 </p>
 
-                <span className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-indigo-600">
+                {/* <span className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-indigo-600">
                   View Project →
-                </span>
+                </span> */}
               </div>
             </Link>
           ))}
@@ -98,7 +98,7 @@ export default function PortfolioHighlights() {
 
         {/* CTA */}
         <div className="mt-20 text-center">
-          <CtaButton
+          {/* <CtaButton
             href="/portfolio"
             bgClassName="bg-indigo-600 hover:bg-indigo-700"
             textClassName="text-white"
@@ -106,7 +106,7 @@ export default function PortfolioHighlights() {
           >
             <span>View Full Portfolio</span>
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </CtaButton>
+          </CtaButton> */}
         </div>
 
       </div>

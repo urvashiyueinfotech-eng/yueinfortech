@@ -54,7 +54,7 @@ export default function FaqSection({ faqs }: { faqs?: FaqItemType[] }) {
             </div>
 
             {/* CTA */}
-            <div className="mt-10">
+            {/* <div className="mt-10">
               <CtaButton
                 href="/faqs"
                 bgClassName="bg-indigo-600 hover:bg-indigo-700 px-6 py-3"
@@ -64,7 +64,7 @@ export default function FaqSection({ faqs }: { faqs?: FaqItemType[] }) {
                 <span>View All FAQs</span>
                 <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </CtaButton>
-            </div>
+            </div> */}
           </div>
 
         </div>

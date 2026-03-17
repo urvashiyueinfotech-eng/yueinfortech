@@ -1,6 +1,9 @@
+"use client";
+
 import SectionHeader from "@/components/SectionHeader";
 import CtaButton from "@/components/CtaButton";
 import { ArrowUpRight } from "lucide-react";
+import CustomSolutionPopup from "@/components/CustomSolutionPopup";
 
 const PROJECT_TYPES = [
   "Startup Websites",
@@ -50,15 +53,26 @@ export default function ProjectTypes() {
 
         {/* CTA */}
         <div className="mt-14 text-center">
-          <CtaButton
-            href="/contact"
-            bgClassName="bg-indigo-600 hover:bg-indigo-700"
-            textClassName="text-white"
-            className="gap-2"
-          >
-            <span>Tell Us About Your Project</span>
-            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </CtaButton>
+          <CustomSolutionPopup
+            source="project-types-cta"
+            context={{
+              page: "home",
+              route: "/",
+              section: "project-types",
+              trigger: "tell-us-about-your-project-cta",
+            }}
+            trigger={
+              <CtaButton
+                href="#"
+                bgClassName="bg-indigo-600 hover:bg-indigo-700"
+                textClassName="text-white"
+                className="gap-2"
+              >
+                <span>Tell Us About Your Project</span>
+                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </CtaButton>
+            }
+          />
         </div>
 
       </div>
