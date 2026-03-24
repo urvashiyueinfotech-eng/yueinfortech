@@ -4,9 +4,11 @@ import CtaButton from "@/components/CtaButton";
 import SectionHeader from "@/components/SectionHeader";
 import PageHero from "@/components/ui/PageHero";
 import MainServiceCard from "@/components/ui/MainServiceCard";
+import PageFaqSection from "@/sections/HomePage/PageFaqSection";
 import { getAllMainServices } from "@/lib/services.service";
 
-export const revalidate = 3600;
+export const revalidate = 21600;
+const SERVICES_FAQ_REVALIDATE = 21600;
 
 function ServicesGridSkeleton() {
   return (
@@ -170,6 +172,10 @@ export default async function ServicesPage() {
           </div>
         </div>
       </section>
+
+      <Suspense fallback={null}>
+        <PageFaqSection pageId="services" revalidate={SERVICES_FAQ_REVALIDATE} />
+      </Suspense>
     </main>
   );
 }

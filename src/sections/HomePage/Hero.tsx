@@ -21,7 +21,7 @@ const Hero = ({
       {/* FULL BACKGROUND IMAGE */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/Gemini_Generated_Image_z6rtt9z6rtt9z6rt.png"
+          src="/heroImage.png"
           alt="Yue Infotech Digital Solutions"
           fill
           priority

@@ -1,5 +1,6 @@
-import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { collection, doc, getDoc, getDocs, orderBy, query } from "firebase/firestore";
+import { CACHE_TAGS, CACHE_TTL, getServiceDetailTag } from "@/lib/cacheTags";
 import type { MainService } from "@/data/main-services.data";
 import { db } from "@/lib/firebase";
 import type { ServiceDoc } from "@/types";
@@ -33,7 +34,7 @@ function mapServiceDocFromSnapshot(
   };
 }
 
-const getAllServiceDocs = cache(async (): Promise<Array<{ id: string; data: ServiceDoc }>> => {
+async function fetchAllServiceDocs(): Promise<Array<{ id: string; data: ServiceDoc }>> {
   const servicesRef = collection(db, SERVICES_COLLECTION);
   const servicesQuery = query(servicesRef, orderBy("displayOrder", "asc"));
   const snapshot = await getDocs(servicesQuery);
@@ -45,9 +46,16 @@ const getAllServiceDocs = cache(async (): Promise<Array<{ id: string; data: Serv
   return snapshot.docs.map((snapshotDoc) =>
     mapServiceDocFromSnapshot(snapshotDoc.id, snapshotDoc.data() as ServiceDoc)
   );
-});
+}
 
-export const getAllMainServices = cache(async (): Promise<MainService[]> => {
+async function getAllServiceDocs() {
+  return unstable_cache(fetchAllServiceDocs, ["services:all"], {
+    revalidate: CACHE_TTL.servicesList,
+    tags: [CACHE_TAGS.servicesList],
+  })();
+}
+
+export async function getAllMainServices(): Promise<MainService[]> {
   try {
     const services = await getAllServiceDocs();
     return services.map(({ id, data }) => mapServiceDocToMainService(id, data));
@@ -55,26 +63,55 @@ export const getAllMainServices = cache(async (): Promise<MainService[]> => {
     console.error("Failed to fetch services", error);
     throw new Error("Unable to load services");
   }
-});
+}
 
-export const getServiceBySlug = cache(async (slug: string): Promise<ServiceDoc | null> => {
+export async function getAllServiceSlugs(): Promise<string[]> {
   try {
-    const snapshot = await getDoc(doc(db, SERVICES_COLLECTION, slug));
-    return snapshot.exists() ? (snapshot.data() as ServiceDoc) : null;
-  } catch (error) {
-    console.error(`Failed to fetch service for slug: ${slug}`, error);
-    return null;
-  }
-});
+    const services = await getAllServiceDocs();
 
-export const getRelatedMainServices = cache(
-  async (excludeSlug: string, limit = 3): Promise<MainService[]> => {
-    try {
-      const services = await getAllMainServices();
-      return services.filter((service) => service.slug !== excludeSlug).slice(0, limit);
-    } catch (error) {
-      console.error("Failed to fetch related services", error);
-      return [];
-    }
+    return Array.from(
+      new Set(
+        services
+          .map(({ id, data }) => (data.slug || id || "").trim())
+          .filter((slug) => slug.length > 0)
+      )
+    );
+  } catch (error) {
+    console.error("Failed to fetch service slugs", error);
+    return [];
   }
-);
+}
+
+export async function getServiceBySlug(slug: string): Promise<ServiceDoc | null> {
+  if (!slug) return null;
+
+  return unstable_cache(
+    async () => {
+      try {
+        const snapshot = await getDoc(doc(db, SERVICES_COLLECTION, slug));
+        return snapshot.exists() ? (snapshot.data() as ServiceDoc) : null;
+      } catch (error) {
+        console.error(`Failed to fetch service for slug: ${slug}`, error);
+        return null;
+      }
+    },
+    ["services:detail", slug],
+    {
+      revalidate: CACHE_TTL.serviceDetail,
+      tags: [getServiceDetailTag(slug)],
+    }
+  )();
+}
+
+export async function getRelatedMainServices(
+  excludeSlug: string,
+  limit = 3
+): Promise<MainService[]> {
+  try {
+    const services = await getAllMainServices();
+    return services.filter((service) => service.slug !== excludeSlug).slice(0, limit);
+  } catch (error) {
+    console.error("Failed to fetch related services", error);
+    return [];
+  }
+}

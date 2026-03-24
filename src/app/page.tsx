@@ -1,17 +1,28 @@
+import type { Metadata } from "next";
+import { Suspense } from "react";
 import HeaderWrapper from "@/components/HeaderWrapper";
 import BlogHighlights from "@/sections/HomePage/BlogHighlights";
-import FaqSection from "@/sections/HomePage/FAQHighlights";
+import PageFaqSection from "@/sections/HomePage/PageFaqSection";
 import FeaturedServices from "@/sections/HomePage/FeaturedServices";
 import PortfolioHighlights from "@/sections/HomePage/PortfolioHighlights";
 import ProjectTypes from "@/sections/HomePage/ProjectTypes";
 import WhatWeDo from "@/sections/HomePage/WhatWeDo";
 import WhyChooseUs from "@/sections/HomePage/WhyChooseUs";
 import { getHomePageData } from "@/lib/homePage";
+import { getPageMetadata } from "@/lib/pageSeo.service";
 
-export const revalidate = 60;
+export const revalidate = 3600;
+const HOME_FAQ_REVALIDATE = 21600;
+const HOME_SEO_REVALIDATE = 21600;
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getPageMetadata("home", undefined, {
+    revalidate: HOME_SEO_REVALIDATE,
+  });
+}
 
 export default async function Home() {
-  const { posts, faqs } = await getHomePageData();
+  const { posts } = await getHomePageData();
 
   return (
     <main>
@@ -24,7 +35,9 @@ export default async function Home() {
       </section>
       <PortfolioHighlights />
       <BlogHighlights posts={posts} />
-      <FaqSection faqs={faqs} />
+      <Suspense fallback={null}>
+        <PageFaqSection pageId="home" revalidate={HOME_FAQ_REVALIDATE} />
+      </Suspense>
     </main>
   );
 }

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { fetchBlogBySlug } from "@/lib/firestoreServer";
 import { buildCloudinaryUrl } from "@/lib/cloudinary";
 
-export const revalidate = 300;
+export const revalidate = 3600;
 
 type PageProps = {
   params: Promise<{ slug: string }>;

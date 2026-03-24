@@ -24,10 +24,6 @@ const DISABLE_INDEXING = process.env.DISABLE_INDEXING === "true";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://yueinfotech.com"),
-  title: {
-    default: "Yue Infotech | Web, SEO & IT Solutions",
-    template: "%s | Yue Infotech",
-  },
   verification: {
     google: "gsewmkCfzU4gMRkf-liHZ04BQaHf3B3vwT_W2YlQEmc",
   },
@@ -49,19 +45,6 @@ export const metadata: Metadata = {
     icon: "/ylogo.png",
     shortcut: "/ylogo.png",
     apple: "/ylogo.png",
-  },
-  description: "Fast, modern websites, AI-optimized SEO, performance ads, powerful content, and secure IT solutions to help your business grow.",
-  openGraph: {
-    title: "Yue Infotech | Web, SEO & IT Solutions",
-    description: "Fast, modern websites, AI-optimized SEO, performance ads, powerful content, and secure IT solutions to help your business grow.",
-    url: "https://yueinfotech.com",
-    siteName: "Yue Infotech",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Yue Infotech | Web, SEO & IT Solutions",
-    description: "Fast, modern websites, AI-optimized SEO, performance ads, powerful content, and secure IT solutions to help your business grow.",
   },
 };
 

@@ -1,13 +1,8 @@
 import { type CardProps } from "@/components/ui/Card";
-import { fetchBlogs, fetchFaqsForCategoryName } from "@/lib/firestoreServer";
+import { CACHE_TTL } from "@/lib/cacheTags";
+import { fetchBlogs } from "@/lib/firestoreServer";
 
-const HOME_FAQ_REVALIDATE = 60;
-const HOME_BLOG_REVALIDATE = 300;
-
-type HomeFaq = {
-  question: string;
-  answer: string;
-};
+const HOME_BLOG_REVALIDATE = CACHE_TTL.blogs;
 
 export async function getHomePageData() {
   const blogData = await fetchBlogs({ limit: 4, revalidate: HOME_BLOG_REVALIDATE });
@@ -36,10 +31,5 @@ export async function getHomePageData() {
           .filter((post) => post.title && post.image)
       : undefined;
 
-  const faqs = (await fetchFaqsForCategoryName("Home", {
-    publishedOnly: true,
-    revalidate: HOME_FAQ_REVALIDATE,
-  })) as HomeFaq[];
-
-  return { posts, faqs };
+  return { posts };
 }

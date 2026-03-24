@@ -9,7 +9,19 @@ import { ProcessSection, FAQSection } from "@/sections/ServicesPage/ExtraSection
 import SectionHeader from "@/components/SectionHeader";
 import MainServiceCard from "@/components/ui/MainServiceCard";
 import CtaButton from "@/components/CtaButton";
-import { getRelatedMainServices, getServiceBySlug } from "@/lib/services.service";
+import {
+  getAllServiceSlugs,
+  getRelatedMainServices,
+  getServiceBySlug,
+} from "@/lib/services.service";
+
+export const revalidate = 86400;
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  const slugs = await getAllServiceSlugs();
+  return slugs.map((slug) => ({ slug }));
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
