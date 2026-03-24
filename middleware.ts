@@ -8,6 +8,7 @@ const SPAM_PATTERNS = [
   '/class/',
   '/petpooja_captain/',
   '/home',
+  '/shopdetail/'
 ];
 
 const SPAM_REGEX = /^\/\d+\.html?$/;
