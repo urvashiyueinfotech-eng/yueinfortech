@@ -1,4 +1,3 @@
-// middleware.ts
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
@@ -8,7 +7,8 @@ const SPAM_PATTERNS = [
   '/class/',
   '/petpooja_captain/',
   '/home',
-  '/shopdetail/'
+  '/shopdetail/',
+  '/pcmypage' // Added from your previous Vercel screenshot
 ];
 
 const SPAM_REGEX = /^\/\d+\.html?$/;
@@ -36,15 +36,16 @@ export function middleware(request: NextRequest) {
       ip,
       userAgent: request.headers.get('user-agent') || 'unknown',
       referer: request.headers.get('referer') || 'none',
-      // Vercel injects these headers automatically
       country: request.headers.get('x-vercel-ip-country') || 'unknown',
       city: request.headers.get('x-vercel-ip-city') || 'unknown',
       region: request.headers.get('x-vercel-ip-country-region') || 'unknown',
     };
 
-    console.log(JSON.stringify(logData, null, 2));
+    // Flattened the JSON so Vercel logs it cleanly on a single line
+    console.log(JSON.stringify(logData));
 
-    return new Response('Not Found', { status: 404 });
+    // Switched to NextResponse and 410 status for faster de-indexing
+    return new NextResponse('410 Gone - Legacy page permanently removed.', { status: 410 });
   }
 
   return NextResponse.next();
