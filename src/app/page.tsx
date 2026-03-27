@@ -11,9 +11,9 @@ import WhyChooseUs from "@/sections/HomePage/WhyChooseUs";
 import { getHomePageData } from "@/lib/homePage";
 import { getPageMetadata } from "@/lib/pageSeo.service";
 
-export const revalidate = 3600;
-const HOME_FAQ_REVALIDATE = 21600;
-const HOME_SEO_REVALIDATE = 21600;
+export const revalidate = 2592000;
+const HOME_FAQ_REVALIDATE = 2592000;
+const HOME_SEO_REVALIDATE = 2592000;
 
 export async function generateMetadata(): Promise<Metadata> {
   return getPageMetadata("home", undefined, {

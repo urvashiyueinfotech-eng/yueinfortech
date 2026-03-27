@@ -2,7 +2,7 @@ import PageHero from "@/components/ui/PageHero";
 import Card, { type CardProps } from "@/components/ui/Card";
 import { fetchBlogs } from "@/lib/firestoreServer";
 
-export const revalidate = 3600;
+export const revalidate = 2592000;
 
 export default async function BlogListPage() {
   const posts =

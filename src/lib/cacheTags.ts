@@ -1,7 +1,7 @@
 export const CACHE_TTL = {
   seo: 60 * 60 * 6,
   faqs: 60 * 60 * 6,
-  servicesList: 60 * 60 * 6,
+  servicesList: 60 * 60 * 24 * 30,
   serviceDetail: 60 * 60 * 24,
   blogs: 60 * 60,
 } as const;

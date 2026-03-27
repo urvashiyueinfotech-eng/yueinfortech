@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAllMainServices } from "@/lib/services.service";
 
-export const revalidate = 86400;
+export const revalidate = 2592000;
 
 export async function GET() {
   try {

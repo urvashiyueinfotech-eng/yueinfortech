@@ -10,8 +10,10 @@ const LEGACY_DISALLOWS: string[] = [
   "/*.htm$",
   "/*.html$",
   "/home",
-  "/api/",          // trailing slash is more explicit
-  "/petpooja_captain/", // 👈 add this too
+  "/api/",          
+  "/petpooja_captain/",
+  "/pcmypage",
+  "/shopdetail/"
 ];
 
 export default function robots(): MetadataRoute.Robots {

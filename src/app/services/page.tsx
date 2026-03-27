@@ -7,8 +7,8 @@ import MainServiceCard from "@/components/ui/MainServiceCard";
 import PageFaqSection from "@/sections/HomePage/PageFaqSection";
 import { getAllMainServices } from "@/lib/services.service";
 
-export const revalidate = 21600;
-const SERVICES_FAQ_REVALIDATE = 21600;
+export const revalidate = 2592000;
+const SERVICES_FAQ_REVALIDATE = 2592000;
 
 function ServicesGridSkeleton() {
   return (
