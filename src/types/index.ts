@@ -7,10 +7,14 @@ export type Service = {
   icon: ReactNode;
 };
 
+export type PopupId = "custom-quote";
+
 export type LinkAction = {
     text: string;
     href: string;
     type: "primary" | "secondary" | "whatsapp" | "outline";
+    kind?: "link" | "popup";
+    popupId?: PopupId;
     icon?: string;
   };
   

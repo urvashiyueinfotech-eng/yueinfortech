@@ -53,7 +53,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug:s
         ]}
       />
 
-      <HeroSection data={data.hero} />
+      <HeroSection data={data.hero} slug={slug} />
       <IntroSection data={data.intro_section} />
       <SubServicesGrid data={data.sub_services_section} />
 
