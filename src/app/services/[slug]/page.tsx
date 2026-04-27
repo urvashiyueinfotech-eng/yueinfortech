@@ -8,7 +8,7 @@ import SubServicesGrid from "@/sections/ServicesPage/SubServicesGrid";
 import { ProcessSection, FAQSection } from "@/sections/ServicesPage/ExtraSection";
 import SectionHeader from "@/components/SectionHeader";
 import MainServiceCard from "@/components/ui/MainServiceCard";
-import CtaButton from "@/components/CtaButton";
+import ServiceFinalCtaAction from "@/components/ServiceFinalCtaAction";
 import {
   getAllServiceSlugs,
   getRelatedMainServices,
@@ -125,10 +125,17 @@ export default async function ServicePage({ params }: { params: Promise<{ slug:s
           <h2 className="text-3xl font-bold">{data.final_cta_section.heading}</h2>
           <p className="mt-3 text-indigo-200">{data.final_cta_section.subheading}</p>
           <div className="mt-8 flex justify-center gap-4 flex-wrap">
-            {data.final_cta_section.actions.map((a) => (
-              <CtaButton key={a.text} href={a.href} className="px-6 py-3 bg-white text-indigo-600 rounded-full">
-                {a.text}
-              </CtaButton>
+            {data.final_cta_section.actions.map((action, idx) => (
+              <ServiceFinalCtaAction
+                key={`${action.text}-${idx}`}
+                action={action}
+                context={{
+                  page: "service",
+                  route: `/services/${slug}`,
+                  section: "final-cta",
+                  trigger: action.popupId ?? action.type,
+                }}
+              />
             ))}
           </div>
         </div>

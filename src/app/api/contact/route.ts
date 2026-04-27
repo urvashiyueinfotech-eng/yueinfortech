@@ -6,23 +6,39 @@ import {
   sanitizeContactSubmission,
 } from "@/lib/contactSubmission";
 
+function getErrorMessage(error: unknown) {
+  return error instanceof Error && error.message
+    ? error.message
+    : "Failed to submit form.";
+}
+
 export async function POST(req: NextRequest) {
+  let body: unknown;
+
   try {
-    const body = await req.json();
-    const submission = sanitizeContactSubmission(body);
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
+  }
 
-    if (!submission) {
-      return NextResponse.json({ error: "All fields are required." }, { status: 400 });
-    }
+  const submission = sanitizeContactSubmission(body);
 
-    if (!adminDb) {
-      console.error("Contact form storage error: Firestore admin is not configured.");
-      return NextResponse.json(
-        { error: "Lead storage is not configured. Please try again later." },
-        { status: 500 }
-      );
-    }
+  if (!submission) {
+    return NextResponse.json(
+      { error: "Please provide name, phone, email, and subject." },
+      { status: 422 }
+    );
+  }
 
+  if (!adminDb) {
+    console.error("Contact form storage error: Firestore admin is not configured.");
+    return NextResponse.json(
+      { error: "Lead storage is not configured. Please try again later." },
+      { status: 503 }
+    );
+  }
+
+  try {
     await adminDb
       .collection(CONTACT_SUBMISSIONS_COLLECTION)
       .add(createContactSubmissionDocument(submission));
@@ -33,7 +49,7 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error("Contact form error", error);
-    return NextResponse.json({ error: "Failed to submit form." }, { status: 500 });
+    return NextResponse.json({ error: getErrorMessage(error) }, { status: 500 });
   }
 }
 

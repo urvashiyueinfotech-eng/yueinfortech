@@ -1,17 +1,27 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import PageHero from "@/components/ui/PageHero";
 import SectionHeader from "@/components/SectionHeader";
-import Image from "next/image";
+import { toast } from "@/components/ui/sonner";
 import type { ContactSubmissionRequest } from "@/lib/contactSubmission";
+
+type SubmitStatus =
+  | { type: "success"; message: string }
+  | { type: "error"; message: string }
+  | null;
+
+const API_SUCCESS_MESSAGE = "Thank you! We received your message and will respond soon.";
+const API_ERROR_MESSAGE = "Unable to send your message right now. Please try again.";
 
 export default function ContactPage() {
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState<string | null>(null);
+  const [status, setStatus] = useState<SubmitStatus>(null);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     const form = event.currentTarget;
     const formData = new FormData(form);
     const name = String(formData.get("name") ?? "").trim();
@@ -20,40 +30,50 @@ export default function ContactPage() {
     const subject = String(formData.get("subject") ?? "").trim();
     const message = String(formData.get("message") ?? "").trim();
 
-    if (!name || !phone || !email || !subject || !message) {
-      setStatus("Please fill in all required fields.");
+    if (!name || !phone || !email || !subject) {
+      const nextMessage = "Please fill in all required fields.";
+      setStatus({ type: "error", message: nextMessage });
+      toast.error(nextMessage);
       return;
     }
 
     try {
       setLoading(true);
       setStatus(null);
+
       const payload: ContactSubmissionRequest = {
         name,
         phone,
         email,
         subject,
-        message,
+        message: message || undefined,
         source: "contact-page",
-        context: { page: "contact", route: "/contact-us", section: "contact-form", trigger: "page-form" },
+        context: {
+          page: "contact",
+          route: "/contact-us",
+          section: "contact-form",
+          trigger: "page-form",
+        },
       };
-      const res = await fetch("/api/contact", {
+
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      const json = await res.json();
-      if (!res.ok) {
-        throw new Error(json.error || "Failed to submit");
+
+      if (!response.ok) {
+        throw new Error(API_ERROR_MESSAGE);
       }
-      setStatus(
-        typeof json.message === "string"
-          ? json.message
-          : "Thank you! We received your message and will respond soon."
-      );
+
+      const nextMessage = API_SUCCESS_MESSAGE;
+      setStatus({ type: "success", message: nextMessage });
+      toast.success(nextMessage);
       form.reset();
-    } catch (error: unknown) {
-      setStatus(error instanceof Error ? error.message : "Something went wrong. Please try again.");
+    } catch {
+      const nextMessage = API_ERROR_MESSAGE;
+      setStatus({ type: "error", message: nextMessage });
+      toast.error(nextMessage);
     } finally {
       setLoading(false);
     }
@@ -61,7 +81,6 @@ export default function ContactPage() {
 
   return (
     <main>
-      {/* HERO */}
       <PageHero
         title="Contact Us"
         backgroundImage="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1920"
@@ -71,7 +90,6 @@ export default function ContactPage() {
         ]}
       />
 
-      {/* CONTACT SECTION */}
       <section className="py-20">
         <div className="mx-auto max-w-7xl px-6">
           <SectionHeader
@@ -83,10 +101,8 @@ export default function ContactPage() {
           />
 
           <div className="mt-14 grid overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-slate-100 lg:grid-cols-2">
-            
-            {/* FORM */}
             <div className="p-8 sm:p-12">
-              <form className="grid gap-5" onSubmit={handleSubmit}>
+              <form className="grid gap-5" onSubmit={handleSubmit} noValidate>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <input
                     type="text"
@@ -98,7 +114,7 @@ export default function ContactPage() {
                   <input
                     type="tel"
                     name="phone"
-                    placeholder="Phone"
+                    placeholder="Phone *"
                     required
                     className="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-indigo-300"
                   />
@@ -124,26 +140,34 @@ export default function ContactPage() {
                 <textarea
                   rows={5}
                   name="message"
-                  placeholder="Message"
-                  required
+                  placeholder="Message (Optional)"
                   className="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-indigo-300"
                 />
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="mt-2 w-fit rounded-full bg-indigo-600 px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition hover:bg-indigo-700 disabled:opacity-60"
+                  className="mt-2 w-fit rounded-full bg-indigo-600 px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {loading ? "Sending..." : "Send Message"}
                 </button>
 
-                {status && (
-                  <p className="text-sm text-slate-700">{status}</p>
-                )}
+                {status ? (
+                  <p
+                    className={
+                      status.type === "success"
+                        ? "text-sm font-medium text-emerald-700"
+                        : "text-sm font-medium text-rose-700"
+                    }
+                    role="status"
+                    aria-live="polite"
+                  >
+                    {status.message}
+                  </p>
+                ) : null}
               </form>
             </div>
 
-            {/* IMAGE */}
             <div className="relative hidden lg:block">
               <Image
                 src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=80&w=1600"

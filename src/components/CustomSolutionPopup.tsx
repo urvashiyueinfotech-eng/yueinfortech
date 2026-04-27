@@ -77,47 +77,42 @@ function buildDefaultFields(serviceOptions: Array<{ label: string; value: string
   ];
 }
 
-function mapSubmissionError(payload: unknown) {
-  if (payload && typeof payload === "object" && "error" in payload) {
-    const message = (payload as { error?: unknown }).error;
-    if (typeof message === "string" && message.trim()) return message;
-  }
-  return "Unable to send your request right now. Please try again.";
-}
+const API_SUCCESS_MESSAGE = "Thanks. We received your project details and will get back to you shortly.";
+const API_ERROR_MESSAGE = "Unable to send your request right now. Please try again.";
 
 async function submitContactForm(
   values: PopupFormValues,
   source: ContactSubmissionSource,
   context?: ContactSubmissionContext
 ) {
-  const response = await fetch("/api/contact", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      name: values.name,
-      phone: values.phone,
-      countryCode: values.countryCode,
-      email: values.email,
-      subject: values.subject,
-      message: values.message,
-      source,
-      context,
-    }),
-  });
+  try {
+    const response = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: values.name,
+        phone: values.phone,
+        countryCode: values.countryCode,
+        email: values.email,
+        subject: values.subject,
+        message: values.message,
+        source,
+        context,
+      }),
+    });
 
-  const payload = await response.json().catch(() => null);
-  if (!response.ok) {
-    throw new Error(mapSubmissionError(payload));
+    if (!response.ok) {
+      throw new Error(API_ERROR_MESSAGE);
+    }
+
+    return {
+      close: true,
+      reset: true,
+      successMessage: API_SUCCESS_MESSAGE,
+    };
+  } catch {
+    throw new Error(API_ERROR_MESSAGE);
   }
-
-  return {
-    close: true,
-    reset: true,
-    successMessage:
-      payload && typeof payload === "object" && "message" in payload && typeof payload.message === "string"
-        ? payload.message
-        : "Thanks. We received your project details and will get back to you shortly.",
-  };
 }
 
 export default function CustomSolutionPopup({
@@ -143,7 +138,7 @@ export default function CustomSolutionPopup({
       }}
       fields={fields}
       submitLabel="Get In Touch"
-      successMessage="Thanks. We received your project details and will get back to you shortly."
+      successMessage={API_SUCCESS_MESSAGE}
       onSubmit={handleSubmit}
       {...props}
     />

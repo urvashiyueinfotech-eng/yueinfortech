@@ -17,16 +17,19 @@ export type ContactSubmissionRequest = {
   countryCode?: string;
   email: string;
   subject: string;
-  message: string;
+  message?: string;
   source?: ContactSubmissionSource;
   context?: ContactSubmissionContext;
 };
 
+export type ContactSubmissionStatus = "unread" | "read";
+
 export type ContactSubmissionDocument = ContactSubmissionRequest & {
   source: ContactSubmissionSource;
-  status: "new";
+  status: ContactSubmissionStatus;
   origin: "website";
   schemaVersion: 1;
+  readAt?: string | null;
   createdAt: string;
   updatedAt: string;
 };
@@ -54,13 +57,15 @@ function sanitizeContext(context: unknown): ContactSubmissionContext | undefined
 export function sanitizeContactSubmission(
   payload: Partial<ContactSubmissionRequest> | null | undefined
 ): ContactSubmissionRequest | null {
+  const sanitizedMessage = cleanString(payload?.message);
+
   const submission = {
     name: cleanString(payload?.name),
     phone: cleanString(payload?.phone),
     countryCode: cleanString(payload?.countryCode),
     email: cleanString(payload?.email),
     subject: cleanString(payload?.subject),
-    message: cleanString(payload?.message),
+    message: sanitizedMessage || undefined,
     source: cleanString(payload?.source) || "website-form",
     context: sanitizeContext(payload?.context),
   } satisfies ContactSubmissionRequest;
@@ -69,8 +74,7 @@ export function sanitizeContactSubmission(
     !submission.name ||
     !submission.phone ||
     !submission.email ||
-    !submission.subject ||
-    !submission.message
+    !submission.subject
   ) {
     return null;
   }
@@ -84,9 +88,15 @@ export function createContactSubmissionDocument(
   const timestamp = new Date().toISOString();
 
   return {
-    ...submission,
+    name: submission.name,
+    phone: submission.phone,
+    email: submission.email,
+    subject: submission.subject,
+    ...(submission.countryCode ? { countryCode: submission.countryCode } : {}),
+    ...(submission.message ? { message: submission.message } : {}),
+    ...(submission.context ? { context: submission.context } : {}),
     source: submission.source ?? "website-form",
-    status: "new",
+    status: "unread",
     origin: "website",
     schemaVersion: 1,
     createdAt: timestamp,
