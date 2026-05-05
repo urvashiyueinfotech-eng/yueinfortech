@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
   }
 
-  const submission = sanitizeContactSubmission(body);
+  const submission = sanitizeContactSubmission(body as any);
 
   if (!submission) {
     return NextResponse.json(

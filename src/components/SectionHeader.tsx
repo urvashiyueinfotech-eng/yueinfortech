@@ -6,7 +6,7 @@ type SectionHeaderProps = {
   eyebrow?: string;
   eyebrowClassName?: string;
   eyebrowContent?: ReactNode;
-  title: string;
+  title: ReactNode;
   titleClassName?: string;
   subtitle?: string;
   subtitleClassName?: string;
