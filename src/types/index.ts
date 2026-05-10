@@ -21,15 +21,26 @@ export type LinkAction = {
   export type FeatureCard = {
     id: string;
     title: string;
+    category?: string;
     subtitle?: string;
     description: string;
+    snippet?: string;
     features?: string[];
     cta?: LinkAction;
   };
   
-  export type ServiceDoc = {
+export type ServiceDoc = {
+    docId?: string;
     id: string;
+    navTitle?: string;
     slug: string;
+    slugPath?: string;
+    serviceType?: "main" | "sub" | "sub-sub" | string;
+    parentDocId?: string | null;
+    ancestorDocIds?: string[];
+    childrenDocIds?: string[];
+    level?: number;
+    isLeaf?: boolean;
     displayOrder: number;
     seo: {
       metaTitle: string;
@@ -37,10 +48,12 @@ export type LinkAction = {
       keywords: string[];
     };
   hero: {
+    badge?: string;
     heading: string;
     subheading: string;
     description: string;
     backgroundImage?: string;
+    stats?: Array<{ value: string; label: string }>;
     actions: LinkAction[];
   };
   intro_section: {
@@ -48,6 +61,7 @@ export type LinkAction = {
     description: string;
     features: string[];
     cta: LinkAction;
+    secondaryCta?: LinkAction;
     introImage?: string;
   };
     sub_services_section: {
@@ -60,6 +74,30 @@ export type LinkAction = {
       description: string;
       steps: Array<{ step_label: string; title: string; description: string }>;
       cta?: LinkAction;
+    };
+    results_section?: {
+      heading: string;
+      description: string;
+      cta?: LinkAction;
+      cards: Array<{
+        id: string;
+        tag: string;
+        description: string;
+        metrics: Array<{ label: string; value: string; tone?: "default" | "positive" }>;
+      }>;
+    };
+    engagement_tiers_section?: {
+      heading: string;
+      description: string;
+      tiers: Array<{
+        id: string;
+        name: string;
+        for: string;
+        featured?: boolean;
+        badge?: string;
+        features: string[];
+        cta?: LinkAction;
+      }>;
     };
     industries_section: {
       heading: string;

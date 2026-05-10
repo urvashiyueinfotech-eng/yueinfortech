@@ -7,10 +7,10 @@ import { Providers } from "@/components/Providers";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { MessageCircle } from "lucide-react";
+import WhatsAppIcon from "@/components/icons/WhatsAppIcon";
 import NextTopLoader from 'nextjs-toploader';
-import type { MainService } from "@/data/main-services.data";
-import { getAllMainServices } from "@/lib/services.service";
+import type { NavServiceItem } from "@/lib/services.service";
+import { getServicesForNav } from "@/lib/services.service";
 
 const figtree = Figtree({
   subsets: ["latin"],
@@ -56,16 +56,16 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  let servicesFromServer: MainService[] = [];
+  let servicesFromServer: NavServiceItem[] = [];
   try {
-    servicesFromServer = await getAllMainServices();
+    servicesFromServer = await getServicesForNav();
   } catch (err) {
     console.warn("Nav services fetch skipped:", err);
     servicesFromServer = [];
   }
 
   return (
-    <html lang="en" className={figtree.variable}>
+    <html lang="en" className={figtree.variable} suppressHydrationWarning>
       <head>
         {SHOULD_LOAD_GA && (
           <>
@@ -85,6 +85,7 @@ export default async function RootLayout({
         )}
       </head>
       <body
+        suppressHydrationWarning
         className={`${figtree.className} font-body antialiased text-slate-600 bg-slate-50 min-h-screen`}
       >
         <Providers>
@@ -111,7 +112,7 @@ export default async function RootLayout({
             className="fixed bottom-5 right-5 z-50 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-3 text-sm font-semibold text-white shadow-lg transition hover:scale-105 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#128C7E] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
             aria-label="Chat with us on WhatsApp"
           >
-            <MessageCircle className="h-5 w-5" />
+            <WhatsAppIcon className="h-5 w-5" />
             <span className="hidden sm:inline">Chat on WhatsApp</span>
           </a>
           <Footer />

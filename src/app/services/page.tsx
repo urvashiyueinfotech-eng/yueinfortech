@@ -1,18 +1,27 @@
-import { Suspense } from "react";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { getAllMainServices } from "@/lib/services.service";
-import { CACHE_TTL } from "@/lib/cacheTags";
 import { fetchFaqsForPage, PublicFaq } from "@/lib/firestoreServer";
+import { getPageMetadata } from "@/lib/pageSeo.service";
 import ServicesFaqClient from "./ServicesFaqClient";
 import CtaButton from "@/components/CtaButton";
+import CustomSolutionPopup from "@/components/CustomSolutionPopup";
 import SectionHeader from "@/components/SectionHeader";
 import ServicesPageCard from "./_components/ServicesPageCard";
 import IntegratedSystemItem from "./_components/IntegratedSystemItem";
 import WhyChooseUsStep from "./_components/WhyChooseUsStep";
 import IndustryPill from "./_components/IndustryPill";
+import WhatsAppIcon from "@/components/icons/WhatsAppIcon";
 
 export const revalidate = 2592000;
 const SERVICES_FAQ_REVALIDATE = 2592000;
+const SERVICES_SEO_REVALIDATE = 2592000;
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getPageMetadata("services", undefined, {
+    revalidate: SERVICES_SEO_REVALIDATE,
+  });
+}
 
 function buildFaqJsonLd(faqs: PublicFaq[]) {
   return {
@@ -62,22 +71,31 @@ export default async function ServicesPage() {
             Yue Infotech delivers integrated digital systems — web engineering, search visibility, performance marketing, strategic content, and secure IT infrastructure — designed to strengthen authority, improve visibility, and generate measurable business growth.
           </p>
           <div className="flex gap-[12px] flex-wrap">
-            <CtaButton 
-              href="/contact" 
-              bgClassName="bg-[#5B4FE9] hover:bg-[#4A3FD4]" 
+            <CtaButton
+              href="/contact-us"
+              bgClassName="bg-[#5B4FE9] hover:bg-[#4A3FD4]"
               textClassName="text-white text-[0.88rem] font-bold"
               className="gap-[7px] py-[13px] px-[28px] shadow-[0_4px_20px_rgba(91,79,233,0.4)]"
             >
               Book Free Consultation →
             </CtaButton>
-            <CtaButton 
-              href="/contact#quote" 
-              bgClassName="bg-[rgba(255,255,255,0.1)] border-[1.5px] border-[rgba(255,255,255,0.25)] hover:bg-[rgba(255,255,255,0.18)]" 
-              textClassName="text-white text-[0.88rem] font-semibold"
-              className="py-[13px] px-[28px]"
-            >
-              Get a Quote
-            </CtaButton>
+            <CustomSolutionPopup
+              source="services-page-quote-cta"
+              context={{
+                page: "services",
+                route: "/services",
+                section: "hero",
+                trigger: "get-a-quote",
+              }}
+              trigger={
+                <button
+                  type="button"
+                  className="group inline-flex items-center justify-center rounded-full bg-[rgba(255,255,255,0.1)] px-[28px] py-[13px] text-[0.88rem] font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-[rgba(255,255,255,0.18)] hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 border-[1.5px] border-[rgba(255,255,255,0.25)]"
+                >
+                  Get a Quote
+                </button>
+              }
+            />
           </div>
         </div>
       </section>
@@ -115,10 +133,10 @@ export default async function ServicesPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]">
             {services.map((service, index) => (
-              <ServicesPageCard 
-                key={service.id} 
-                service={service} 
-                index={index} 
+              <ServicesPageCard
+                key={service.id}
+                service={service}
+                index={index}
               />
             ))}
           </div>
@@ -142,17 +160,17 @@ export default async function ServicesPage() {
               subtitleClassName="text-[#4B5563] text-[0.95rem] leading-[1.72]"
             />
             <div className="flex gap-[12px] flex-wrap">
-              <CtaButton 
-                href="/contact" 
-                bgClassName="bg-[#5B4FE9] hover:bg-[#4A3FD4]" 
+              <CtaButton
+                href="/contact-us"
+                bgClassName="bg-[#5B4FE9] hover:bg-[#4A3FD4]"
                 textClassName="text-white text-[0.86rem] font-bold"
                 className="gap-[6px] py-[12px] px-[26px] shadow-[0_4px_16px_rgba(91,79,233,0.3)]"
               >
                 Get a Personalised Strategy →
               </CtaButton>
-              <CtaButton 
-                href="/case-studies" 
-                bgClassName="bg-white border-[1.5px] border-[#E5E7EB] hover:border-[#5B4FE9]" 
+              <CtaButton
+                href="/case-studies"
+                bgClassName="bg-white border-[1.5px] border-[#E5E7EB] hover:border-[#5B4FE9]"
                 textClassName="text-[#5B4FE9] text-[0.86rem] font-semibold"
                 className="gap-[6px] py-[12px] px-[26px] hover:shadow-[0_4px_16px_rgba(91,79,233,0.12)] shadow-none"
               >
@@ -188,9 +206,9 @@ export default async function ServicesPage() {
                 subtitle="We combine marketing strategy, technical engineering, and infrastructure expertise to build digital systems that support sustainable business growth — not one-off campaigns."
                 subtitleClassName="text-[#4B5563] text-[0.95rem] leading-[1.72]"
               />
-              <CtaButton 
-                href="/contact" 
-                bgClassName="bg-[#5B4FE9] hover:bg-[#4A3FD4]" 
+              <CtaButton
+                href="/contact-us"
+                bgClassName="bg-[#5B4FE9] hover:bg-[#4A3FD4]"
                 textClassName="text-white text-[0.86rem] font-bold"
                 className="gap-[6px] py-[12px] px-[26px] shadow-[0_4px_16px_rgba(91,79,233,0.3)]"
               >
@@ -263,29 +281,30 @@ export default async function ServicesPage() {
               eyebrow="Not Sure Where to Start?"
               eyebrowClassName="bg-transparent ring-0 px-0 py-0 text-[0.72rem] font-bold tracking-[0.1em] uppercase text-[#5B4FE9]"
               title={
-                <>We'll Help You <span className="text-[#5B4FE9]">Choose the Right Service</span></>
+                <>We&apos;ll Help You <span className="text-[#5B4FE9]">Choose the Right Service</span></>
               }
               titleClassName="text-[clamp(1.8rem,3vw,2.4rem)] font-extrabold text-[#1E1B4B] tracking-[-0.02em] leading-[1.15]"
               subtitle="We understand your goals, evaluate your digital position, and guide you to the most effective solution — without pushing you toward the most expensive one."
               subtitleClassName="text-[#4B5563] text-[0.93rem] leading-[1.72]"
             />
             <div className="flex gap-[12px] flex-wrap">
-              <CtaButton 
-                href="/contact" 
-                bgClassName="bg-[#5B4FE9] hover:bg-[#4A3FD4]" 
+              <CtaButton
+                href="/contact-us"
+                bgClassName="bg-[#5B4FE9] hover:bg-[#4A3FD4]"
                 textClassName="text-white text-[0.86rem] font-bold"
                 className="gap-[6px] py-[12px] px-[26px] shadow-[0_4px_16px_rgba(91,79,233,0.3)]"
               >
                 Book Free Consultation →
               </CtaButton>
-              <CtaButton 
-                href="https://wa.me/918859366292" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                bgClassName="bg-white border-[1.5px] border-[#E5E7EB] hover:border-[#5B4FE9]" 
+              <CtaButton
+                href="https://wa.me/918859366292"
+                target="_blank"
+                rel="noopener noreferrer"
+                bgClassName="bg-white border-[1.5px] border-[#E5E7EB] hover:border-[#5B4FE9]"
                 textClassName="text-[#5B4FE9] text-[0.86rem] font-semibold"
                 className="gap-[6px] py-[12px] px-[26px] hover:shadow-[0_4px_16px_rgba(91,79,233,0.12)] shadow-none"
               >
+                <WhatsAppIcon className="h-4 w-4" />
                 Chat on WhatsApp
               </CtaButton>
             </div>
@@ -318,34 +337,43 @@ export default async function ServicesPage() {
           Ready to Start Your Project<br />With <em className="not-italic text-[#7B72EE]">Yue Infotech?</em>
         </h2>
         <p className="text-[rgba(255,255,255,0.6)] max-w-[500px] mx-auto mb-[36px] text-[0.93rem] relative z-10">
-          Let's build digital systems designed for visibility, performance, and measurable business growth.
+          Let&apos;s build digital systems designed for visibility, performance, and measurable business growth.
         </p>
         <div className="flex justify-center gap-[12px] flex-wrap relative z-10">
-          <CtaButton 
-            href="/contact" 
-            bgClassName="bg-[#5B4FE9] hover:bg-[#4A3FD4]" 
+          <CtaButton
+            href="/contact-us"
+            bgClassName="bg-[#5B4FE9] hover:bg-[#4A3FD4]"
             textClassName="text-white text-[0.88rem] font-bold"
             className="gap-[7px] py-[13px] px-[28px] shadow-[0_4px_20px_rgba(91,79,233,0.4)]"
           >
             Book a Strategy Call →
           </CtaButton>
-          <CtaButton 
-            href="/contact#quote" 
-            bgClassName="bg-[rgba(255,255,255,0.1)] border-[1.5px] border-[rgba(255,255,255,0.25)] hover:bg-[rgba(255,255,255,0.18)]" 
-            textClassName="text-white text-[0.88rem] font-semibold"
-            className="py-[13px] px-[28px]"
-          >
-            Request a Quote
-          </CtaButton>
-          <CtaButton 
-            href="https://wa.me/918859366292" 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            bgClassName="bg-[rgba(37,211,102,0.1)] border-[1.5px] border-[rgba(37,211,102,0.3)] hover:bg-[rgba(37,211,102,0.18)]" 
+          <CustomSolutionPopup
+            source="services-page-quote-cta"
+            context={{
+              page: "services",
+              route: "/services",
+              section: "final-cta",
+              trigger: "request-a-quote",
+            }}
+            trigger={
+              <button
+                type="button"
+                className="group inline-flex items-center justify-center rounded-full bg-[rgba(255,255,255,0.1)] px-[28px] py-[13px] text-[0.88rem] font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-[rgba(255,255,255,0.18)] hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 border-[1.5px] border-[rgba(255,255,255,0.25)]"
+              >
+                Request a Quote
+              </button>
+            }
+          />
+          <CtaButton
+            href="https://wa.me/918859366292"
+            target="_blank"
+            rel="noopener noreferrer"
+            bgClassName="bg-[rgba(37,211,102,0.1)] border-[1.5px] border-[rgba(37,211,102,0.3)] hover:bg-[rgba(37,211,102,0.18)]"
             textClassName="text-[#25D366] text-[0.85rem] font-bold"
             className="gap-[7px] py-[13px] px-[22px] shadow-none"
           >
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            <WhatsAppIcon className="h-4 w-4" />
             Chat on WhatsApp
           </CtaButton>
         </div>

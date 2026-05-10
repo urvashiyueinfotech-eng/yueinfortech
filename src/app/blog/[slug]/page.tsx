@@ -1,14 +1,35 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import PageHero from "@/components/ui/PageHero";
 import Image from "next/image";
 import { fetchBlogBySlug } from "@/lib/firestoreServer";
 import { buildCloudinaryUrl } from "@/lib/cloudinary";
+import { getPageMetadata } from "@/lib/pageSeo.service";
 
 export const revalidate = 2592000;
 
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const blog = await fetchBlogBySlug(slug, { revalidate });
+
+  if (!blog) {
+    return { title: "Blog Not Found" };
+  }
+
+  const fallback: Metadata = {
+    title: blog.metaTitle || blog.title,
+    description: blog.metaDescription || blog.excerpt || "",
+    keywords: blog.keywords,
+  };
+
+  return getPageMetadata("blog-detail", fallback, {
+    revalidate,
+  });
+}
 
 export default async function BlogDetailPage({ params }: PageProps) {
   const { slug } = await params;

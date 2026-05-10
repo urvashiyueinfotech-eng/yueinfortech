@@ -23,6 +23,12 @@ function isSpamRequest(pathname: string): boolean {
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
+  if (pathname === '/contact' || pathname === '/contact/') {
+    const url = request.nextUrl.clone();
+    url.pathname = '/contact-us';
+    return NextResponse.redirect(url, 308);
+  }
+
   if (isSpamRequest(pathname)) {
     const ip =
       request.headers.get('x-forwarded-for')?.split(',')[0] ||

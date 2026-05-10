@@ -1,8 +1,19 @@
 import Image from 'next/image';
+import type { Metadata } from "next";
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import PageHero from '@/components/ui/PageHero';
 import CustomSolutionPopup from '@/components/CustomSolutionPopup';
+import { getPageMetadata } from "@/lib/pageSeo.service";
+import WhatsAppIcon from "@/components/icons/WhatsAppIcon";
+
+const ABOUT_SEO_REVALIDATE = 2592000;
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getPageMetadata("about-us", undefined, {
+    revalidate: ABOUT_SEO_REVALIDATE,
+  });
+}
 
 type ServiceColor = 'blue' | 'green' | 'purple' | 'pink' | 'cyan';
 type StepColor = 'bg-indigo-600' | 'bg-purple-600' | 'bg-blue-600' | 'bg-pink-600' | 'bg-cyan-600';
@@ -136,7 +147,7 @@ const YEARS_OF_EXPERIENCE = new Date().getFullYear() - 2018;
 export default function AboutUs() {
   return (
     <main className="font-sans text-slate-600 antialiased bg-slate-50 min-h-screen">
-      
+
       {/* Navbar Placeholder - Assuming you have a Layout, but adding this just in case you need a standalone header */}
       {/* <div className="fixed w-full z-50 top-0 py-4 bg-white/80 backdrop-blur-md border-b border-slate-100">
           <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
@@ -174,10 +185,10 @@ export default function AboutUs() {
                 </h2>
               </div>
               <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-              Yue Infotech is a full-stack digital growth agency delivering enterprise SEO, AI visibility engineering, high-performance web development, performance marketing, and secure IT infrastructure. Since 2018, we've helped businesses build scalable digital systems engineered to increase authority, accelerate growth, and generate measurable revenue
+                Yue Infotech is a full-stack digital growth agency delivering enterprise SEO, AI visibility engineering, high-performance web development, performance marketing, and secure IT infrastructure. Since 2018, we&apos;ve helped businesses build scalable digital systems engineered to increase authority, accelerate growth, and generate measurable revenue
               </p>
               <div className="flex flex-wrap gap-4">
-                <Link href="#services" className="px-8 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition shadow-lg shadow-indigo-500/30">
+                <Link href="/services" className="px-8 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition shadow-lg shadow-indigo-500/30">
                   Explore Services
                 </Link>
                 <CustomSolutionPopup
@@ -199,13 +210,13 @@ export default function AboutUs() {
                 />
               </div>
             </div>
-            
+
             {/* Abstract Visual */}
             <div className="relative lg:block">
               {/* Blobs using standard Tailwind colors */}
               <div className="absolute -top-20 -right-20 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
               <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse delay-700"></div>
-              
+
               <Image
                 src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                 alt="Team working at Yue Infotech"
@@ -230,10 +241,10 @@ export default function AboutUs() {
               </div>
               <h2 className="text-2xl font-bold text-slate-900 mb-4">Our Mission</h2>
               <p className="text-slate-600 leading-relaxed">
-              To architect secure, scalable, and performance-driven digital systems that deliver sustainable business growth. We focus on long-term visibility, authority, and conversion — not short-term marketing spikes.
+                To architect secure, scalable, and performance-driven digital systems that deliver sustainable business growth. We focus on long-term visibility, authority, and conversion — not short-term marketing spikes.
               </p>
             </div>
-            
+
             {/* Vision */}
             <div className="p-8 rounded-2xl bg-slate-50 border border-slate-100 hover:-translate-y-1 hover:shadow-lg transition duration-300">
               <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-6">
@@ -241,7 +252,7 @@ export default function AboutUs() {
               </div>
               <h2 className="text-2xl font-bold text-slate-900 mb-4">Our Vision</h2>
               <p className="text-slate-600 leading-relaxed">
-              To become a globally trusted partner for digital transformation and AI-era search visibility. Innovation, technical precision, transparency, and measurable performance guide everything we do.
+                To become a globally trusted partner for digital transformation and AI-era search visibility. Innovation, technical precision, transparency, and measurable performance guide everything we do.
               </p>
             </div>
           </div>
@@ -271,16 +282,16 @@ export default function AboutUs() {
             <div className="md:w-1/2">
               <h2 className="text-3xl font-bold text-slate-900 mb-6">Our Story (Founded in 2018)</h2>
               <p className="text-slate-600 mb-4">
-              Yue Infotech began in 2018 with one core belief: <strong className="text-indigo-600">Digital growth should be strategic, measurable, and scalable.</strong>
+                Yue Infotech began in 2018 with one core belief: <strong className="text-indigo-600">Digital growth should be strategic, measurable, and scalable.</strong>
               </p>
               <p className="text-slate-600 mb-6">
-              What started with website development for local businesses evolved into delivering enterprise-level digital ecosystems for B2B brands, ecommerce companies, and global organizations.
+                What started with website development for local businesses evolved into delivering enterprise-level digital ecosystems for B2B brands, ecommerce companies, and global organizations.
               </p>
               <p className="text-slate-600 mb-6">As search shifted toward AI-driven discovery systems, we integrated AEO, GEO, SXO, structured data frameworks, and infrastructure engineering into our growth model.</p>
               <div className="mt-8">
                 <h4 className="font-bold text-slate-900 mb-4">We don’t run isolated campaigns.</h4>
                 <p className="text-slate-600">
-                We build integrated digital systems designed for authority, acquisition, and sustained expansion.
+                  We build integrated digital systems designed for authority, acquisition, and sustained expansion.
                 </p>
               </div>
               <div className="mt-8">
@@ -300,17 +311,17 @@ export default function AboutUs() {
       <section className="py-20 bg-white border-t border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            
+
             {/* Text Content */}
             <div>
               <span className="text-indigo-600 font-semibold tracking-wide uppercase text-sm mb-2 block">
-                  Our Core DNA
+                Our Core DNA
               </span>
               <h2 className="text-3xl font-bold text-slate-900 mb-6">Who We Are Today</h2>
               <p className="text-lg text-slate-600 mb-8 leading-relaxed">
                 We are strategists, developers, SEO engineers, marketers, and infrastructure specialists working together to deliver:
               </p>
-              
+
               {/* Highlight Box for Concluding Statement */}
               <div className="bg-indigo-50 border-l-4 border-indigo-600 p-6 rounded-r-xl shadow-sm">
                 <p className="text-slate-700 font-medium leading-relaxed">
@@ -328,8 +339,8 @@ export default function AboutUs() {
                 "Authority-driven content",
                 "Secure cloud architecture"
               ].map((item, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className="flex items-center p-4 bg-slate-50 rounded-xl border border-slate-100 hover:border-indigo-200 hover:shadow-md transition-all duration-300 group"
                 >
                   <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center mr-4 shrink-0 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
@@ -341,16 +352,16 @@ export default function AboutUs() {
                 </div>
               ))}
             </div>
-            
+
           </div>
         </div>
-      </section> 
+      </section>
 
-       {/* Mid-Page CTA Banner */}
+      {/* Mid-Page CTA Banner */}
       <section className="pb-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative bg-indigo-600 rounded-3xl p-8 md:p-12 lg:p-16 text-center shadow-2xl overflow-hidden">
-            
+
             {/* Background Decorative Elements */}
             <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-white opacity-5 rounded-full blur-3xl pointer-events-none"></div>
             <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-72 h-72 bg-indigo-900 opacity-20 rounded-full blur-2xl pointer-events-none"></div>
@@ -365,10 +376,10 @@ export default function AboutUs() {
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row justify-center items-center gap-4 flex-wrap">
-                
+
                 {/* Call Now Button */}
-                <a 
-                  href="tel:+918859366292" 
+                <a
+                  href="tel:+918859366292"
                   className="flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 bg-white text-indigo-700 rounded-full font-bold hover:bg-indigo-50 hover:scale-105 transition-all shadow-lg"
                 >
                   <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -378,8 +389,8 @@ export default function AboutUs() {
                 </a>
 
                 {/* Consult Button */}
-                <Link 
-                  href="/contact-us" 
+                <Link
+                  href="/contact-us"
                   className="flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 bg-indigo-800 text-white border border-indigo-500 rounded-full font-bold hover:bg-indigo-700 hover:scale-105 transition-all"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -389,15 +400,13 @@ export default function AboutUs() {
                 </Link>
 
                 {/* WhatsApp Button */}
-                <a 
-                  href="https://wa.me/918859366292" 
-                  target="_blank" 
+                <a
+                  href="https://wa.me/918859366292"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 bg-[#25D366] text-white rounded-full font-bold hover:bg-[#20bd5a] hover:scale-105 transition-all shadow-lg shadow-[#25D366]/20"
                 >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01C17.18 3.03 14.69 2 12.04 2z"/>
-                  </svg>
+                  <WhatsAppIcon className="h-5 w-5" />
                   Chat on WhatsApp
                 </a>
 
@@ -426,11 +435,11 @@ export default function AboutUs() {
                 description={service.description}
               />
             ))}
-            
+
             {/* CTA Card */}
             <div className="bg-gradient-to-br from-slate-900 to-indigo-950 p-6 rounded-xl flex flex-col justify-center items-center text-center text-white">
               <h3 className="text-xl font-bold mb-2">Need a custom solution?</h3>
-              <p className="text-sm text-indigo-200 mb-4">Let's discuss your project.</p>
+              <p className="text-sm text-indigo-200 mb-4">Let&apos;s discuss your project.</p>
               <Link href="/services" className="inline-block px-6 py-2 bg-white text-indigo-900 rounded-full font-bold text-sm hover:bg-indigo-50 transition">
                 Explore All Services
               </Link>
@@ -446,11 +455,11 @@ export default function AboutUs() {
             <h2 className="text-3xl md:text-4xl font-bold mb-4">How We Work</h2>
             <div className="h-1 w-20 bg-indigo-600 mx-auto rounded"></div>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4 text-center">
-             {ABOUT_STEPS.map((step) => (
-               <Step key={step.title} number={step.number} title={step.title} desc={step.desc} color={step.color} />
-             ))}
+            {ABOUT_STEPS.map((step) => (
+              <Step key={step.title} number={step.number} title={step.title} desc={step.desc} color={step.color} />
+            ))}
           </div>
         </div>
       </section>
@@ -471,7 +480,7 @@ export default function AboutUs() {
                 ))}
               </ul>
             </div>
-            
+
             {/* Values */}
             <div>
               <h2 className="text-3xl font-bold text-slate-900 mb-8">Our Values</h2>
@@ -482,7 +491,7 @@ export default function AboutUs() {
               </div>
             </div>
           </div>
-          
+
           {/* Industries Badge Cloud */}
           {/* Improved Industries Grid */}
           <div className="mt-20 pt-16 border-t border-slate-200">
@@ -492,30 +501,30 @@ export default function AboutUs() {
               </span>
               <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Industries We Serve</h2>
             </div>
-            
+
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
               {ABOUT_INDUSTRIES.map((ind) => (
-                <div 
-                  key={ind.name} 
+                <div
+                  key={ind.name}
                   className="group flex flex-col items-center justify-center p-6 bg-white rounded-xl border border-slate-100 hover:border-indigo-200 hover:shadow-lg transition-all duration-300 cursor-default"
                 >
                   <div className="w-12 h-12 mb-3 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-indigo-50 group-hover:scale-110 transition-transform duration-300">
-                     {/* Dynamic Icon */}
-                     <svg className="w-6 h-6 text-slate-400 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        {ind.icon}
-                     </svg>
+                    {/* Dynamic Icon */}
+                    <svg className="w-6 h-6 text-slate-400 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      {ind.icon}
+                    </svg>
                   </div>
                   <span className="text-sm font-semibold text-slate-700 group-hover:text-indigo-700 transition-colors text-center">
                     {ind.name}
                   </span>
                 </div>
               ))}
-              
+
               {/* "And More" Card to balance the 8-item grid if you add/remove items */}
               {ABOUT_INDUSTRIES.length % 2 !== 0 && ABOUT_INDUSTRIES.length % 4 !== 0 && (
-                 <div className="flex flex-col items-center justify-center p-6 bg-slate-50 rounded-xl border border-dashed border-slate-200">
-                   <span className="text-sm font-medium text-slate-500">And many more...</span>
-                 </div>
+                <div className="flex flex-col items-center justify-center p-6 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                  <span className="text-sm font-medium text-slate-500">And many more...</span>
+                </div>
               )}
             </div>
           </div>
@@ -524,50 +533,56 @@ export default function AboutUs() {
 
       {/* Final CTA */}
       <section className="py-24 bg-gradient-to-br from-slate-900 to-indigo-900 text-white relative overflow-hidden">
-      
-      {/* Background Texture */}
-      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-700 via-gray-900 to-black"></div>
-      
-      {/* Subtle Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-500/10 blur-[100px] rounded-full pointer-events-none"></div>
 
-      <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
-        
-        <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-          Let’s Build Something That Grows With You
-        </h2>
-        
-        <p className="text-xl text-indigo-100/80 mb-10 max-w-2xl mx-auto leading-relaxed">
-          Whether you need a website, SEO strategy, branding, content, or secure IT infrastructure — we’re here to help you grow.
-        </p>
+        {/* Background Texture */}
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-700 via-gray-900 to-black"></div>
 
-        {/* --- IMPROVED BUTTONS --- */}
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-5">
-          
-          {/* Button 1: Primary (Calendar Icon) */}
-          <button className="group relative px-8 py-4 bg-white text-indigo-950 rounded-full font-bold text-lg hover:bg-indigo-50 transition-all duration-300 shadow-[0_0_20px_-5px_rgba(255,255,255,0.3)] hover:shadow-[0_0_25px_-5px_rgba(255,255,255,0.5)] hover:-translate-y-1 w-full sm:w-auto">
-            <span className="flex items-center justify-center gap-3">
-              {/* Calendar Icon */}
-              <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-              </svg>
-              Book Free Consultation
-            </span>
-          </button>
+        {/* Subtle Glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-500/10 blur-[100px] rounded-full pointer-events-none"></div>
 
-          {/* Button 2: Secondary (Glassmorphism + WhatsApp Icon) */}
-          <button className="group px-8 py-4 bg-white/5 border border-white/10 text-white rounded-full font-semibold text-lg hover:bg-white/10 hover:border-green-500/30 transition-all duration-300 backdrop-blur-sm flex items-center justify-center gap-3 w-full sm:w-auto">
-             {/* Icon Container with Glow */}
-             <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 group-hover:bg-green-500 group-hover:text-white transition-colors duration-300">
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01C17.18 3.03 14.69 2 12.04 2z"/></svg>
-             </div>
-             <span className="group-hover:text-green-300 transition-colors">Chat on WhatsApp</span>
-          </button>
+        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
+
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
+            Let’s Build Something That Grows With You
+          </h2>
+
+          <p className="text-xl text-indigo-100/80 mb-10 max-w-2xl mx-auto leading-relaxed">
+            Whether you need a website, SEO strategy, branding, content, or secure IT infrastructure — we’re here to help you grow.
+          </p>
+
+          {/* --- IMPROVED BUTTONS --- */}
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-5">
+
+            {/* Button 1: Primary (Calendar Icon) */}
+            <Link href="/contact-us">
+              <button className="group relative px-8 py-4 bg-white text-indigo-950 rounded-full font-bold text-lg hover:bg-indigo-50 transition-all duration-300 shadow-[0_0_20px_-5px_rgba(255,255,255,0.3)] hover:shadow-[0_0_25px_-5px_rgba(255,255,255,0.5)] hover:-translate-y-1 w-full sm:w-auto">
+                <span className="flex items-center justify-center gap-3">
+                  {/* Calendar Icon */}
+                  <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                  </svg>
+                  Book Free Consultation
+                </span>
+              </button>
+            </Link>
+
+            {/* Button 2: Secondary (Glassmorphism + WhatsApp Icon) */}
+            <a
+              href="https://wa.me/918859366292"
+              target="_blank"
+              rel="noopener noreferrer">
+              <button className="group px-8 py-4 bg-white/5 border border-white/10 text-white rounded-full font-semibold text-lg hover:bg-white/10 hover:border-green-500/30 transition-all duration-300 backdrop-blur-sm flex items-center justify-center gap-3 w-full sm:w-auto">
+                {/* Icon Container with Glow */}
+                <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 group-hover:bg-green-500 group-hover:text-white transition-colors duration-300">
+                  <WhatsAppIcon className="h-4 w-4" />
+                </div>
+                <span className="group-hover:text-green-300 transition-colors">Chat on WhatsApp</span>
+              </button>
+            </a>
+          </div>
 
         </div>
-
-      </div>
-    </section>
+      </section>
 
     </main>
   );
@@ -586,57 +601,57 @@ const ServiceCard = ({
   description: string;
   colorClass: ServiceColor;
 }) => {
-    // Mapping colors to Tailwind classes dynamically can be tricky with JIT, 
-    // so we handle specific cases or use safe-listing. 
-    // For this mockup, I'll stick to a simple mapping or just pass style props.
-    // To keep it simple for copy-paste, I'll default to Indigo/Blue mix if dynamic fails, 
-    // but here I use standard group-hover logic.
-    
-    const colorMap: Record<ServiceColor, string> = {
-        blue: "text-blue-600 bg-blue-50 group-hover:bg-blue-600",
-        green: "text-green-600 bg-green-50 group-hover:bg-green-600",
-        purple: "text-purple-600 bg-purple-50 group-hover:bg-purple-600",
-        pink: "text-pink-600 bg-pink-50 group-hover:bg-pink-600",
-        cyan: "text-cyan-600 bg-cyan-50 group-hover:bg-cyan-600",
-    };
+  // Mapping colors to Tailwind classes dynamically can be tricky with JIT, 
+  // so we handle specific cases or use safe-listing. 
+  // For this mockup, I'll stick to a simple mapping or just pass style props.
+  // To keep it simple for copy-paste, I'll default to Indigo/Blue mix if dynamic fails, 
+  // but here I use standard group-hover logic.
 
-    const activeColor = colorMap[colorClass];
+  const colorMap: Record<ServiceColor, string> = {
+    blue: "text-blue-600 bg-blue-50 group-hover:bg-blue-600",
+    green: "text-green-600 bg-green-50 group-hover:bg-green-600",
+    purple: "text-purple-600 bg-purple-50 group-hover:bg-purple-600",
+    pink: "text-pink-600 bg-pink-50 group-hover:bg-pink-600",
+    cyan: "text-cyan-600 bg-cyan-50 group-hover:bg-cyan-600",
+  };
 
-    return (
-        <div className="bg-white p-6 rounded-xl border border-slate-100 shadow-sm hover:shadow-xl transition duration-300 group">
-            <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 transition group-hover:text-white ${activeColor}`}>
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    {icon}
-                </svg>
-            </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-3">{title}</h3>
-            <p className="text-sm leading-7 text-slate-600">{description}</p>
-        </div>
-    );
+  const activeColor = colorMap[colorClass];
+
+  return (
+    <div className="bg-white p-6 rounded-xl border border-slate-100 shadow-sm hover:shadow-xl transition duration-300 group">
+      <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 transition group-hover:text-white ${activeColor}`}>
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          {icon}
+        </svg>
+      </div>
+      <h3 className="text-xl font-bold text-slate-900 mb-3">{title}</h3>
+      <p className="text-sm leading-7 text-slate-600">{description}</p>
+    </div>
+  );
 };
 
 const Step = ({ number, title, desc, color }: AboutStep) => (
-    <div className="relative p-4">
-        <div className={`w-16 h-16 ${color} rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 border-4 border-slate-800`}>
-            {number}
-        </div>
-        <h3 className="font-bold text-lg mb-2">{title}</h3>
-        <p className="text-sm text-slate-400">{desc}</p>
+  <div className="relative p-4">
+    <div className={`w-16 h-16 ${color} rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 border-4 border-slate-800`}>
+      {number}
     </div>
+    <h3 className="font-bold text-lg mb-2">{title}</h3>
+    <p className="text-sm text-slate-400">{desc}</p>
+  </div>
 );
 
 const ValueItem = ({ title, desc, icon }: AboutValue) => (
-    <div className="flex">
-        <div className="flex-shrink-0">
-            <div className="flex items-center justify-center h-10 w-10 rounded-md bg-indigo-600 text-white">
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    {icon}
-                </svg>
-            </div>
-        </div>
-        <div className="ml-4">
-            <h3 className="text-lg leading-6 font-medium text-slate-900">{title}</h3>
-            <p className="mt-1 text-sm text-slate-500">{desc}</p>
-        </div>
+  <div className="flex">
+    <div className="flex-shrink-0">
+      <div className="flex items-center justify-center h-10 w-10 rounded-md bg-indigo-600 text-white">
+        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          {icon}
+        </svg>
+      </div>
     </div>
+    <div className="ml-4">
+      <h3 className="text-lg leading-6 font-medium text-slate-900">{title}</h3>
+      <p className="mt-1 text-sm text-slate-500">{desc}</p>
+    </div>
+  </div>
 );

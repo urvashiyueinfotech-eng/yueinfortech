@@ -52,6 +52,9 @@ export type PublicBlog = {
   id: string;
   title: string;
   slug: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  keywords?: string[];
   excerpt?: string;
   content?: string;
   thumbnail?: string;
@@ -234,6 +237,9 @@ export async function fetchBlogs({ limit = 4, revalidate = CACHE_TTL.blogs } = {
         id: row.document.name?.split("/").pop() ?? "",
         title: String(data.title ?? ""),
         slug: data.slug ? `/blog/${data.slug}` : `/blog/${row.document.name?.split("/").pop() ?? ""}`,
+        metaTitle: typeof data.metaTitle === "string" ? data.metaTitle : "",
+        metaDescription: typeof data.metaDescription === "string" ? data.metaDescription : "",
+        keywords: Array.isArray(data.keywords) ? data.keywords.filter((keyword) => typeof keyword === "string") : [],
         excerpt: typeof data.excerpt === "string" ? data.excerpt : "",
         content: typeof data.content === "string" ? data.content : "",
         thumbnail: typeof data.thumbnail === "string" ? data.thumbnail : "",
@@ -296,6 +302,9 @@ export async function fetchBlogBySlug(
     id: entry.document.name?.split("/").pop() ?? "",
     title: String(data.title ?? ""),
     slug: `/blog/${slug}`,
+    metaTitle: typeof data.metaTitle === "string" ? data.metaTitle : "",
+    metaDescription: typeof data.metaDescription === "string" ? data.metaDescription : "",
+    keywords: Array.isArray(data.keywords) ? data.keywords.filter((keyword) => typeof keyword === "string") : [],
     excerpt: typeof data.excerpt === "string" ? data.excerpt : "",
     content: typeof data.content === "string" ? data.content : "",
     thumbnail: typeof data.thumbnail === "string" ? data.thumbnail : "",

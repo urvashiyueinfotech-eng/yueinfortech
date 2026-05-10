@@ -1,8 +1,17 @@
+import type { Metadata } from "next";
 import PageHero from "@/components/ui/PageHero";
 import Card, { type CardProps } from "@/components/ui/Card";
 import { fetchBlogs } from "@/lib/firestoreServer";
+import { getPageMetadata } from "@/lib/pageSeo.service";
 
 export const revalidate = 2592000;
+const BLOG_SEO_REVALIDATE = 2592000;
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getPageMetadata("blog", undefined, {
+    revalidate: BLOG_SEO_REVALIDATE,
+  });
+}
 
 export default async function BlogListPage() {
   const posts =

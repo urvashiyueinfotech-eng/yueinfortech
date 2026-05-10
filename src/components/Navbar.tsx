@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, ChevronDown, Menu, PhoneCall, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { MainService } from "@/data/main-services.data";
+import type { NavServiceItem } from "@/lib/services.service";
 
 // --- Configuration ---
 const navItems = [
@@ -19,10 +19,10 @@ const navItems = [
 ];
 
 // Simple in-module cache to avoid repeated Firestore calls for nav services
-let servicesCache: MainService[] | null = null;
-let servicesPromise: Promise<MainService[]> | null = null;
+let servicesCache: NavServiceItem[] | null = null;
+let servicesPromise: Promise<NavServiceItem[]> | null = null;
 
-async function fetchServicesOnce(): Promise<MainService[]> {
+async function fetchServicesOnce(): Promise<NavServiceItem[]> {
   if (servicesCache) return servicesCache;
   if (servicesPromise) return servicesPromise;
 
@@ -32,22 +32,14 @@ async function fetchServicesOnce(): Promise<MainService[]> {
       throw new Error("Failed to load nav services");
     }
 
-    const rows = (await response.json()) as Array<{
-      id: string;
-      title: string;
-      slug: string;
-      primaryHref?: string;
-    }>;
+    const rows = (await response.json()) as NavServiceItem[];
 
     const fetched = rows.map((row) => ({
       id: row.id,
-      eyebrow: "",
       title: row.title,
-      description: "",
-      image: "",
-      services: [],
-      primaryHref: row.primaryHref ?? `/services/${row.slug}`,
       slug: row.slug,
+      href: row.href ?? `/services/${row.slug}`,
+      children: Array.isArray(row.children) ? row.children : [],
     }));
 
     servicesCache = fetched;
@@ -76,8 +68,12 @@ const Logo = ({ tone }: { tone: "light" | "dark" }) => (
   </Link>
 );
 
-const DesktopNav = ({ isScrolled, services }: { isScrolled: boolean; services: MainService[] }) => {
+const DesktopNav = ({ isScrolled, services }: { isScrolled: boolean; services: NavServiceItem[] }) => {
   const pathname = usePathname();
+  const [activeServiceSlug, setActiveServiceSlug] = useState<string | null>(null);
+
+  const activeService =
+    services.find((service) => service.slug === activeServiceSlug) ?? services[0] ?? null;
 
   return (
     <nav className="hidden xl:flex items-center gap-2">
@@ -85,7 +81,11 @@ const DesktopNav = ({ isScrolled, services }: { isScrolled: boolean; services: M
         const isActive = pathname === item.href;
         if (item.label === "Services") {
           return (
-            <div key={item.label} className="group relative h-full flex items-center">
+            <div
+              key={item.label}
+              className="group relative h-full flex items-center"
+              onMouseLeave={() => setActiveServiceSlug(null)}
+            >
               <Link
                 href={item.href}
                 className={cn(
@@ -103,20 +103,47 @@ const DesktopNav = ({ isScrolled, services }: { isScrolled: boolean; services: M
                 <ChevronDown className="h-4 w-4" />
               </Link>
               
-              <div className="pointer-events-none absolute left-1/2 top-full z-30 w-80 -translate-x-1/2 pt-4 opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:opacity-100">
-                <div className="overflow-hidden rounded-2xl border border-black/5 bg-white/95 shadow-xl backdrop-blur-sm">
-                  <div className="grid gap-1 p-3">
-                    {/* Render services sorted by order */}
-                    {services.map((svc) => (
-                      <Link
-                        key={svc.slug}
-                        href={`/services/${svc.slug}`}
-                        className="flex flex-col rounded-xl px-3 py-2.5 text-left text-sm font-medium text-slate-900 transition hover:bg-gray-50"
-                      >
-                        <span>{svc.title}</span>
-                      </Link>
-                    ))}
+              <div className="pointer-events-none absolute left-1/2 top-full z-30 w-[660px] -translate-x-1/2 pt-4 opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:opacity-100">
+                <div className="flex items-start gap-4">
+                  <div className="w-[320px] rounded-3xl border border-slate-200 bg-white p-3 shadow-[0_14px_40px_rgba(15,23,42,0.12)]">
+                    <div className="grid gap-1">
+                      {services.map((svc) => {
+                        const isActiveService = svc.slug === activeService?.slug;
+                        return (
+                          <Link
+                            key={svc.slug}
+                            href={svc.href}
+                            onMouseEnter={() => setActiveServiceSlug(svc.slug)}
+                            className={cn(
+                              "flex items-center justify-between gap-3 rounded-2xl px-3 py-3 text-[15px] font-medium text-slate-900 transition",
+                              isActiveService ? "bg-slate-100" : "hover:bg-slate-50"
+                            )}
+                          >
+                            <span>{svc.title}</span>
+                            {svc.children.length > 0 ? (
+                              <ChevronDown className="h-4 w-4 -rotate-90 text-slate-500" />
+                            ) : null}
+                          </Link>
+                        );
+                      })}
+                    </div>
                   </div>
+
+                  {activeService && activeService.children.length > 0 ? (
+                    <div className="w-[300px] rounded-3xl border border-slate-200 bg-white p-3 shadow-[0_14px_40px_rgba(15,23,42,0.12)]">
+                      <div className="grid gap-1">
+                        {activeService.children.map((child) => (
+                          <Link
+                            key={child.slug}
+                            href={child.href}
+                            className="rounded-2xl px-3 py-3 text-[15px] font-medium text-slate-900 transition hover:bg-slate-100"
+                          >
+                            {child.title}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -153,7 +180,7 @@ const MobileMenu = ({
 }: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  services: MainService[];
+  services: NavServiceItem[];
 }) => {
   const pathname = usePathname();
   const [servicesOpen, setServicesOpen] = useState(false);
@@ -219,17 +246,35 @@ const MobileMenu = ({
                         {servicesOpen && (
                           <div className="grid gap-2 rounded-lg border border-white/10 bg-white/5 p-3">
                             {services.map((svc) => (
-                              <Link
-                                key={svc.slug}
-                                href={`/services/${svc.slug}`}
-                                onClick={() => {
-                                  setIsOpen(false);
-                                  setServicesOpen(false);
-                                }}
-                                className="rounded-lg px-3 py-2 text-sm text-slate-200 transition hover:bg-white/10"
-                              >
-                                {svc.title}
-                              </Link>
+                              <div key={svc.slug} className="space-y-1 rounded-lg px-1 py-1">
+                                <Link
+                                  href={svc.href}
+                                  onClick={() => {
+                                    setIsOpen(false);
+                                    setServicesOpen(false);
+                                  }}
+                                  className="block rounded-lg px-3 py-2 text-sm font-semibold text-slate-100 transition hover:bg-white/10"
+                                >
+                                  {svc.title}
+                                </Link>
+                                {svc.children.length > 0 ? (
+                                  <div className="grid gap-1 pl-4">
+                                    {svc.children.map((child) => (
+                                      <Link
+                                        key={child.slug}
+                                        href={child.href}
+                                        onClick={() => {
+                                          setIsOpen(false);
+                                          setServicesOpen(false);
+                                        }}
+                                        className="rounded-md px-3 py-1.5 text-xs text-slate-300 transition hover:bg-white/10 hover:text-white"
+                                      >
+                                        {child.title}
+                                      </Link>
+                                    ))}
+                                  </div>
+                                ) : null}
+                              </div>
                             ))}
                           </div>
                         )}
@@ -275,13 +320,13 @@ const MobileMenu = ({
 
 // --- Main Component ---
 type NavbarProps = {
-  servicesFromServer?: MainService[];
+  servicesFromServer?: NavServiceItem[];
 };
 
 const Navbar = ({ servicesFromServer = [] }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [services, setServices] = useState<MainService[]>(servicesFromServer);
+  const [services, setServices] = useState<NavServiceItem[]>(servicesFromServer);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);

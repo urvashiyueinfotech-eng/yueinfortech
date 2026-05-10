@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Mail, Phone, ArrowRight } from "lucide-react";
 import Image from "next/image";
 
+const COPYRIGHT_YEAR = new Date().getFullYear();
+
 export default function Footer() {
   return (
     <footer className="relative bg-slate-900 text-slate-300">
@@ -107,7 +109,12 @@ export default function Footer() {
 
               <div className="flex items-center gap-3">
                 <Mail className="h-4 w-4 text-indigo-400" />
-                <span>hello@yueinfotech.com</span>
+                <a
+                  href="mailto:sales@yueinfotech.com"
+                  className="transition hover:text-white"
+                >
+                  sales@yueinfotech.com
+                </a>
               </div>
 
               <Link
@@ -127,7 +134,7 @@ export default function Footer() {
         {/* BOTTOM BAR */}
         <div className="flex flex-col items-center justify-between gap-4 text-sm sm:flex-row">
           <p className="text-slate-500">
-            © {new Date().getFullYear()} Yue Infotech. All rights reserved.
+            © {COPYRIGHT_YEAR} Yue Infotech. All rights reserved.
           </p>
 
           <div className="flex gap-4 text-slate-400">

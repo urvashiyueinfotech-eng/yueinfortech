@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yue Infotech — Services</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --navy: #070b2f;
+            --navy-2: #0f1447;
+            --purple: #6d5dfc;
+            --purple-2: #8a7cff;
+            --violet: #4f46e5;
+            --cyan: #67e8f9;
+            --green: #24d366;
+            --text: #11142d;
+            --muted: #667085;
+            --soft: #f6f7ff;
+            --soft-2: #eef0ff;
+            --white: #ffffff;
+            --border: rgba(109, 93, 252, 0.14);
+            --shadow: 0 24px 70px rgba(17, 20, 45, 0.12);
+            --shadow-soft: 0 18px 45px rgba(17, 20, 45, 0.08);
+            --radius-xl: 30px;
+            --radius-lg: 22px;
+            --radius-md: 16px;
+            --container: 1180px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #fbfbff;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            width: min(100% - 40px, var(--container));
+            margin-inline: auto;
+        }
+
+        .section {
+            padding: 110px 0;
+            position: relative;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            color: var(--purple);
+            background: rgba(109, 93, 252, 0.09);
+            border: 1px solid rgba(109, 93, 252, 0.16);
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 18px;
+        }
+
+        .section-title {
+            font-size: clamp(34px, 5vw, 58px);
+            line-height: 0.95;
+            letter-spacing: -0.055em;
+            font-weight: 900;
+            max-width: 760px;
+        }
+
+        .section-title span,
+        .gradient-text {
+            background: linear-gradient(135deg, var(--purple), #2f2bff 60%, #1f9cff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .section-copy {
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.75;
+            max-width: 650px;
+            margin-top: 18px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: 0;
+            border-radius: 999px;
+            padding: 14px 22px;
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            color: var(--white);
+            background: linear-gradient(135deg, var(--purple), var(--violet));
+            box-shadow: 0 16px 32px rgba(109, 93, 252, 0.34);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 20px 42px rgba(109, 93, 252, 0.45);
+        }
+
+        .btn-ghost {
+            color: var(--white);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(18px);
+        }
+
+        .btn-light {
+            color: var(--purple);
+            background: rgba(109, 93, 252, 0.1);
+            border: 1px solid rgba(109, 93, 252, 0.16);
+        }
+
+        .site-header {
+            position: fixed;
+            top: 18px;
+            left: 50%;
+            z-index: 50;
+            transform: translateX(-50%);
+            width: min(100% - 36px, var(--container));
+            border-radius: 999px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(8, 12, 48, 0.72);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 18px 60px rgba(0, 0, 0, 0.22);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--white);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 0.9;
+        }
+
+        .logo-mark {
+            width: 32px;
+            height: 32px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--white), var(--purple-2));
+            position: relative;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+        }
+
+        .logo-mark::after {
+            content: "Y";
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            color: var(--navy);
+            font-weight: 900;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            color: rgba(255, 255, 255, 0.78);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .nav-links a {
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links .active {
+            color: var(--white);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .phone-pill {
+            display: inline-flex;
+            flex-direction: column;
+            color: rgba(255, 255, 255, 0.82);
+            font-size: 11px;
+            line-height: 1.1;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .phone-pill strong {
+            color: var(--white);
+            font-size: 12px;
+        }
+
+        .menu-btn {
+            display: none;
+            color: white;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 14px;
+            width: 42px;
+            height: 42px;
+            font-size: 22px;
+        }
+
+        .hero {
+            min-height: 760px;
+            padding: 170px 0 90px;
+            background:
+                radial-gradient(circle at 18% 20%, rgba(109, 93, 252, 0.55), transparent 28%),
+                radial-gradient(circle at 78% 20%, rgba(31, 156, 255, 0.24), transparent 22%),
+                radial-gradient(circle at 72% 82%, rgba(138, 124, 255, 0.35), transparent 30%),
+                linear-gradient(145deg, #050728 0%, #0a0d3d 47%, #14095a 100%);
+            color: var(--white);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hero::before,
+        .hero::after {
+            content: "";
+            position: absolute;
+            border-radius: 999px;
+            filter: blur(10px);
+            opacity: 0.65;
+            pointer-events: none;
+        }
+
+        .hero::before {
+            width: 520px;
+            height: 520px;
+            right: -160px;
+            top: 120px;
+            background: radial-gradient(circle, rgba(109, 93, 252, 0.34), transparent 65%);
+            animation: floatGlow 9s ease-in-out infinite;
+        }
+
+        .hero::after {
+            width: 380px;
+            height: 380px;
+            left: -120px;
+            bottom: 30px;
+            background: radial-gradient(circle, rgba(103, 232, 249, 0.14), transparent 65%);
+            animation: floatGlow 11s ease-in-out infinite reverse;
+        }
+
+        @keyframes floatGlow {
+
+            0%,
+            100% {
+                transform: translate3d(0, 0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate3d(28px, -18px, 0) scale(1.06);
+            }
+        }
+
+        .hero-grid {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: minmax(0, 1.05fr) minmax(340px, 0.95fr);
+            gap: 70px;
+            align-items: center;
+        }
+
+        .hero h1 {
+            max-width: 770px;
+            font-size: clamp(46px, 7vw, 86px);
+            line-height: 0.94;
+            letter-spacing: -0.07em;
+            font-weight: 900;
+            margin-top: 14px;
+        }
+
+        .hero p {
+            color: rgba(255, 255, 255, 0.72);
+            max-width: 620px;
+            line-height: 1.8;
+            margin: 24px 0 32px;
+            font-size: 17px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .hero-visual {
+            position: relative;
+            min-height: 480px;
+        }
+
+        .dashboard-card {
+            position: absolute;
+            inset: 30px 0 auto auto;
+            width: min(100%, 460px);
+            min-height: 420px;
+            border-radius: 36px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            backdrop-filter: blur(24px);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.25);
+            padding: 22px;
+            overflow: hidden;
+        }
+
+        .dashboard-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), transparent 40%);
+            pointer-events: none;
+        }
+
+        .mini-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .dots {
+            display: flex;
+            gap: 7px;
+        }
+
+        .dots span {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .mini-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .chart-card,
+        .metric-card,
+        .floating-card {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 24px;
+            padding: 18px;
+        }
+
+        .chart-card {
+            height: 170px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+        }
+
+        .bar {
+            flex: 1;
+            min-width: 18px;
+            border-radius: 999px 999px 8px 8px;
+            background: linear-gradient(180deg, var(--cyan), var(--purple));
+            opacity: 0.9;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .metric-card strong {
+            display: block;
+            color: white;
+            font-size: 24px;
+            letter-spacing: -0.05em;
+            margin-bottom: 4px;
+        }
+
+        .metric-card span {
+            color: rgba(255, 255, 255, 0.62);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .floating-card {
+            position: absolute;
+            z-index: 2;
+            color: white;
+            width: 210px;
+            box-shadow: 0 26px 70px rgba(0, 0, 0, 0.2);
+            animation: floatCard 5.5s ease-in-out infinite;
+        }
+
+        .floating-card.one {
+            left: -18px;
+            top: 85px;
+        }
+
+        .floating-card.two {
+            right: -12px;
+            bottom: 24px;
+            animation-delay: -2s;
+        }
+
+        .floating-card strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .floating-card span {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        @keyframes floatCard {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-14px);
+            }
+        }
+
+        .stats-wrap {
+            margin-top: -58px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            padding: 14px;
+            border-radius: 28px;
+            background: rgba(255, 255, 255, 0.86);
+            border: 1px solid rgba(109, 93, 252, 0.12);
+            backdrop-filter: blur(18px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .stat {
+            text-align: center;
+            padding: 24px 12px;
+            border-radius: 22px;
+            background: linear-gradient(180deg, #fff, #f7f7ff);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .stat:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 38px rgba(109, 93, 252, 0.13);
+        }
+
+        .stat strong {
+            display: block;
+            color: var(--purple);
+            font-size: 30px;
+            line-height: 1;
+            letter-spacing: -0.05em;
+        }
+
+        .stat span {
+            display: block;
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .services {
+            background: linear-gradient(180deg, #fbfbff, #f5f6ff);
+        }
+
+        .services-head {
+            display: grid;
+            grid-template-columns: 0.95fr 1fr;
+            gap: 40px;
+            align-items: end;
+            margin-bottom: 44px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .service-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 28px;
+            background: rgba(255, 255, 255, 0.82);
+            border: 1px solid var(--border);
+            box-shadow: 0 14px 42px rgba(17, 20, 45, 0.06);
+            padding: 30px;
+            min-height: 370px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .service-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top left, rgba(109, 93, 252, 0.13), transparent 42%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow);
+            border-color: rgba(109, 93, 252, 0.38);
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-card.featured {
+            border-color: rgba(109, 93, 252, 0.48);
+            box-shadow: 0 24px 70px rgba(109, 93, 252, 0.14);
+        }
+
+        .icon-badge {
+            width: 52px;
+            height: 52px;
+            border-radius: 18px;
+            display: grid;
+            place-items: center;
+            color: white;
+            font-size: 22px;
+            background: linear-gradient(135deg, var(--purple), var(--violet));
+            box-shadow: 0 14px 28px rgba(109, 93, 252, 0.28);
+            margin-bottom: 28px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .service-card h3,
+        .service-card p,
+        .service-card ul,
+        .service-card a {
+            position: relative;
+            z-index: 1;
+        }
+
+        .service-card h3 {
+            font-size: 22px;
+            line-height: 1.15;
+            letter-spacing: -0.04em;
+            margin-bottom: 12px;
+        }
+
+        .service-card p {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .service-card ul {
+            list-style: none;
+            display: grid;
+            gap: 11px;
+            margin-bottom: 24px;
+        }
+
+        .service-card li {
+            color: #3f435e;
+            font-size: 13px;
+            line-height: 1.45;
+            display: flex;
+            gap: 9px;
+        }
+
+        .service-card li::before {
+            content: "✓";
+            color: var(--purple);
+            font-weight: 900;
+        }
+
+        .learn-link {
+            color: var(--purple);
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .together {
+            background: #fff;
+        }
+
+        .split {
+            display: grid;
+            grid-template-columns: 0.85fr 1.15fr;
+            gap: 70px;
+            align-items: center;
+        }
+
+        .feature-mosaic {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .feature-tile {
+            min-height: 180px;
+            padding: 22px;
+            border-radius: 26px;
+            background: linear-gradient(180deg, #fff, #f7f7ff);
+            border: 1px solid var(--border);
+            box-shadow: 0 18px 42px rgba(17, 20, 45, 0.06);
+            transition: transform 0.25s ease;
+        }
+
+        .feature-tile:hover {
+            transform: translateY(-6px);
+        }
+
+        .feature-tile:nth-child(2),
+        .feature-tile:nth-child(5) {
+            transform: translateY(28px);
+        }
+
+        .feature-tile:nth-child(2):hover,
+        .feature-tile:nth-child(5):hover {
+            transform: translateY(20px);
+        }
+
+        .tile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            color: var(--purple);
+            background: rgba(109, 93, 252, 0.1);
+            margin-bottom: 18px;
+        }
+
+        .feature-tile h4 {
+            font-size: 15px;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .feature-tile p {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .partner {
+            background: linear-gradient(180deg, #f6f7ff, #fff);
+        }
+
+        .timeline-grid {
+            display: grid;
+            grid-template-columns: 0.8fr 1.2fr;
+            gap: 70px;
+            align-items: start;
+        }
+
+        .timeline {
+            position: relative;
+            display: grid;
+            gap: 20px;
+        }
+
+        .timeline::before {
+            content: "";
+            position: absolute;
+            top: 20px;
+            bottom: 20px;
+            left: 22px;
+            width: 2px;
+            background: linear-gradient(180deg, rgba(109, 93, 252, 0), rgba(109, 93, 252, 0.45), rgba(109, 93, 252, 0));
+        }
+
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 46px 1fr;
+            gap: 18px;
+            position: relative;
+        }
+
+        .step-dot {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            color: var(--purple);
+            background: #fff;
+            border: 1px solid rgba(109, 93, 252, 0.24);
+            box-shadow: 0 12px 28px rgba(109, 93, 252, 0.14);
+            font-weight: 900;
+            z-index: 1;
+        }
+
+        .timeline-card {
+            padding: 22px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            box-shadow: 0 18px 46px rgba(17, 20, 45, 0.07);
+        }
+
+        .timeline-card span {
+            color: var(--purple);
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .timeline-card h4 {
+            margin: 6px 0 7px;
+            font-size: 17px;
+            letter-spacing: -0.03em;
+        }
+
+        .timeline-card p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.65;
+        }
+
+        .industries {
+            background: #fff;
+            text-align: center;
+        }
+
+        .industries .section-title,
+        .industries .section-copy {
+            margin-inline: auto;
+        }
+
+        .industry-pills {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 36px;
+        }
+
+        .industry-pill {
+            padding: 13px 18px;
+            border-radius: 999px;
+            background: #fff;
+            color: #3f435e;
+            border: 1px solid rgba(109, 93, 252, 0.14);
+            box-shadow: 0 10px 30px rgba(17, 20, 45, 0.04);
+            font-size: 13px;
+            font-weight: 800;
+            transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+        }
+
+        .industry-pill:hover {
+            transform: translateY(-3px);
+            color: white;
+            background: linear-gradient(135deg, var(--purple), var(--violet));
+        }
+
+        .faq {
+            background: linear-gradient(180deg, #f7f8ff, #fff);
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: 0.8fr 1.2fr;
+            gap: 60px;
+            align-items: start;
+        }
+
+        .accordion {
+            display: grid;
+            gap: 16px;
+        }
+
+        details {
+            border-radius: 20px;
+            background: #fff;
+            border: 1px solid var(--border);
+            box-shadow: 0 14px 36px rgba(17, 20, 45, 0.06);
+            overflow: hidden;
+        }
+
+        summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 22px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        summary::after {
+            content: "+";
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            color: var(--purple);
+            background: rgba(109, 93, 252, 0.1);
+            flex: 0 0 auto;
+        }
+
+        details[open] summary::after {
+            content: "−";
+        }
+
+        details p {
+            padding: 0 24px 24px;
+            color: var(--muted);
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        .choice {
+            background: #fff;
+        }
+
+        .choice-card {
+            display: grid;
+            grid-template-columns: 0.95fr 1.05fr;
+            gap: 50px;
+            align-items: center;
+            padding: 46px;
+            border-radius: 34px;
+            background: linear-gradient(135deg, #fff, #f3f4ff);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .check-panel {
+            padding: 28px;
+            border-radius: 28px;
+            background: rgba(109, 93, 252, 0.08);
+            border: 1px solid rgba(109, 93, 252, 0.14);
+        }
+
+        .check-row {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(109, 93, 252, 0.12);
+        }
+
+        .check-row:last-child {
+            border-bottom: 0;
+        }
+
+        .check-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            color: white;
+            background: linear-gradient(135deg, var(--purple), var(--violet));
+            flex: 0 0 auto;
+        }
+
+        .check-row h4 {
+            font-size: 15px;
+            margin-bottom: 5px;
+            letter-spacing: -0.02em;
+        }
+
+        .check-row p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+        .final-cta {
+            padding: 110px 0;
+            text-align: center;
+            color: white;
+            background:
+                radial-gradient(circle at 35% 25%, rgba(109, 93, 252, 0.5), transparent 32%),
+                radial-gradient(circle at 80% 80%, rgba(103, 232, 249, 0.14), transparent 26%),
+                linear-gradient(145deg, #050728, #0b0f43 55%, #160a5c);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .final-cta h2 {
+            font-size: clamp(34px, 5vw, 62px);
+            line-height: 0.98;
+            letter-spacing: -0.06em;
+            max-width: 700px;
+            margin: 0 auto 18px;
+        }
+
+        .final-cta p {
+            color: rgba(255, 255, 255, 0.68);
+            max-width: 620px;
+            margin: 0 auto 30px;
+            line-height: 1.8;
+        }
+
+        .footer {
+            background: #050728;
+            color: white;
+            padding: 70px 0 24px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.2fr repeat(3, 1fr);
+            gap: 50px;
+            padding-bottom: 46px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer p,
+        .footer a,
+        .footer li {
+            color: rgba(255, 255, 255, 0.62);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .footer h4 {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 18px;
+        }
+
+        .footer ul {
+            list-style: none;
+            display: grid;
+            gap: 7px;
+        }
+
+        .footer a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding-top: 24px;
+            color: rgba(255, 255, 255, 0.46);
+            font-size: 13px;
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 60;
+            background: var(--green);
+            color: white;
+            border-radius: 999px;
+            padding: 14px 18px;
+            font-size: 13px;
+            font-weight: 900;
+            box-shadow: 0 18px 40px rgba(36, 211, 102, 0.3);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            animation: reveal 0.75s ease forwards;
+        }
+
+        .delay-1 {
+            animation-delay: 0.12s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.24s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.36s;
+        }
+
+        @keyframes reveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 1024px) {
+
+            .nav-links,
+            .phone-pill,
+            .header-actions .btn {
+                display: none;
+            }
+
+            .menu-btn {
+                display: grid;
+                place-items: center;
+            }
+
+            .hero-grid,
+            .services-head,
+            .split,
+            .timeline-grid,
+            .faq-grid,
+            .choice-card {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-visual {
+                min-height: 430px;
+            }
+
+            .dashboard-card {
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%);
+            }
+
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .feature-mosaic {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .feature-tile:nth-child(2),
+            .feature-tile:nth-child(5),
+            .feature-tile:nth-child(2):hover,
+            .feature-tile:nth-child(5):hover {
+                transform: none;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .container {
+                width: min(100% - 28px, var(--container));
+            }
+
+            .section {
+                padding: 78px 0;
+            }
+
+            .site-header {
+                top: 10px;
+                width: calc(100% - 20px);
+                border-radius: 22px;
+            }
+
+            .hero {
+                padding-top: 130px;
+                min-height: auto;
+            }
+
+            .hero p {
+                font-size: 15px;
+            }
+
+            .hero-actions,
+            .final-cta .hero-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .cards-grid,
+            .feature-mosaic {
+                grid-template-columns: 1fr;
+            }
+
+            .service-card {
+                min-height: auto;
+                padding: 24px;
+            }
+
+            .choice-card {
+                padding: 26px;
+                border-radius: 26px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+            }
+
+            .whatsapp-float {
+                right: 14px;
+                bottom: 14px;
+                padding: 12px 14px;
+            }
+        }
+
+        @media (max-width: 440px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .industry-pill {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <a href="#" class="logo" aria-label="Yue Infotech home">
+            <span class="logo-mark"></span>
+            <span>Yue<br>Infotech</span>
+        </a>
+
+        <nav class="nav-links" aria-label="Primary navigation">
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#services" class="active">Services</a>
+            <a href="#">Blog</a>
+            <a href="#">Contact</a>
+        </nav>
+
+        <div class="header-actions">
+            <span class="phone-pill">Need something? <strong>+91 9876543210</strong></span>
+            <a href="#consultation" class="btn btn-primary">Book Free Consultation →</a>
+        </div>
+
+        <button class="menu-btn" aria-label="Open menu">☰</button>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container hero-grid">
+                <div class="hero-content reveal">
+                    <span class="eyebrow">Digital-first solutions designed to grow with you</span>
+                    <h1>Digital, Creative &<br><span class="gradient-text">IT Solutions</span> for Growth</h1>
+                    <p>Yue Infotech delivers integrated digital services — web engineering, cloud solutions, performance
+                        marketing, creative content, and modern IT infrastructure — designed to help your business
+                        perform, innovate reliably, and generate measurable business growth.</p>
+                    <div class="hero-actions">
+                        <a href="#consultation" class="btn btn-primary">Book Free Consultation</a>
+                        <a href="#services" class="btn btn-ghost">View Services</a>
+                    </div>
+                </div>
+
+                <div class="hero-visual reveal delay-2" aria-hidden="true">
+                    <div class="dashboard-card">
+                        <div class="mini-top">
+                            <div class="dots"><span></span><span></span><span></span></div>
+                            <div class="mini-label">Growth Dashboard</div>
+                        </div>
+                        <div class="chart-card">
+                            <span class="bar" style="height: 42%"></span>
+                            <span class="bar" style="height: 68%"></span>
+                            <span class="bar" style="height: 55%"></span>
+                            <span class="bar" style="height: 82%"></span>
+                            <span class="bar" style="height: 74%"></span>
+                            <span class="bar" style="height: 92%"></span>
+                        </div>
+                        <div class="metric-grid">
+                            <div class="metric-card"><strong>8+</strong><span>Years in IT</span></div>
+                            <div class="metric-card"><strong>50+</strong><span>Projects delivered</span></div>
+                            <div class="metric-card"><strong>15+</strong><span>Industry verticals</span></div>
+                            <div class="metric-card"><strong>94%</strong><span>Success rate</span></div>
+                        </div>
+                    </div>
+                    <div class="floating-card one"><strong>SEO + Content</strong><span>Organic traffic strategy, content
+                            systems, and ranking growth.</span></div>
+                    <div class="floating-card two"><strong>Cloud + Web</strong><span>Modern platforms built for speed,
+                            security, and scale.</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats-wrap">
+            <div class="container">
+                <div class="stats reveal delay-1">
+                    <div class="stat"><strong>8+</strong><span>Years in IT</span></div>
+                    <div class="stat"><strong>50+</strong><span>Projects Delivered</span></div>
+                    <div class="stat"><strong>15+</strong><span>Industry Verticals</span></div>
+                    <div class="stat"><strong>94%</strong><span>Success Rate</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section services" id="services">
+            <div class="container">
+                <div class="services-head">
+                    <div>
+                        <span class="eyebrow">What we do</span>
+                        <h2 class="section-title">Everything Your Business Needs <span>to Grow Digitally</span></h2>
+                    </div>
+                    <p class="section-copy">From core online presence — each solution is built as a standalone
+                        engagement or as part of a connected integrated growth system.</p>
+                </div>
+
+                <div class="cards-grid">
+                    <article class="service-card featured">
+                        <div class="icon-badge">▣</div>
+                        <h3>Fast, Modern & Conversion-Focused Websites Built for Growth</h3>
+                        <p>We craft high-performing websites that look premium, load fast, and convert visitors into
+                            leads, sales, and customers.</p>
+                        <ul>
+                            <li>Built for speed, performance & Core Web Vitals</li>
+                            <li>SEO-optimized from day one</li>
+                            <li>UX that supports higher conversions</li>
+                            <li>Scalable design for long-term use</li>
+                            <li>Mobile-first responsive layouts</li>
+                            <li>Integrated with CRM, CMS & SaaS frameworks</li>
+                        </ul>
+                        <a href="#" class="learn-link">Explore →</a>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="icon-badge">⌕</div>
+                        <h3>Drive More Traffic, Leads & Sales With Data-Driven Marketing</h3>
+                        <p>Our marketing services combine strategy, creativity, and analytics to help businesses grow
+                            online.</p>
+                        <ul>
+                            <li>SEO-focused marketing</li>
+                            <li>Multi-channel strategy</li>
+                            <li>Precise targeting & segmentation</li>
+                            <li>Full-funnel optimization</li>
+                            <li>Real-time reporting & analytics</li>
+                            <li>ROI, CAC & ROAS improvement</li>
+                        </ul>
+                        <a href="#" class="learn-link">Explore →</a>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="icon-badge">↯</div>
+                        <h3>Bring Your Local Customers, Calls & Walk-Ins With Local Search Marketing</h3>
+                        <p>We help businesses get discovered by nearby customers through Maps, local search, and
+                            reputation-focused campaigns.</p>
+                        <ul>
+                            <li>Rank higher on Google Maps</li>
+                            <li>Capture “near me” search traffic</li>
+                            <li>Boost phone calls & foot traffic</li>
+                            <li>Build trust with verified reviews</li>
+                            <li>Optimize for mobile & local intent</li>
+                            <li>Target customers in your service area</li>
+                        </ul>
+                        <a href="#" class="learn-link">Explore →</a>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="icon-badge">▧</div>
+                        <h3>Rank Higher, Capture AI Search Traffic & Convert Better</h3>
+                        <p>SEO is no longer only about rankings. We optimize for Google Search, AI Overviews, voice
+                            search, and answer engines.</p>
+                        <ul>
+                            <li>SEO + GEO + AEO integrated framework</li>
+                            <li>Technical SEO audit and cleanup</li>
+                            <li>AI & LLM visibility optimization</li>
+                            <li>Authority-focused keyword research</li>
+                            <li>SERPs, schema, and rich snippets</li>
+                            <li>Service, local, and scalable SEO ecosystems</li>
+                        </ul>
+                        <a href="#" class="learn-link">Explore →</a>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="icon-badge">▤</div>
+                        <h3>High-Quality Content That Educates, Engages & Converts</h3>
+                        <p>Content is the foundation of digital trust. We create conversion-focused blogs, landing
+                            pages, social content, and brand copy.</p>
+                        <ul>
+                            <li>SEO-ready content for organic growth</li>
+                            <li>GEO-friendly paragraphs for AI answers</li>
+                            <li>AEO content from FAQs and schemas</li>
+                            <li>B2B + D2C blog content</li>
+                            <li>Website copywriting</li>
+                            <li>Original, data-backed and fully researched</li>
+                        </ul>
+                        <a href="#" class="learn-link">Explore →</a>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section together">
+            <div class="container split">
+                <div>
+                    <span class="eyebrow">Why choose us</span>
+                    <h2 class="section-title">All Services Work Better <span>Together</span></h2>
+                    <p class="section-copy">Most agencies run isolated campaigns. Yue Infotech builds connected digital
+                        systems — where your website, SEO, marketing, content, and IT infrastructure are engineered
+                        around a single growth goal.</p>
+                    <div class="hero-actions" style="margin-top: 30px;">
+                        <a href="#consultation" class="btn btn-primary">Start a Personalized Strategy →</a>
+                        <a href="#services" class="btn btn-light">View Our Work</a>
+                    </div>
+                </div>
+
+                <div class="feature-mosaic">
+                    <div class="feature-tile">
+                        <div class="tile-icon">◎</div>
+                        <h4>Web as the Foundation</h4>
+                        <p>Every digital campaign starts with a website designed for conversion, performance, and scale.
+                        </p>
+                    </div>
+                    <div class="feature-tile">
+                        <div class="tile-icon">◌</div>
+                        <h4>SEO Amplifies Content</h4>
+                        <p>SEO without content has nothing to rank. Content without SEO lacks growth direction.</p>
+                    </div>
+                    <div class="feature-tile">
+                        <div class="tile-icon">◈</div>
+                        <h4>Paid Captures Intent</h4>
+                        <p>Paid media helps you quickly find the right customers while organic growth compounds.</p>
+                    </div>
+                    <div class="feature-tile">
+                        <div class="tile-icon">◆</div>
+                        <h4>Content Fuels Every Channel</h4>
+                        <p>Smart content improves SEO, email, social, ads, sales enablement, and brand reputation.</p>
+                    </div>
+                    <div class="feature-tile">
+                        <div class="tile-icon">◇</div>
+                        <h4>IT Protects the System</h4>
+                        <p>Reliable infrastructure keeps your business secure, fast, and ready to scale.</p>
+                    </div>
+                    <div class="feature-tile">
+                        <div class="tile-icon">▦</div>
+                        <h4>Data Connects Everything</h4>
+                        <p>Your website, campaigns, CRM, and reporting should work together instead of in silos.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section partner">
+            <div class="container timeline-grid">
+                <div>
+                    <span class="eyebrow">Why choose us</span>
+                    <h2 class="section-title">Your All-in-One Partner <span>for Digital Growth</span></h2>
+                    <p class="section-copy">Most businesses juggle separate freelancers, agencies, and vendors — causing
+                        misalignment and missed growth opportunities. Yue Infotech brings everything together under one
+                        connected team.</p>
+                    <div class="hero-actions" style="margin-top: 30px;">
+                        <a href="#consultation" class="btn btn-primary">Get Personalized Recommendations →</a>
+                    </div>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="step-dot">01</div>
+                        <div class="timeline-card"><span>Start where you are</span>
+                            <h4>Every Decision Backed by Real Data</h4>
+                            <p>We use analytics, behavior, search trends, and business signals to guide smart decisions.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="step-dot">02</div>
+                        <div class="timeline-card"><span>Built around outcomes</span>
+                            <h4>Advanced AI Tools With Expert Execution</h4>
+                            <p>We combine AI automation, SEO, GEO, AEO, analytics, and human strategy to improve speed,
+                                insight, and precision.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="step-dot">03</div>
+                        <div class="timeline-card"><span>Secure by design</span>
+                            <h4>IT & AI Optimized at Every Level</h4>
+                            <p>Cloud, security, website infrastructure, automation, and business systems are aligned to
+                                support growth.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="step-dot">04</div>
+                        <div class="timeline-card"><span>Measured growth</span>
+                            <h4>Clear Reporting — No Vanity Metrics</h4>
+                            <p>We focus on leads, conversions, revenue impact, and real business KPIs.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="step-dot">05</div>
+                        <div class="timeline-card"><span>Flexible engagement</span>
+                            <h4>No Years of Continuous Expertise</h4>
+                            <p>From startups to established companies, we bring flexible expertise across web, IT,
+                                cloud, marketing, AI search, and growth systems.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section industries">
+            <div class="container">
+                <span class="eyebrow">Industries we serve</span>
+                <h2 class="section-title">Industries We Work With</h2>
+                <div class="industry-pills">
+                    <span class="industry-pill">E-commerce & Retail</span>
+                    <span class="industry-pill">B2B & SaaS</span>
+                    <span class="industry-pill">Real Estate</span>
+                    <span class="industry-pill">Healthcare & Wellness</span>
+                    <span class="industry-pill">Education & EdTech</span>
+                    <span class="industry-pill">Finance & FinTech</span>
+                    <span class="industry-pill">Hospitality & Travel</span>
+                    <span class="industry-pill">Local Businesses</span>
+                    <span class="industry-pill">Startups</span>
+                    <span class="industry-pill">Professional Services</span>
+                    <span class="industry-pill">Technology</span>
+                    <span class="industry-pill">Manufacturing</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="section faq">
+            <div class="container faq-grid">
+                <div>
+                    <span class="eyebrow">Frequently asked questions</span>
+                    <h2 class="section-title">Frequently Asked <span>Questions</span></h2>
+                    <p class="section-copy">Everything you need to know before choosing a service or starting a project.
+                    </p>
+                </div>
+
+                <div class="accordion">
+                    <details>
+                        <summary>Which service is best for my business?</summary>
+                        <p>The right service depends on your current stage, goals, market, and budget. We usually start
+                            by understanding your website, traffic, leads, conversions, and operational needs before
+                            recommending a roadmap.</p>
+                    </details>
+                    <details>
+                        <summary>Do you offer combined service packages?</summary>
+                        <p>Yes. Services can be delivered individually or combined into integrated growth packages
+                            covering web, SEO, content, paid media, local search, cloud, and IT support.</p>
+                    </details>
+                    <details>
+                        <summary>Can you help with both local and global SEO?</summary>
+                        <p>Yes. We support local SEO for location-based businesses and broader SEO/GEO/AEO strategies
+                            for regional, national, and global visibility.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <section class="section choice" id="consultation">
+            <div class="container">
+                <div class="choice-card">
+                    <div>
+                        <span class="eyebrow">Not sure what you need?</span>
+                        <h2 class="section-title">We’ll Help You Choose the <span>Right Service</span></h2>
+                        <p class="section-copy">We understand your goals, evaluate your digital position, and guide you
+                            to the most effective solutions — without pushing you toward the most expensive one.</p>
+                        <div class="hero-actions" style="margin-top: 28px;">
+                            <a href="#" class="btn btn-primary">Book Free Consultation →</a>
+                            <a href="#" class="btn btn-light">Chat on WhatsApp</a>
+                        </div>
+                    </div>
+
+                    <div class="check-panel">
+                        <div class="check-row">
+                            <div class="check-icon">✓</div>
+                            <div>
+                                <h4>We review your current website, search visibility, and digital marketing position
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="check-row">
+                            <div class="check-icon">✓</div>
+                            <div>
+                                <h4>We identify the 3 highest-impact opportunities for your specific business and budget
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="check-row">
+                            <div class="check-icon">✓</div>
+                            <div>
+                                <h4>We recommend the right service and scope aligned with your goals — no fluff</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="final-cta">
+            <div class="container">
+                <span class="eyebrow"
+                    style="color: #fff; background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.13);">Start
+                    growing with us</span>
+                <h2>Ready to Start Your Project With <span class="gradient-text">Yue Infotech?</span></h2>
+                <p>Let’s build digital systems designed for visibility, performance, and measurable business growth.</p>
+                <div class="hero-actions" style="justify-content:center;">
+                    <a href="#" class="btn btn-primary">Book a Strategy Call →</a>
+                    <a href="#" class="btn btn-ghost">Request a Quote</a>
+                    <a href="#" class="btn btn-ghost">Chat on WhatsApp</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <a href="#" class="logo" style="margin-bottom: 18px;"><span
+                            class="logo-mark"></span><span>Yue<br>Infotech</span></a>
+                    <p>Yue Infotech builds digital systems for businesses that need websites, marketing, cloud, IT, and
+                        growth infrastructure working together.</p>
+                </div>
+                <div>
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Our Services</h4>
+                    <ul>
+                        <li><a href="#">Web Design & Development</a></li>
+                        <li><a href="#">SEO Services</a></li>
+                        <li><a href="#">Digital Marketing</a></li>
+                        <li><a href="#">Content Writing</a></li>
+                        <li><a href="#">Local Business Solutions</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Contact Us</h4>
+                    <ul>
+                        <li>+91 9876543210</li>
+                        <li>hello@yueinfotech.com</li>
+                        <li><a href="#">View on Maps →</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 Yue Infotech. All rights reserved.</span>
+                <span>Privacy Policy · Terms</span>
+            </div>
+        </div>
+    </footer>
+
+    <a href="#" class="whatsapp-float">Chat on WhatsApp</a>
+
+    <script>
+        const menuButton = document.querySelector('.menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuButton?.addEventListener('click', () => {
+            const open = navLinks.style.display === 'flex';
+            navLinks.style.display = open ? 'none' : 'flex';
+            navLinks.style.position = 'absolute';
+            navLinks.style.top = '70px';
+            navLinks.style.left = '0';
+            navLinks.style.right = '0';
+            navLinks.style.flexDirection = 'column';
+            navLinks.style.padding = '24px';
+            navLinks.style.background = 'rgba(8, 12, 48, 0.96)';
+            navLinks.style.borderRadius = '22px';
+            navLinks.style.border = '1px solid rgba(255,255,255,0.12)';
+        });
+    </script>
+</body>
+
+</html>

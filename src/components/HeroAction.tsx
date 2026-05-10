@@ -1,5 +1,6 @@
 import CtaButton from "@/components/CtaButton";
 import CustomSolutionPopup from "@/components/CustomSolutionPopup";
+import WhatsAppIcon from "@/components/icons/WhatsAppIcon";
 import type { LinkAction } from "@/types";
 import type { ContactSubmissionContext } from "@/lib/contactSubmission";
 
@@ -45,6 +46,7 @@ export default function HeroAction({ action, context }: HeroActionProps) {
             type="button"
             className={`group inline-flex items-center justify-center gap-2 rounded-full shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${bgClassName} ${textClassName}`}
           >
+            {action.type === "whatsapp" ? <WhatsAppIcon className="h-4 w-4" /> : null}
             {action.text}
           </button>
         }
@@ -59,6 +61,7 @@ export default function HeroAction({ action, context }: HeroActionProps) {
       textClassName={textClassName}
       className="gap-2"
     >
+      {action.type === "whatsapp" ? <WhatsAppIcon className="h-4 w-4" /> : null}
       {action.text}
     </CtaButton>
   );
