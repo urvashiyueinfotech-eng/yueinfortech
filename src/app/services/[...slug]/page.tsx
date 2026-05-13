@@ -78,7 +78,7 @@ function renderHeroTitle(heading: string) {
 
 function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: string }) {
   return (
-    <main className="bg-[#F8F9FF] text-[#1E1B4B] font-sans selection:bg-[#5B4FE9]/20 pb-20">
+    <main className="bg-[#F8F9FF] text-[#1E1B4B] font-sans selection:bg-[#5B4FE9]/20">
       {/* ── HERO ── */}
       <section className="min-h-screen bg-gradient-to-br from-[#0D1035] via-[#111437] to-[#1a1060] flex flex-col justify-center px-[5%] py-[120px] pb-[80px] relative overflow-hidden">
         <div className="absolute inset-0 z-0 bg-[radial-gradient(rgba(91,79,233,0.15)_1px,transparent_1px)] [background-size:32px_32px]"></div>
@@ -298,7 +298,7 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-[24px] animate-fade-up">
             {data.engagement_tiers_section.tiers.map((tier, idx) => (
-              <div key={tier.id || idx} className={`bg-white rounded-[20px] p-[36px_28px] shadow-[0_4px_24px_rgba(91,79,233,0.08)] border border-[#5B4FE9]/5 flex flex-col transition-all duration-250 hover:-translate-y-1 ${tier.featured ? 'border-2 border-[#5B4FE9] bg-[#0D1035] text-white' : ''}`}>
+              <div key={tier.id || idx} className={`rounded-[20px] p-[36px_28px] shadow-[0_4px_24px_rgba(91,79,233,0.08)] flex flex-col transition-all duration-250 hover:-translate-y-1 ${tier.featured ? 'border-2 border-[#5B4FE9] bg-[#0D1035] text-white' : 'bg-white border border-[#5B4FE9]/5'}`}>
                 {tier.badge && <div className="inline-block bg-[#5B4FE9] text-white text-[0.68rem] font-bold tracking-[0.06em] uppercase px-3 py-1 rounded-full mb-3.5 self-start">{tier.badge}</div>}
                 <div className={`text-[1.6rem] font-extrabold tracking-[-0.02em] mb-1 ${tier.featured ? 'text-white' : 'text-[#1E1B4B]'}`}>{tier.name}</div>
                 <div className={`text-[0.83rem] mb-6 pb-5 border-b ${tier.featured ? 'text-white/65 border-white/12' : 'text-[#4B5563] border-[#E5E7EB]'}`}>{tier.for}</div>
