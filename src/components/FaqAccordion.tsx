@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import FaqItem from "@/components/ui/FaqItem";
-import type { FaqItemType } from "./FAQHighlights";
+import type { FaqItemType } from "@/components/faq.types";
 
 export default function FaqAccordion({ faqs }: { faqs: FaqItemType[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);

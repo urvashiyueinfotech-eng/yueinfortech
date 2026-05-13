@@ -1,81 +1,8 @@
-import { notFound } from "next/navigation";
-import type { Metadata } from "next";
-import Link from "next/link";
+const fs = require('fs');
 
-import IntroSection from "@/sections/ServicesPage/IntroSection";
-import SubServicesGrid from "@/sections/ServicesPage/SubServicesGrid";
-import { ProcessSection, FAQSection } from "@/sections/ServicesPage/ExtraSection";
-import MainServiceCard from "@/components/ui/MainServiceCard";
-import ServiceFinalCtaAction from "@/components/ServiceFinalCtaAction";
-import HeroAction from "@/components/HeroAction";
-import CustomSolutionPopup from "@/components/CustomSolutionPopup";
-import WhatsAppIcon from "@/components/icons/WhatsAppIcon";
-import type { LinkAction } from "@/types";
-import type { ContactSubmissionContext, ContactSubmissionSource } from "@/lib/contactSubmission";
+const content = fs.readFileSync('src/app/services/[...slug]/page.tsx', 'utf8');
 
-function ServiceAction({ action, className, context }: { action: LinkAction; className: string; context: ContactSubmissionContext }) {
-  if (action.kind === "popup" && action.popupId === "custom-quote") {
-    return (
-      <CustomSolutionPopup
-        source={context.section as ContactSubmissionSource}
-        context={context}
-        trigger={
-          <button type="button" className={className}>
-            {action.type === "whatsapp" ? <WhatsAppIcon className="h-4 w-4" /> : null}
-            {action.text}
-          </button>
-        }
-      />
-    );
-  }
-
-  if (action.type === "whatsapp") {
-    return (
-      <a href="https://wa.me/918859366292" className={className} target="_blank" rel="noopener noreferrer">
-        <WhatsAppIcon className="h-4 w-4" />
-        {action.text}
-      </a>
-    );
-  }
-
-  return (
-    <Link href={action.href ?? "/contact-us"} className={className}>
-      {action.text}
-    </Link>
-  );
-}
-import {
-  getAllServiceSlugs,
-  getRelatedMainServices,
-  getServiceBySlug,
-} from "@/lib/services.service";
-import { getPageMetadata } from "@/lib/pageSeo.service";
-import type { ServiceDoc } from "@/types";
-
-export const revalidate = 2592000;
-export const dynamicParams = true;
-
-function joinSlug(segments?: string[]) {
-  return (segments ?? []).join("/").trim();
-}
-
-function renderHeroTitle(heading: string) {
-  const normalized = heading.trim();
-  if (normalized.toLowerCase().includes("leads & sales")) {
-    return (
-      <>
-        Drive More Traffic,
-        <br />
-        Leads & <em className="not-italic text-[#7B72EE]">Sales</em>
-      </>
-    );
-  }
-
-  return normalized;
-}
-
-
-
+const newTemplate = `
 function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: string }) {
   return (
     <main className="bg-[#F8F9FF] text-[#1E1B4B] font-sans selection:bg-[#5B4FE9]/20 pb-20">
@@ -121,7 +48,7 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
                   className={baseClass}
                   context={{
                     page: "service",
-                    route: `/services/${slugPath}`,
+                    route: \`/services/\${slugPath}\`,
                     section: "hero",
                     trigger: action.popupId ?? action.type,
                   }}
@@ -146,14 +73,14 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
                   <ServiceAction
                     action={data.intro_section.cta}
                     className="bg-[#5B4FE9] text-white px-[28px] py-[13px] rounded-full text-[0.88rem] font-bold no-underline inline-flex items-center gap-[7px] transition-all shadow-[0_4px_16px_rgba(91,79,233,0.3)] hover:bg-[#4A3FD4] hover:-translate-y-0.5"
-                    context={{ page: "service", route: `/services/${slugPath}`, section: "overview", trigger: data.intro_section.cta.popupId ?? data.intro_section.cta.type }}
+                    context={{ page: "service", route: \`/services/\${slugPath}\`, section: "overview", trigger: data.intro_section.cta.popupId ?? data.intro_section.cta.type }}
                   />
                 )}
                 {data.intro_section.secondaryCta && (
                   <ServiceAction
                     action={data.intro_section.secondaryCta}
                     className="bg-white text-[#5B4FE9] border-[1.5px] border-[#E5E7EB] px-[28px] py-[13px] rounded-full text-[0.88rem] font-semibold no-underline inline-flex items-center gap-[7px] transition-all hover:border-[#5B4FE9] hover:shadow-[0_4px_16px_rgba(91,79,233,0.12)]"
-                    context={{ page: "service", route: `/services/${slugPath}`, section: "overview", trigger: data.intro_section.secondaryCta.popupId ?? data.intro_section.secondaryCta.type }}
+                    context={{ page: "service", route: \`/services/\${slugPath}\`, section: "overview", trigger: data.intro_section.secondaryCta.popupId ?? data.intro_section.secondaryCta.type }}
                   />
                 )}
               </div>
@@ -184,7 +111,7 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
             {data.sub_services_section.cards.map((card, idx) => {
               const isFeatured = idx < 2;
               return (
-                <div key={card.id || idx} className={`bg-white rounded-[20px] p-[32px_28px] shadow-[0_4px_24px_rgba(91,79,233,0.08)] border transition-all duration-250 hover:-translate-y-1 hover:shadow-[0_8px_40px_rgba(91,79,233,0.16)] flex flex-col ${isFeatured ? 'border-2 border-[#5B4FE9] bg-[linear-gradient(135deg,#fff_0%,#EEF0FF_100%)]' : 'border-[#5B4FE9]/5'}`} style={idx === 0 ? { gridColumn: 'span 2' } : {}}>
+                <div key={card.id || idx} className={\`bg-white rounded-[20px] p-[32px_28px] shadow-[0_4px_24px_rgba(91,79,233,0.08)] border transition-all duration-250 hover:-translate-y-1 hover:shadow-[0_8px_40px_rgba(91,79,233,0.16)] flex flex-col \${isFeatured ? 'border-2 border-[#5B4FE9] bg-[linear-gradient(135deg,#fff_0%,#EEF0FF_100%)]' : 'border-[#5B4FE9]/5'}\`} style={idx === 0 ? { gridColumn: 'span 2' } : {}}>
                   <div className="w-12 h-12 bg-[#EEF0FF] rounded-xl flex items-center justify-center mb-[18px]">
                     <svg viewBox="0 0 24 24" className="w-[22px] h-[22px] fill-[#5B4FE9]">
                       <path d="M12 2L2 7l10 5 10-5-10-5zm0 7.5l-7.5-3.75L12 9.5l7.5-3.75L12 9.5zm0 12.5l-10-5v-6l10 5 10-5v6l-10 5z"/>
@@ -229,7 +156,7 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
                 <ServiceAction
                   action={data.process_section.cta}
                   className="bg-[#5B4FE9] text-white px-[28px] py-[13px] rounded-full text-[0.88rem] font-bold no-underline inline-flex items-center gap-[7px] transition-all shadow-[0_4px_16px_rgba(91,79,233,0.3)] hover:bg-[#4A3FD4] hover:-translate-y-0.5"
-                  context={{ page: "service", route: `/services/${slugPath}`, section: "process", trigger: data.process_section.cta.popupId ?? data.process_section.cta.type }}
+                  context={{ page: "service", route: \`/services/\${slugPath}\`, section: "process", trigger: data.process_section.cta.popupId ?? data.process_section.cta.type }}
                 />
               )}
             </div>
@@ -239,12 +166,12 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
                 <div key={idx} className="flex gap-[24px] relative pb-[32px] last:pb-0">
                   <div className="flex flex-col items-center shrink-0">
                     <div className="w-12 h-12 rounded-full border-2 border-[#5B4FE9] bg-white flex items-center justify-center text-[0.82rem] font-extrabold text-[#5B4FE9] shrink-0 z-10">{String(idx + 1).padStart(2, '0')}.</div>
-                    {idx !== data.process_section!.steps.length - 1 && (
+                    {idx !== data.process_section.steps.length - 1 && (
                       <div className="w-[2px] bg-gradient-to-b from-[#5B4FE9] to-[#5B4FE9]/10 flex-1 my-1"></div>
                     )}
                   </div>
                   <div className="bg-white rounded-[16px] p-[20px_22px] shadow-[0_4px_24px_rgba(91,79,233,0.08)] border border-[#5B4FE9]/5 flex-1">
-                    <div className="text-[0.7rem] font-bold text-[#5B4FE9] tracking-[0.08em] uppercase mb-1">{step.step_label || `Stage ${idx + 1}`}</div>
+                    <div className="text-[0.7rem] font-bold text-[#5B4FE9] tracking-[0.08em] uppercase mb-1">{step.step_label || \`Stage \${idx + 1}\`}</div>
                     <h3 className="text-[1rem] font-extrabold text-[#1E1B4B] mb-1.5">{step.title}</h3>
                     <p className="text-[0.84rem] text-[#4B5563] leading-[1.6]">{step.description}</p>
                   </div>
@@ -270,7 +197,7 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
                   {card.metrics.map((metric, midx) => (
                     <div key={midx} className="flex justify-between items-center pb-2.5 border-b border-[#E5E7EB] last:border-b-0 last:pb-0">
                       <span className="text-[0.82rem] text-[#4B5563]">{metric.label}</span>
-                      <span className={`text-[1.2rem] font-extrabold ${metric.tone === 'positive' ? 'text-[#059669]' : 'text-[#5B4FE9]'}`}>{metric.value}</span>
+                      <span className={\`text-[1.2rem] font-extrabold \${metric.tone === 'positive' ? 'text-[#059669]' : 'text-[#5B4FE9]'}\`}>{metric.value}</span>
                     </div>
                   ))}
                 </div>
@@ -298,20 +225,20 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-[24px] animate-fade-up">
             {data.engagement_tiers_section.tiers.map((tier, idx) => (
-              <div key={tier.id || idx} className={`bg-white rounded-[20px] p-[36px_28px] shadow-[0_4px_24px_rgba(91,79,233,0.08)] border border-[#5B4FE9]/5 flex flex-col transition-all duration-250 hover:-translate-y-1 ${tier.featured ? 'border-2 border-[#5B4FE9] bg-[#0D1035] text-white' : ''}`}>
+              <div key={tier.id || idx} className={\`bg-white rounded-[20px] p-[36px_28px] shadow-[0_4px_24px_rgba(91,79,233,0.08)] border border-[#5B4FE9]/5 flex flex-col transition-all duration-250 hover:-translate-y-1 \${tier.featured ? 'border-2 border-[#5B4FE9] bg-[#0D1035] text-white' : ''}\`}>
                 {tier.badge && <div className="inline-block bg-[#5B4FE9] text-white text-[0.68rem] font-bold tracking-[0.06em] uppercase px-3 py-1 rounded-full mb-3.5 self-start">{tier.badge}</div>}
-                <div className={`text-[1.6rem] font-extrabold tracking-[-0.02em] mb-1 ${tier.featured ? 'text-white' : 'text-[#1E1B4B]'}`}>{tier.name}</div>
-                <div className={`text-[0.83rem] mb-6 pb-5 border-b ${tier.featured ? 'text-white/65 border-white/12' : 'text-[#4B5563] border-[#E5E7EB]'}`}>{tier.for}</div>
+                <div className={\`text-[1.6rem] font-extrabold tracking-[-0.02em] mb-1 \${tier.featured ? 'text-white' : 'text-[#1E1B4B]'}\`}>{tier.name}</div>
+                <div className={\`text-[0.83rem] mb-6 pb-5 border-b \${tier.featured ? 'text-white/65 border-white/12' : 'text-[#4B5563] border-[#E5E7EB]'}\`}>{tier.for}</div>
                 
                 <ul className="list-none flex-1">
                   {tier.features.map((feature, fidx) => (
-                    <li key={fidx} className={`text-[0.84rem] py-2 pl-[22px] relative border-b ${tier.featured ? 'text-white/80 border-white/10' : 'text-[#4B5563] border-[#E5E7EB]'} [&::before]:content-[''] [&::before]:absolute [&::before]:left-0 [&::before]:top-[17px] [&::before]:w-2 [&::before]:h-2 [&::before]:bg-${tier.featured ? '[#7B72EE]' : '[#5B4FE9]'} [&::before]:rounded-full`}>{feature}</li>
+                    <li key={fidx} className={\`text-[0.84rem] py-2 pl-[22px] relative border-b \${tier.featured ? 'text-white/80 border-white/10' : 'text-[#4B5563] border-[#E5E7EB]'} [&::before]:content-[''] [&::before]:absolute [&::before]:left-0 [&::before]:top-[17px] [&::before]:w-2 [&::before]:h-2 [&::before]:bg-\${tier.featured ? '[#7B72EE]' : '[#5B4FE9]'} [&::before]:rounded-full\`}>{feature}</li>
                   ))}
                 </ul>
                 
                 {tier.cta && (
                   <div className="mt-7">
-                    <Link href={tier.cta.href} className={`w-full border-none px-5 py-3.5 rounded-full text-[0.87rem] font-bold no-underline flex items-center justify-center gap-[6px] transition-all cursor-pointer ${tier.featured ? 'bg-[#5B4FE9] text-white shadow-[0_4px_20px_rgba(91,79,233,0.4)] hover:bg-white hover:text-[#5B4FE9]' : 'bg-[#EEF0FF] text-[#5B4FE9] hover:bg-[#5B4FE9] hover:text-white'}`}>
+                    <Link href={tier.cta.href} className={\`w-full border-none px-5 py-3.5 rounded-full text-[0.87rem] font-bold no-underline flex items-center justify-center gap-[6px] transition-all cursor-pointer \${tier.featured ? 'bg-[#5B4FE9] text-white shadow-[0_4px_20px_rgba(91,79,233,0.4)] hover:bg-white hover:text-[#5B4FE9]' : 'bg-[#EEF0FF] text-[#5B4FE9] hover:bg-[#5B4FE9] hover:text-white'}\`}>
                       {tier.cta.text} →
                     </Link>
                   </div>
@@ -337,7 +264,7 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
 
       {/* ── FAQ ── */}
       {data.faq_section?.questions?.length ? (
-        <div className="bg-white w-full">
+        <div className="bg-white">
           <FAQSection data={data.faq_section} />
         </div>
       ) : null}
@@ -374,7 +301,7 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
                   className={baseClass}
                   context={{
                     page: "service",
-                    route: `/services/${slugPath}`,
+                    route: \`/services/\${slugPath}\`,
                     section: "final-cta",
                     trigger: action.popupId ?? action.type,
                   }}
@@ -387,150 +314,12 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
     </main>
   );
 }
+`;
 
+const updatedContent = content.replace(
+  /function MainServiceTemplate\(\{ data, slugPath \}: \{ data: ServiceDoc; slugPath: string \}\) \{[\s\S]*?\}\n\nexport async function generateStaticParams/m,
+  newTemplate + '\n\nexport async function generateStaticParams'
+).replace(/import "\.\/service-detail\.css";\n/, '').replace(/import ServiceDetailFaqClient from "\.\/ServiceDetailFaqClient";\n/, '');
 
-export async function generateStaticParams() {
-  const paths = await getAllServiceSlugs();
-  return paths
-    .filter(Boolean)
-    .map((path) => ({ slug: path.split("/").filter(Boolean) }));
-}
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string[] }>;
-}): Promise<Metadata> {
-  const { slug } = await params;
-  const slugPath = joinSlug(slug);
-  const data = await getServiceBySlug(slugPath);
-  if (!data) return { title: "Service Not Found" };
-
-  const fallback: Metadata = {
-    title: data.seo.metaTitle,
-    description: data.seo.metaDescription,
-    keywords: data.seo.keywords,
-  };
-
-  return getPageMetadata("service-detail", fallback, {
-    revalidate,
-  });
-}
-
-export default async function ServicePage({
-  params,
-}: {
-  params: Promise<{ slug: string[] }>;
-}) {
-  const { slug } = await params;
-  const slugPath = joinSlug(slug);
-  const data = await getServiceBySlug(slugPath);
-
-  if (!data) return notFound();
-
-  const related = await getRelatedMainServices(data.slug);
-  const isMainService = !data.serviceType || data.serviceType === "main";
-  const hasEnhancedServiceContent =
-    Boolean(data.hero?.stats?.length) ||
-    Boolean(data.results_section?.cards?.length) ||
-    Boolean(data.engagement_tiers_section?.tiers?.length);
-
-  if (isMainService || hasEnhancedServiceContent) {
-    return <MainServiceTemplate data={data} slugPath={slugPath} />;
-  }
-
-  return (
-    <main>
-      <section className="relative overflow-hidden py-16 lg:py-20">
-        <div className="mx-auto max-w-6xl px-6">
-          <p className="text-xs font-bold uppercase tracking-[0.1em] text-indigo-600">{data.hero.subheading}</p>
-          <h1 className="mt-3 text-4xl font-extrabold tracking-tight text-slate-900 md:text-5xl">{data.hero.heading}</h1>
-          <p className="mt-4 max-w-3xl text-slate-600">{data.hero.description}</p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            {data.hero.actions.map((action, idx) => (
-              <HeroAction
-                key={`${action.text}-${idx}`}
-                action={action}
-                context={{
-                  page: "service",
-                  route: `/services/${slugPath}`,
-                  section: "hero",
-                  trigger: action.popupId ?? action.type,
-                }}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {data.intro_section && <IntroSection data={data.intro_section} />}
-      {data.sub_services_section?.cards?.length ? (
-        <SubServicesGrid data={data.sub_services_section} />
-      ) : null}
-
-      {data.process_section && <ProcessSection data={data.process_section} />}
-
-      {data.industries_section?.items?.length ? (
-        <section className="py-20 lg:py-24">
-          <div className="mx-auto max-w-7xl px-6">
-            <h2 className="text-center text-3xl font-extrabold text-slate-900">
-              {data.industries_section.heading}
-            </h2>
-            <div className="mt-14 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
-              {data.industries_section.items.map((industry) => (
-                <div
-                  key={industry}
-                  className="group relative flex items-center justify-center rounded-2xl bg-white px-6 py-10 text-center shadow-sm ring-1 ring-slate-100 transition hover:-translate-y-1 hover:shadow-lg"
-                >
-                  <span className="text-sm font-semibold text-slate-900 sm:text-base">{industry}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      ) : null}
-
-      {related.length > 0 && (
-        <section className="bg-white py-20">
-          <h2 className="text-center text-3xl font-extrabold text-slate-900">Explore Other Services</h2>
-          <div className="container mt-12 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
-            {related.map((svc, i) => (
-              <MainServiceCard key={svc.slug} service={svc} index={i} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {data.faq_section?.questions?.length ? (
-        <div className="bg-white w-full">
-          <FAQSection data={data.faq_section} />
-        </div>
-      ) : null}
-
-      {data.final_cta_section ? (
-        <section className="py-24">
-          <div className="mx-auto max-w-5xl rounded-3xl bg-indigo-600 px-8 py-14 text-center text-white shadow-2xl shadow-indigo-500/30">
-            <h2 className="text-3xl font-bold">{data.final_cta_section.heading}</h2>
-            {data.final_cta_section.subheading ? (
-              <p className="mt-3 text-indigo-200">{data.final_cta_section.subheading}</p>
-            ) : null}
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
-              {data.final_cta_section.actions.map((action, idx) => (
-                <ServiceFinalCtaAction
-                  key={`${action.text}-${idx}`}
-                  action={action}
-                  context={{
-                    page: "service",
-                    route: `/services/${slugPath}`,
-                    section: "final-cta",
-                    trigger: action.popupId ?? action.type,
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
-      ) : null}
-    </main>
-  );
-}
+fs.writeFileSync('src/app/services/[...slug]/page.tsx', updatedContent);
+console.log("Written updated page.tsx with pure Tailwind");

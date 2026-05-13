@@ -1,4 +1,4 @@
-import FaqSection from "@/sections/HomePage/FAQHighlights";
+import FaqSection, { type FaqSectionProps } from "@/components/FaqSection";
 import { CACHE_TTL } from "@/lib/cacheTags";
 import {
   type PublicFaq,
@@ -8,6 +8,7 @@ import {
 type PageFaqSectionProps = {
   pageId: "home" | "services";
   revalidate?: number;
+  sectionProps?: Omit<FaqSectionProps, "faqs">;
 };
 
 function buildFaqJsonLd(faqs: PublicFaq[]) {
@@ -28,6 +29,7 @@ function buildFaqJsonLd(faqs: PublicFaq[]) {
 export default async function PageFaqSection({
   pageId,
   revalidate = CACHE_TTL.faqs,
+  sectionProps,
 }: PageFaqSectionProps) {
   const faqs = await fetchFaqsForPage(pageId, {
     publishedOnly: true,
@@ -44,7 +46,7 @@ export default async function PageFaqSection({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqJsonLd(faqs)) }}
       />
-      <FaqSection faqs={faqs} />
+      <FaqSection faqs={faqs} {...sectionProps} />
     </>
   );
 }

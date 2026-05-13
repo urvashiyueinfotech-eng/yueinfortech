@@ -1,9 +1,0 @@
-- Install deps (if not already): `npm install`
-- Dev server: `npm run dev` then open http://localhost:3000
-- Production build sanity: `npm run build && npm start`
-- Manual checks by width: 320px, 375px, 425px, 768px, 1024px, 1280px, 1440px
-  - Navbar toggle: opens/closes via tap, overlay scrolls if tall, Escape key closes, body scrolling is locked while open.
-  - Header on scroll: transitions to compact state without covering hero text.
-  - Hero: heading and paragraph stay readable (no overflow), CTA remains tappable (≥44px), hero image scales with no horizontal scroll.
-  - Decorative elements: arrow hidden on xs, visible/scaled on md+, social icons stay off-screen edges on sm+.
-- Optional: run Lighthouse in Chrome devtools for LCP/CLS confirmation on the hero.

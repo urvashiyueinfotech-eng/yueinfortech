@@ -2,7 +2,7 @@ import SectionHeader from "@/components/SectionHeader";
 import CtaButton from "@/components/CtaButton";
 import { ServiceDoc } from "@/types";
 import { ArrowUpRight } from "lucide-react";
-import ServiceFaqList from "./ServiceFaqList";
+import FaqSection from "@/components/FaqSection";
 
 export function ProcessSection({ data }: { data: NonNullable<ServiceDoc["process_section"]> }) {
   return (
@@ -50,19 +50,21 @@ export function ProcessSection({ data }: { data: NonNullable<ServiceDoc["process
 }
 
 export function FAQSection({ data }: { data: ServiceDoc["faq_section"] }) {
+  const faqs = data.questions.map((q, idx) => ({
+    id: `${idx}`,
+    question: q.question,
+    answer: q.answer,
+  }));
+
   return (
-    <section className="bg-white py-16 lg:py-20">
-      <div className="mx-auto max-w-4xl px-6">
-        <SectionHeader
-          eyebrow="FAQ"
-          title={data.heading}
-          align="center"
-          className="mx-auto max-w-2xl"
-        />
-        <div className="mt-8">
-          <ServiceFaqList questions={data.questions} />
-        </div>
-      </div>
-    </section>
+    <FaqSection
+      faqs={faqs}
+      eyebrow="Common Questions"
+      eyebrowClassName="text-indigo-700"
+      title={data.heading || "Answers to Common Questions"}
+      subtitle="Everything you need to know about our services, process, and how we help businesses grow with SEO, technology, and strategy."
+      layout="split"
+      align="left"
+    />
   );
 }

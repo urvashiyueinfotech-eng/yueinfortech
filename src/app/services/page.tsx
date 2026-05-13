@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { getAllMainServices } from "@/lib/services.service";
 import { fetchFaqsForPage, PublicFaq } from "@/lib/firestoreServer";
 import { getPageMetadata } from "@/lib/pageSeo.service";
-import ServicesFaqClient from "./ServicesFaqClient";
 import CtaButton from "@/components/CtaButton";
 import CustomSolutionPopup from "@/components/CustomSolutionPopup";
 import SectionHeader from "@/components/SectionHeader";
@@ -12,6 +11,7 @@ import IntegratedSystemItem from "./_components/IntegratedSystemItem";
 import WhyChooseUsStep from "./_components/WhyChooseUsStep";
 import IndustryPill from "./_components/IndustryPill";
 import WhatsAppIcon from "@/components/icons/WhatsAppIcon";
+import FaqSection from "@/components/FaqSection";
 
 export const revalidate = 2592000;
 const SERVICES_FAQ_REVALIDATE = 2592000;
@@ -247,28 +247,13 @@ export default async function ServicesPage() {
 
       {/* ── FAQ ── */}
       {faqs && faqs.length > 0 && (
-        <section className="py-[80px] px-[5%] bg-[#F8F9FF]">
-          <div className="max-w-7xl mx-auto">
-            <SectionHeader
-              align="left"
-              className="max-w-[560px] ml-0 mb-[48px]"
-              eyebrow="Common Questions"
-              eyebrowClassName="bg-transparent ring-0 px-0 py-0 text-[0.72rem] font-bold tracking-[0.1em] uppercase text-[#5B4FE9]"
-              title={
-                <>Frequently Asked <span className="text-[#5B4FE9]">Questions</span></>
-              }
-              titleClassName="text-[clamp(2rem,3.5vw,2.8rem)] font-extrabold text-[#1E1B4B] tracking-[-0.02em] leading-[1.15]"
-              subtitle="Everything you need to know before choosing a service or starting a project."
-              subtitleClassName="text-[#4B5563] text-[0.95rem] leading-[1.72]"
-            />
-
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqJsonLd(faqs)) }}
-            />
-            <ServicesFaqClient faqs={faqs} />
-          </div>
-        </section>
+        <>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqJsonLd(faqs)) }}
+          />
+          <FaqSection faqs={faqs} />
+        </>
       )}
 
       {/* ── HELP CHOOSE ── */}
