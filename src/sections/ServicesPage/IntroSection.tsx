@@ -43,6 +43,12 @@ export default function IntroSection({ data }: { data: ServiceDoc["intro_section
           >
             <span>{data.cta.text}</span>
           </CtaButton>
+
+          {data.additionalDescription ? (
+            <div className="ml-auto max-w-3xl rounded-xl border-l-4 border-indigo-600 bg-indigo-50 px-6 py-5 text-sm font-medium leading-7 text-slate-800 [&>strong]:font-bold [&>strong]:text-indigo-600">
+              <span dangerouslySetInnerHTML={{ __html: data.additionalDescription }} />
+            </div>
+          ) : null}
         </div>
 
         <div className="relative h-80 w-full overflow-hidden rounded-3xl bg-slate-100 shadow-inner ring-1 ring-slate-200">

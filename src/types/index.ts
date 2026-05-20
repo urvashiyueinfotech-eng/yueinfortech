@@ -59,11 +59,19 @@ export type ServiceDoc = {
   intro_section: {
     heading: string;
     description: string;
+    additionalDescription?: string;
     features: string[];
     cta: LinkAction;
     secondaryCta?: LinkAction;
     introImage?: string;
   };
+    direct_answer_section?: {
+      eyebrow: string;
+      heading: string;
+      cardLabel: string;
+      content: string;
+      cta?: LinkAction;
+    };
     sub_services_section: {
       heading: string;
       description: string;

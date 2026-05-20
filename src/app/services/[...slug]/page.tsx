@@ -45,7 +45,6 @@ function ServiceAction({ action, className, context }: { action: LinkAction; cla
   );
 }
 import {
-  getAllServiceSlugs,
   getRelatedMainServices,
   getServiceBySlug,
 } from "@/lib/services.service";
@@ -59,72 +58,84 @@ function joinSlug(segments?: string[]) {
   return (segments ?? []).join("/").trim();
 }
 
-function renderHeroTitle(heading: string) {
-  const normalized = heading.trim();
-  if (normalized.toLowerCase().includes("leads & sales")) {
-    return (
-      <>
-        Drive More Traffic,
-        <br />
-        Leads & <em className="not-italic text-[#7B72EE]">Sales</em>
-      </>
-    );
-  }
-
-  return normalized;
-}
-
-
-
 function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: string }) {
+  const processEyebrow = slugPath === "content-writing-services" ? "How We Work" : "Why Choose Us";
+
+  const highlightText = (text: string) => {
+    if (!text) return '';
+    // Use [\s\S]*? to safely match across newlines
+    let result = text.replace(/\*\*([\s\S]*?)\*\*/g, '<span>$1</span>');
+    result = result.replace(/\*([\s\S]*?)\*/g, '<span>$1</span>');
+    
+    if (!result.includes('<span>')) {
+      const phrases = [
+        "Outrank You",
+        "Other Agencies",
+        "Services",
+        "Full-Funnel Marketing",
+        "Delivers in Practice",
+        "Yue Infotech",
+        "Converts\\?"
+      ];
+      phrases.forEach(phrase => {
+        // Convert literal spaces to \s+ so it matches across newlines too
+        const flexiblePhrase = phrase.replace(/\s+/g, '\\s+');
+        const regex = new RegExp(`(${flexiblePhrase})`, 'gi');
+        result = result.replace(regex, '<span>$1</span>');
+      });
+    }
+    
+    result = result.replace(/<br\s*\/?>/g, '<br />');
+    result = result.replace(/\n/g, '<br />');
+    result = result.replace(/\|/g, '<br />');
+    return result;
+  };
+
   return (
-    <main className="bg-[#F8F9FF] text-[#1E1B4B] font-sans selection:bg-[#5B4FE9]/20">
+    <main className="bg-[#F8F9FF] text-[#1E1B4B] font-sans selection:bg-[#5B4FE9]/20 overflow-x-hidden">
       {/* ── HERO ── */}
-      <section className="min-h-screen bg-gradient-to-br from-[#0D1035] via-[#111437] to-[#1a1060] flex flex-col justify-center px-[5%] py-[120px] pb-[80px] relative overflow-hidden">
+      <section className="min-h-screen bg-[linear-gradient(135deg,#0D1035_0%,#111437_40%,#1a1060_100%)] flex flex-col justify-center px-[5%] py-[120px] pb-[80px] relative overflow-hidden">
         <div className="absolute inset-0 z-0 bg-[radial-gradient(rgba(91,79,233,0.15)_1px,transparent_1px)] [background-size:32px_32px]"></div>
         <div className="absolute top-[-100px] right-0 w-[55%] h-[120%] z-0 bg-[linear-gradient(120deg,transparent_30%,rgba(91,79,233,0.12)_70%,rgba(91,79,233,0.05)_100%)]"></div>
         <div className="relative z-10 max-w-[720px]">
-          <div className="inline-flex items-center gap-2 bg-[#5B4FE9]/20 border border-[#5B4FE9]/40 text-[#7B72EE] px-4 py-2 rounded-full text-[0.78rem] font-semibold tracking-wider uppercase mb-7">
-            <span className="w-1.5 h-1.5 bg-[#7B72EE] rounded-full animate-pulse"></span>
-            {data.hero.badge || data.hero.subheading}
-          </div>
-          <h1 className="text-[clamp(2.8rem,5.5vw,4.5rem)] font-extrabold text-white leading-[1.1] tracking-[-0.03em] mb-5 [&>em]:not-italic [&>em]:text-[#7B72EE]">
-            {renderHeroTitle(data.hero.heading)}
+          {data.hero.badge && (
+            <div className="inline-flex items-center gap-[8px] bg-[#5B4FE9]/20 border border-[#5B4FE9]/40 text-[#7B72EE] px-[16px] py-[8px] rounded-[50px] text-[0.78rem] font-[600] tracking-[0.04em] uppercase mb-[28px]">
+              <span className="w-[6px] h-[6px] bg-[#7B72EE] rounded-full animate-pulse"></span>
+              {data.hero.badge}
+            </div>
+          )}
+          <h1 className="text-[clamp(2.8rem,5.5vw,4.5rem)] font-[800] text-white leading-[1.1] tracking-[-0.03em] mb-[20px] [&>span]:text-[#7B72EE]" dangerouslySetInnerHTML={{ __html: highlightText(data.hero.heading) }}>
           </h1>
           
           {data.hero.description && (
-            <div className="bg-white/5 border-l-[3px] border-[#7B72EE] px-5 py-3.5 rounded-r-lg mb-8 text-[0.93rem] text-white/75 leading-[1.68] max-w-[580px] [&>strong]:text-white">
-              {data.hero.description}
+            <div className="bg-white/5 border-l-[3px] border-[#7B72EE] px-[20px] py-[14px] rounded-[0_8px_8px_0] mb-[32px] text-[0.93rem] text-white/75 leading-[1.68] max-w-[580px] [&>strong]:text-white">
+              <span dangerouslySetInnerHTML={{ __html: data.hero.description }} />
             </div>
           )}
 
-          {Array.isArray(data.hero.stats) && data.hero.stats.length > 0 && (
-            <div className="flex gap-10 flex-wrap mb-10">
+          {data.hero.stats && data.hero.stats.length > 0 && (
+            <div className="flex gap-[40px] flex-wrap mb-[40px]">
               {data.hero.stats.map((stat, idx) => (
                 <div key={idx}>
-                  <div className="text-[2rem] font-extrabold text-[#7B72EE] leading-none">{stat.value}</div>
-                  <div className="text-[0.78rem] text-white/55 mt-0.5">{stat.label}</div>
+                  <div className="text-[2rem] font-[800] text-[#7B72EE] leading-[1]">{stat.value}</div>
+                  <div className="text-[0.78rem] text-white/55 mt-[2px]">{stat.label}</div>
                 </div>
               ))}
             </div>
           )}
-
-          <div className="flex gap-3.5 flex-wrap">
+          
+          <div className="flex gap-[14px] flex-wrap">
             {data.hero.actions.map((action, idx) => {
               const baseClass = idx === 0 
-                ? "bg-[#5B4FE9] text-white px-[30px] py-[14px] rounded-full text-[0.9rem] font-bold no-underline inline-flex items-center gap-2 transition-all shadow-[0_4px_20px_rgba(91,79,233,0.4)] hover:bg-[#4A3FD4] hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(91,79,233,0.5)]" 
-                : "bg-white/10 text-white border-[1.5px] border-white/25 px-[30px] py-[14px] rounded-full text-[0.9rem] font-semibold no-underline inline-flex items-center gap-2 transition-all hover:bg-white/20 hover:border-white/40";
+                ? "bg-[#5B4FE9] text-white px-[30px] py-[14px] rounded-[50px] text-[0.9rem] font-[700] no-underline inline-flex items-center gap-[8px] transition-all shadow-[0_4px_20px_rgba(91,79,233,0.4)] hover:bg-[#4A3FD4] hover:-translate-y-[2px] hover:shadow-[0_8px_30px_rgba(91,79,233,0.5)]" 
+                : "bg-white/10 text-white border-[1.5px] border-white/25 px-[30px] py-[14px] rounded-[50px] text-[0.9rem] font-[600] no-underline inline-flex items-center gap-[8px] transition-all hover:bg-white/[0.18] hover:border-white/40";
+              
               return (
                 <ServiceAction
-                  key={idx}
+                  key={`${action.text}-${idx}`}
                   action={action}
                   className={baseClass}
-                  context={{
-                    page: "service",
-                    route: `/services/${slugPath}`,
-                    section: "hero",
-                    trigger: action.popupId ?? action.type,
-                  }}
+                  context={{ page: "service", route: `/services/${slugPath}`, section: "hero", trigger: action.popupId ?? action.type }}
                 />
               );
             })}
@@ -132,28 +143,28 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
         </div>
       </section>
 
-      {/* ── WHY US (Overview) ── */}
+      {/* ── OVERVIEW (WHY US) ── */}
       {data.intro_section && (
         <section className="px-[5%] py-[90px] bg-white">
-          <div className="text-[0.73rem] font-bold tracking-[0.1em] uppercase text-[#5B4FE9] mb-3">Overview</div>
+          <div className="text-[0.73rem] font-[700] tracking-[0.1em] uppercase text-[#5B4FE9] mb-[12px]">Overview</div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-[48px] items-start animate-fade-up">
             <div className="max-w-[460px]">
-              <h2 className="text-[clamp(2rem,3.5vw,3rem)] font-extrabold text-[#1E1B4B] tracking-[-0.02em] leading-[1.15] mb-3.5 [&>span]:text-[#5B4FE9]" dangerouslySetInnerHTML={{ __html: data.intro_section.heading.replace('Other Agencies', '<span>Other Agencies</span>') }} />
+              <h2 className="text-[clamp(2rem,3.5vw,3rem)] font-[800] text-[#1E1B4B] tracking-[-0.02em] leading-[1.15] mb-[14px] [&>span]:text-[#5B4FE9]" dangerouslySetInnerHTML={{ __html: highlightText(data.intro_section.heading) }} />
               <p className="text-[#4B5563] text-[0.97rem] max-w-[560px] leading-[1.7] mb-[32px]">{data.intro_section.description}</p>
               
-              <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+              <div className="flex gap-[12px] flex-wrap">
                 {data.intro_section.cta && (
                   <ServiceAction
                     action={data.intro_section.cta}
-                    className="bg-[#5B4FE9] text-white px-[28px] py-[13px] rounded-full text-[0.88rem] font-bold no-underline inline-flex items-center gap-[7px] transition-all shadow-[0_4px_16px_rgba(91,79,233,0.3)] hover:bg-[#4A3FD4] hover:-translate-y-0.5"
-                    context={{ page: "service", route: `/services/${slugPath}`, section: "overview", trigger: data.intro_section.cta.popupId ?? data.intro_section.cta.type }}
+                    className="bg-[#5B4FE9] text-white px-[28px] py-[13px] rounded-[50px] text-[0.88rem] font-[700] no-underline inline-flex items-center gap-[7px] transition-all shadow-[0_4px_16px_rgba(91,79,233,0.3)] hover:bg-[#4A3FD4] hover:-translate-y-[2px]"
+                    context={{ page: "service", route: `/services/${slugPath}`, section: "intro", trigger: data.intro_section.cta.popupId ?? data.intro_section.cta.type }}
                   />
                 )}
                 {data.intro_section.secondaryCta && (
                   <ServiceAction
                     action={data.intro_section.secondaryCta}
-                    className="bg-white text-[#5B4FE9] border-[1.5px] border-[#E5E7EB] px-[28px] py-[13px] rounded-full text-[0.88rem] font-semibold no-underline inline-flex items-center gap-[7px] transition-all hover:border-[#5B4FE9] hover:shadow-[0_4px_16px_rgba(91,79,233,0.12)]"
-                    context={{ page: "service", route: `/services/${slugPath}`, section: "overview", trigger: data.intro_section.secondaryCta.popupId ?? data.intro_section.secondaryCta.type }}
+                    className="bg-white text-[#5B4FE9] border-[1.5px] border-[#E5E7EB] px-[28px] py-[13px] rounded-[50px] text-[0.88rem] font-[600] no-underline inline-flex items-center gap-[7px] transition-all hover:border-[#5B4FE9] hover:shadow-[0_4px_16px_rgba(91,79,233,0.12)]"
+                    context={{ page: "service", route: `/services/${slugPath}`, section: "intro", trigger: data.intro_section.secondaryCta.popupId ?? data.intro_section.secondaryCta.type }}
                   />
                 )}
               </div>
@@ -162,51 +173,63 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
             {data.intro_section.features && data.intro_section.features.length > 0 && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-[14px]">
                 {data.intro_section.features.map((feature, idx) => (
-                  <div key={idx} className="bg-white rounded-[14px] p-[18px_20px] flex items-start gap-[12px] shadow-[0_4px_24px_rgba(91,79,233,0.08)] border border-[#5B4FE9]/5">
-                    <div className="w-2.5 h-2.5 bg-[#5B4FE9] rounded-full shrink-0 mt-1.5"></div>
-                    <p className="text-[0.88rem] font-semibold text-[#1E1B4B] leading-[1.4]">{feature}</p>
+                  <div key={idx} className="bg-white rounded-[14px] px-[20px] py-[18px] flex items-start gap-[12px] shadow-[0_4px_24px_rgba(91,79,233,0.08)] border border-[#5B4FE9]/[0.08]">
+                    <div className="w-[10px] h-[10px] bg-[#5B4FE9] rounded-full shrink-0 mt-[6px]"></div>
+                    <p className="text-[0.88rem] font-[600] text-[#1E1B4B] leading-[1.4]">{feature}</p>
                   </div>
                 ))}
               </div>
             )}
           </div>
+          {data.intro_section.additionalDescription ? (
+            <div className="mt-[42px] max-w-[760px] rounded-[12px] border-l-[4px] border-[#5B4FE9] bg-[#EEF0FF] px-[28px] py-[24px] text-[0.95rem] font-[500] leading-[1.7] text-[#1E1B4B] md:ml-auto [&>strong]:font-[800] [&>strong]:text-[#5B4FE9]">
+              <span dangerouslySetInnerHTML={{ __html: data.intro_section.additionalDescription }} />
+            </div>
+          ) : null}
         </section>
       )}
 
       {/* ── SERVICES GRID ── */}
       {data.sub_services_section?.cards?.length ? (
         <section className="px-[5%] py-[90px] bg-[#F8F9FF]" id="services">
-          <div className="text-[0.73rem] font-bold tracking-[0.1em] uppercase text-[#5B4FE9] mb-3">What We Do</div>
-          <h2 className="text-[clamp(2rem,3.5vw,3rem)] font-extrabold text-[#1E1B4B] tracking-[-0.02em] leading-[1.15] mb-3.5 [&>span]:text-[#5B4FE9]" dangerouslySetInnerHTML={{ __html: data.sub_services_section.heading.replace('Services', '<span>Services</span>') }} />
+          <div className="text-[0.73rem] font-[700] tracking-[0.1em] uppercase text-[#5B4FE9] mb-[12px]">What We Do</div>
+          <h2 className="text-[clamp(2rem,3.5vw,3rem)] font-[800] text-[#1E1B4B] tracking-[-0.02em] leading-[1.15] mb-[14px] [&>span]:text-[#5B4FE9]" dangerouslySetInnerHTML={{ __html: highlightText(data.sub_services_section.heading) }} />
           <p className="text-[#4B5563] text-[0.97rem] max-w-[560px] leading-[1.7] mb-[52px]">{data.sub_services_section.description}</p>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-[24px] animate-fade-up">
+          <div className="grid grid-cols-1 md:grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-[24px] animate-fade-up">
             {data.sub_services_section.cards.map((card, idx) => {
               const isFeatured = idx < 2;
+              const titleSupportingText = card.snippet || card.subtitle;
+              const calloutText = card.description && card.description !== card.snippet ? card.description : "";
               return (
-                <div key={card.id || idx} className={`bg-white rounded-[20px] p-[32px_28px] shadow-[0_4px_24px_rgba(91,79,233,0.08)] border transition-all duration-250 hover:-translate-y-1 hover:shadow-[0_8px_40px_rgba(91,79,233,0.16)] flex flex-col ${isFeatured ? 'border-2 border-[#5B4FE9] bg-[linear-gradient(135deg,#fff_0%,#EEF0FF_100%)]' : 'border-[#5B4FE9]/5'}`} style={idx === 0 ? { gridColumn: 'span 2' } : {}}>
-                  <div className="w-12 h-12 bg-[#EEF0FF] rounded-xl flex items-center justify-center mb-[18px]">
-                    <svg viewBox="0 0 24 24" className="w-[22px] h-[22px] fill-[#5B4FE9]">
-                      <path d="M12 2L2 7l10 5 10-5-10-5zm0 7.5l-7.5-3.75L12 9.5l7.5-3.75L12 9.5zm0 12.5l-10-5v-6l10 5 10-5v6l-10 5z"/>
-                    </svg>
-                  </div>
-                  <div className="text-[0.72rem] font-bold text-[#5B4FE9] tracking-[0.08em] uppercase mb-2">{String(idx + 1).padStart(2, '0')} — {card.category || card.subtitle || "Service"}</div>
-                  <h3 className="text-[1.08rem] font-extrabold text-[#1E1B4B] mb-2 tracking-[-0.01em]">{card.title}</h3>
-                  {card.subtitle && <div className="text-[0.82rem] font-semibold text-[#5B4FE9] mb-2.5">{card.subtitle}</div>}
-                  {(card.snippet || card.description) && (
-                    <div className="text-[0.83rem] text-[#4B5563] leading-[1.65] mb-4 p-[10px_14px] bg-[#EEF0FF] rounded-lg border-l-[3px] border-[#5B4FE9]">{card.snippet || card.description}</div>
+                <div key={card.id || idx} className={`bg-white rounded-[20px] px-[28px] py-[32px] shadow-[0_4px_24px_rgba(91,79,233,0.08)] border transition-all duration-[0.25s] hover:-translate-y-1 hover:shadow-[0_8px_40px_rgba(91,79,233,0.16)] flex flex-col ${isFeatured ? 'border-2 border-[#5B4FE9] bg-[linear-gradient(135deg,#fff_0%,#EEF0FF_100%)]' : 'border-[#5B4FE9]/[0.06]'}`} style={isFeatured ? { gridColumn: 'span 2' } : {}}>
+                  <div className="text-[0.72rem] font-[700] text-[#5B4FE9] tracking-[0.08em] uppercase mb-[8px]">{String(idx + 1).padStart(2, '0')} — {card.category || card.subtitle || "Service"}</div>
+                  <h3 className="text-[1.08rem] font-[800] text-[#1E1B4B] mb-[8px] tracking-[-0.01em]">{card.title}</h3>
+                  {titleSupportingText && (
+                    <div
+                      className="text-[0.82rem] font-[600] text-[#5B4FE9] mb-[10px] leading-[1.55]"
+                      dangerouslySetInnerHTML={{ __html: titleSupportingText }}
+                    />
+                  )}
+                  
+                  {calloutText && (
+                    <div className="text-[0.83rem] text-[#4B5563] leading-[1.65] mb-[16px] px-[14px] py-[10px] bg-[#EEF0FF] rounded-[8px] border-l-[3px] border-[#5B4FE9]">
+                      <span dangerouslySetInnerHTML={{ __html: calloutText }} />
+                    </div>
                   )}
                   
                   {card.features && card.features.length > 0 && (
-                    <ul className="list-none mb-5 flex-1 [&>li]:text-[0.83rem] [&>li]:text-[#4B5563] [&>li]:py-1 [&>li]:pl-[18px] [&>li]:relative [&>li::before]:content-[''] [&>li::before]:absolute [&>li::before]:left-0 [&>li::before]:top-[11px] [&>li::before]:w-1.5 [&>li::before]:h-1.5 [&>li::before]:bg-[#5B4FE9] [&>li::before]:rounded-full">
-                      {card.features.map((item, itemIdx) => (
-                        <li key={itemIdx}>{item}</li>
+                    <ul className="list-none mb-[20px] flex-1">
+                      {card.features.map((feature, fidx) => (
+                        <li key={fidx} className="text-[0.83rem] text-[#4B5563] py-[5px] pl-[18px] relative before:content-[''] before:absolute before:left-0 before:top-[13px] before:w-[6px] before:h-[6px] before:bg-[#5B4FE9] before:rounded-full">
+                          {feature}
+                        </li>
                       ))}
                     </ul>
                   )}
                   
                   {card.cta && (
-                    <Link href={card.cta.href} className="text-[0.82rem] font-bold text-[#5B4FE9] no-underline inline-flex items-center gap-[5px] mt-auto transition-all hover:gap-[9px]">
+                    <Link href={card.cta.href} className="text-[0.82rem] font-[700] text-[#5B4FE9] no-underline inline-flex items-center gap-[5px] mt-auto transition-all hover:gap-[9px]">
                       {card.cta.text} →
                     </Link>
                   )}
@@ -220,15 +243,15 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
       {/* ── PROCESS FUNNEL ── */}
       {data.process_section && (
         <section className="px-[5%] py-[90px] bg-white" id="approach">
-          <div className="text-[0.73rem] font-bold tracking-[0.1em] uppercase text-[#5B4FE9] mb-3">Why Choose Us</div>
+          <div className="text-[0.73rem] font-[700] tracking-[0.1em] uppercase text-[#5B4FE9] mb-[12px]">{processEyebrow}</div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-[80px] items-start animate-fade-up">
-            <div className="pt-4">
-              <h2 className="text-[clamp(2rem,3.5vw,3rem)] font-extrabold text-[#1E1B4B] tracking-[-0.02em] leading-[1.15] mb-3.5 [&>span]:text-[#5B4FE9]" dangerouslySetInnerHTML={{ __html: data.process_section.heading.replace('Full-Funnel Marketing', '<span>Full-Funnel Marketing</span>') }} />
+            <div className="pt-[16px]">
+              <h2 className="text-[clamp(2rem,3.5vw,3rem)] font-[800] text-[#1E1B4B] tracking-[-0.02em] leading-[1.15] mb-[14px] [&>span]:text-[#5B4FE9]" dangerouslySetInnerHTML={{ __html: highlightText(data.process_section.heading) }} />
               <p className="text-[#4B5563] text-[0.97rem] max-w-[560px] leading-[1.7] mb-[36px]">{data.process_section.description}</p>
               {data.process_section.cta && (
                 <ServiceAction
                   action={data.process_section.cta}
-                  className="bg-[#5B4FE9] text-white px-[28px] py-[13px] rounded-full text-[0.88rem] font-bold no-underline inline-flex items-center gap-[7px] transition-all shadow-[0_4px_16px_rgba(91,79,233,0.3)] hover:bg-[#4A3FD4] hover:-translate-y-0.5"
+                  className="bg-[#5B4FE9] text-white px-[28px] py-[13px] rounded-[50px] text-[0.88rem] font-[700] no-underline inline-flex items-center gap-[7px] transition-all shadow-[0_4px_16px_rgba(91,79,233,0.3)] hover:bg-[#4A3FD4] hover:-translate-y-[2px]"
                   context={{ page: "service", route: `/services/${slugPath}`, section: "process", trigger: data.process_section.cta.popupId ?? data.process_section.cta.type }}
                 />
               )}
@@ -238,14 +261,14 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
               {data.process_section.steps.map((step, idx) => (
                 <div key={idx} className="flex gap-[24px] relative pb-[32px] last:pb-0">
                   <div className="flex flex-col items-center shrink-0">
-                    <div className="w-12 h-12 rounded-full border-2 border-[#5B4FE9] bg-white flex items-center justify-center text-[0.82rem] font-extrabold text-[#5B4FE9] shrink-0 z-10">{String(idx + 1).padStart(2, '0')}.</div>
+                    <div className="w-[48px] h-[48px] rounded-full border-2 border-[#5B4FE9] bg-white flex items-center justify-center text-[0.82rem] font-[800] text-[#5B4FE9] shrink-0 z-10">{String(idx + 1).padStart(2, '0')}.</div>
                     {idx !== data.process_section!.steps.length - 1 && (
-                      <div className="w-[2px] bg-gradient-to-b from-[#5B4FE9] to-[#5B4FE9]/10 flex-1 my-1"></div>
+                      <div className="w-[2px] bg-[linear-gradient(to_bottom,#5B4FE9,rgba(91,79,233,0.1))] flex-1 my-[4px]"></div>
                     )}
                   </div>
-                  <div className="bg-white rounded-[16px] p-[20px_22px] shadow-[0_4px_24px_rgba(91,79,233,0.08)] border border-[#5B4FE9]/5 flex-1">
-                    <div className="text-[0.7rem] font-bold text-[#5B4FE9] tracking-[0.08em] uppercase mb-1">{step.step_label || `Stage ${idx + 1}`}</div>
-                    <h3 className="text-[1rem] font-extrabold text-[#1E1B4B] mb-1.5">{step.title}</h3>
+                  <div className="bg-white rounded-[16px] px-[22px] py-[20px] shadow-[0_4px_24px_rgba(91,79,233,0.08)] border border-[#5B4FE9]/[0.08] flex-1">
+                    <div className="text-[0.7rem] font-[700] text-[#5B4FE9] tracking-[0.08em] uppercase mb-[5px]">{step.step_label || `Stage ${idx + 1}`}</div>
+                    <h3 className="text-[1rem] font-[800] text-[#1E1B4B] mb-[6px]">{step.title}</h3>
                     <p className="text-[0.84rem] text-[#4B5563] leading-[1.6]">{step.description}</p>
                   </div>
                 </div>
@@ -256,62 +279,72 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
       )}
 
       {/* ── RESULTS ── */}
-      {data.results_section && data.results_section.cards.length > 0 && (
+      {data.results_section?.cards?.length && data.results_section.cards.length > 0 ? (
         <section className="px-[5%] py-[90px] bg-[#F8F9FF]" id="results">
-          <div className="text-[0.73rem] font-bold tracking-[0.1em] uppercase text-[#5B4FE9] mb-3">Documented Results</div>
-          <h2 className="text-[clamp(2rem,3.5vw,3rem)] font-extrabold text-[#1E1B4B] tracking-[-0.02em] leading-[1.15] mb-3.5 [&>span]:text-[#5B4FE9]" dangerouslySetInnerHTML={{ __html: data.results_section.heading.replace('Delivers in Practice', '<span>Delivers in Practice</span>') }} />
+          <div className="text-[0.73rem] font-[700] tracking-[0.1em] uppercase text-[#5B4FE9] mb-[12px]">Documented Results</div>
+          <h2 className="text-[clamp(2rem,3.5vw,3rem)] font-[800] text-[#1E1B4B] tracking-[-0.02em] leading-[1.15] mb-[14px] [&>span]:text-[#5B4FE9]" dangerouslySetInnerHTML={{ __html: highlightText(data.results_section.heading) }} />
           <p className="text-[#4B5563] text-[0.97rem] max-w-[560px] leading-[1.7] mb-[52px]">{data.results_section.description}</p>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-[24px] mb-10 animate-fade-up">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-[24px] mb-[40px] animate-fade-up">
             {data.results_section.cards.map((card, idx) => (
-              <div key={card.id || idx} className="bg-white rounded-[20px] p-[28px_24px] shadow-[0_4px_24px_rgba(91,79,233,0.08)] border border-[#5B4FE9]/5 transition-all duration-250 hover:-translate-y-1 hover:shadow-[0_8px_40px_rgba(91,79,233,0.16)]">
-                <div className="inline-block bg-[#EEF0FF] text-[#5B4FE9] text-[0.72rem] font-bold tracking-[0.06em] uppercase px-3 py-1.5 rounded-full mb-4.5">{card.tag}</div>
-                <div className="flex flex-col gap-3 mb-4.5">
+              <div key={card.id || idx} className="bg-white rounded-[20px] px-[24px] py-[28px] shadow-[0_4px_24px_rgba(91,79,233,0.08)] border border-[#5B4FE9]/[0.06] transition-all duration-[0.25s] hover:-translate-y-1 hover:shadow-[0_8px_40px_rgba(91,79,233,0.16)]">
+                {card.tag && (
+                  <div className="inline-block bg-[#EEF0FF] text-[#5B4FE9] text-[0.72rem] font-[700] tracking-[0.06em] uppercase px-[12px] py-[5px] rounded-[50px] mb-[18px]">
+                    {card.tag}
+                  </div>
+                )}
+                
+                <div className="flex flex-col gap-[12px] mb-[18px]">
                   {card.metrics.map((metric, midx) => (
-                    <div key={midx} className="flex justify-between items-center pb-2.5 border-b border-[#E5E7EB] last:border-b-0 last:pb-0">
+                    <div key={midx} className="flex justify-between items-center pb-[10px] border-b border-[#E5E7EB] last:border-b-0 last:pb-0">
                       <span className="text-[0.82rem] text-[#4B5563]">{metric.label}</span>
-                      <span className={`text-[1.2rem] font-extrabold ${metric.tone === 'positive' ? 'text-[#059669]' : 'text-[#5B4FE9]'}`}>{metric.value}</span>
+                      <span className={`text-[1.2rem] font-[800] ${metric.tone === 'positive' || String(metric.value).includes('+') || String(metric.value).includes('-') ? 'text-[#059669]' : 'text-[#5B4FE9]'}`}>
+                        {metric.value}
+                      </span>
                     </div>
                   ))}
                 </div>
-                {card.description && <div className="text-[0.78rem] text-[#9CA3AF] leading-[1.6] pt-3.5 border-t border-[#E5E7EB]">{card.description}</div>}
+                
+                <div className="text-[0.78rem] text-[#9CA3AF] leading-[1.6] pt-[14px] border-t border-[#E5E7EB]">
+                  {card.description}
+                </div>
               </div>
             ))}
           </div>
           
           {data.results_section.cta && (
             <div className="text-center">
-              <Link href={data.results_section.cta.href} className="bg-[#5B4FE9] text-white px-[28px] py-[13px] rounded-full text-[0.88rem] font-bold no-underline inline-flex items-center gap-[7px] transition-all shadow-[0_4px_16px_rgba(91,79,233,0.3)] hover:bg-[#4A3FD4] hover:-translate-y-0.5">
+              <Link href={data.results_section.cta.href} className="bg-[#5B4FE9] text-white px-[28px] py-[13px] rounded-[50px] text-[0.88rem] font-[700] no-underline inline-flex items-center gap-[7px] transition-all shadow-[0_4px_16px_rgba(91,79,233,0.3)] hover:bg-[#4A3FD4] hover:-translate-y-[2px]">
                 {data.results_section.cta.text} →
               </Link>
             </div>
           )}
         </section>
-      )}
+      ) : null}
 
       {/* ── TIERS ── */}
       {data.engagement_tiers_section && data.engagement_tiers_section.tiers.length > 0 && (
         <section className="px-[5%] py-[90px] bg-white">
-          <div className="text-[0.73rem] font-bold tracking-[0.1em] uppercase text-[#5B4FE9] mb-3">Engagement Options</div>
-          <h2 className="text-[clamp(2rem,3.5vw,3rem)] font-extrabold text-[#1E1B4B] tracking-[-0.02em] leading-[1.15] mb-3.5 [&>span]:text-[#5B4FE9]" dangerouslySetInnerHTML={{ __html: data.engagement_tiers_section.heading.replace('Yue Infotech', '<span>Yue Infotech</span>') }} />
+          <div className="text-[0.73rem] font-[700] tracking-[0.1em] uppercase text-[#5B4FE9] mb-[12px]">Engagement Options</div>
+          <h2 className="text-[clamp(2rem,3.5vw,3rem)] font-[800] text-[#1E1B4B] tracking-[-0.02em] leading-[1.15] mb-[14px] [&>span]:text-[#5B4FE9]" dangerouslySetInnerHTML={{ __html: highlightText(data.engagement_tiers_section.heading) }} />
           <p className="text-[#4B5563] text-[0.97rem] max-w-[560px] leading-[1.7] mb-[52px]">{data.engagement_tiers_section.description}</p>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-[24px] animate-fade-up">
             {data.engagement_tiers_section.tiers.map((tier, idx) => (
-              <div key={tier.id || idx} className={`rounded-[20px] p-[36px_28px] shadow-[0_4px_24px_rgba(91,79,233,0.08)] flex flex-col transition-all duration-250 hover:-translate-y-1 ${tier.featured ? 'border-2 border-[#5B4FE9] bg-[#0D1035] text-white' : 'bg-white border border-[#5B4FE9]/5'}`}>
-                {tier.badge && <div className="inline-block bg-[#5B4FE9] text-white text-[0.68rem] font-bold tracking-[0.06em] uppercase px-3 py-1 rounded-full mb-3.5 self-start">{tier.badge}</div>}
-                <div className={`text-[1.6rem] font-extrabold tracking-[-0.02em] mb-1 ${tier.featured ? 'text-white' : 'text-[#1E1B4B]'}`}>{tier.name}</div>
-                <div className={`text-[0.83rem] mb-6 pb-5 border-b ${tier.featured ? 'text-white/65 border-white/12' : 'text-[#4B5563] border-[#E5E7EB]'}`}>{tier.for}</div>
+              <div key={tier.id || idx} className={`rounded-[20px] px-[28px] py-[36px] shadow-[0_4px_24px_rgba(91,79,233,0.08)] flex flex-col transition-all duration-[0.25s] hover:-translate-y-1 ${tier.featured ? 'border-2 border-[#5B4FE9] bg-[#0D1035] text-white' : 'bg-white border border-[#5B4FE9]/[0.08]'}`}>
+                {tier.badge && <div className="inline-block bg-[#5B4FE9] text-white text-[0.68rem] font-[700] tracking-[0.06em] uppercase px-[12px] py-[4px] rounded-[50px] mb-[14px] self-start">{tier.badge}</div>}
+                <div className={`text-[1.6rem] font-[800] tracking-[-0.02em] mb-[4px] ${tier.featured ? 'text-white' : 'text-[#1E1B4B]'}`}>{tier.name}</div>
+                <div className={`text-[0.83rem] mb-[24px] pb-[20px] border-b ${tier.featured ? 'text-white/65 border-white/12' : 'text-[#4B5563] border-[#E5E7EB]'}`}>{tier.for}</div>
                 
                 <ul className="list-none flex-1">
                   {tier.features.map((feature, fidx) => (
-                    <li key={fidx} className={`text-[0.84rem] py-2 pl-[22px] relative border-b ${tier.featured ? 'text-white/80 border-white/10' : 'text-[#4B5563] border-[#E5E7EB]'} [&::before]:content-[''] [&::before]:absolute [&::before]:left-0 [&::before]:top-[17px] [&::before]:w-2 [&::before]:h-2 [&::before]:bg-${tier.featured ? '[#7B72EE]' : '[#5B4FE9]'} [&::before]:rounded-full`}>{feature}</li>
+                    <li key={fidx} className={`text-[0.84rem] py-[8px] pl-[22px] relative border-b ${tier.featured ? 'text-white/80 border-white/10 before:bg-[#7B72EE]' : 'text-[#4B5563] border-[#E5E7EB] before:bg-[#5B4FE9]'} before:content-[''] before:absolute before:left-0 before:top-[17px] before:w-[8px] before:h-[8px] before:rounded-full`}>{feature}</li>
                   ))}
                 </ul>
                 
                 {tier.cta && (
-                  <div className="mt-7">
-                    <Link href={tier.cta.href} className={`w-full border-none px-5 py-3.5 rounded-full text-[0.87rem] font-bold no-underline flex items-center justify-center gap-[6px] transition-all cursor-pointer ${tier.featured ? 'bg-[#5B4FE9] text-white shadow-[0_4px_20px_rgba(91,79,233,0.4)] hover:bg-white hover:text-[#5B4FE9]' : 'bg-[#EEF0FF] text-[#5B4FE9] hover:bg-[#5B4FE9] hover:text-white'}`}>
+                  <div className="mt-[28px]">
+                    <Link href={tier.cta.href} className={`w-full border-none px-[20px] py-[13px] rounded-[50px] text-[0.87rem] font-[700] no-underline flex items-center justify-center gap-[6px] transition-all cursor-pointer ${tier.featured ? 'bg-[#5B4FE9] text-white shadow-[0_4px_20px_rgba(91,79,233,0.4)] hover:bg-white hover:text-[#5B4FE9]' : 'bg-[#EEF0FF] text-[#5B4FE9] hover:bg-[#5B4FE9] hover:text-white'}`}>
                       {tier.cta.text} →
                     </Link>
                   </div>
@@ -322,14 +355,56 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
         </section>
       )}
 
+      {data.direct_answer_section?.heading && data.direct_answer_section.content ? (
+        <section className="bg-[#F8F9FF] px-[5%] py-[84px] sm:py-[96px]">
+          <div className="max-w-[860px]">
+            {data.direct_answer_section.eyebrow ? (
+              <div className="mb-[18px] text-[0.73rem] font-[800] uppercase tracking-[0.12em] text-[#5B4FE9]">
+                {data.direct_answer_section.eyebrow}
+              </div>
+            ) : null}
+            <h2
+              className="mb-[48px] text-[clamp(2rem,4vw,3.1rem)] font-[800] leading-[1.12] tracking-[-0.035em] text-[#1E1B4B] [&>span]:text-[#5B4FE9]"
+              dangerouslySetInnerHTML={{ __html: highlightText(data.direct_answer_section.heading) }}
+            />
+
+            <div className="rounded-[22px] border border-[#5B4FE9]/20 bg-white/55 px-[28px] py-[30px] shadow-[0_18px_60px_rgba(91,79,233,0.06)] backdrop-blur sm:px-[44px] sm:py-[42px]">
+              {data.direct_answer_section.cardLabel ? (
+                <div className="mb-[22px] text-[0.78rem] font-[800] uppercase tracking-[0.1em] text-[#5B4FE9]">
+                  {data.direct_answer_section.cardLabel}
+                </div>
+              ) : null}
+              <p className="text-[1rem] font-[500] leading-[1.75] text-[#1E1B4B]">
+                {data.direct_answer_section.content}
+              </p>
+            </div>
+
+            {data.direct_answer_section.cta ? (
+              <div className="mt-[34px]">
+                <ServiceAction
+                  action={data.direct_answer_section.cta}
+                  className="inline-flex items-center gap-[8px] rounded-[50px] bg-[#5B4FE9] px-[28px] py-[14px] text-[0.9rem] font-[800] text-white no-underline shadow-[0_12px_32px_rgba(91,79,233,0.28)] transition-all hover:-translate-y-[2px] hover:bg-[#4A3FD4] hover:shadow-[0_16px_38px_rgba(91,79,233,0.34)]"
+                  context={{
+                    page: "service",
+                    route: `/services/${slugPath}`,
+                    section: "direct-answer",
+                    trigger: data.direct_answer_section.cta.popupId ?? data.direct_answer_section.cta.type,
+                  }}
+                />
+              </div>
+            ) : null}
+          </div>
+        </section>
+      ) : null}
+
       {/* ── INDUSTRIES ── */}
       {data.industries_section?.items?.length ? (
         <section className="px-[5%] py-[60px] bg-[#F8F9FF]">
-          <div className="text-[0.73rem] font-bold tracking-[0.1em] uppercase text-[#5B4FE9] mb-3">Industries We Serve</div>
-          <h2 className="text-[clamp(1.6rem,2.8vw,2.2rem)] font-extrabold text-[#1E1B4B] tracking-[-0.02em] leading-[1.15] mb-0">{data.industries_section.heading}</h2>
-          <div className="flex flex-wrap gap-[10px] mt-7">
+          <div className="text-[0.73rem] font-[700] tracking-[0.1em] uppercase text-[#5B4FE9] mb-[12px]">Industries We Serve</div>
+          <h2 className="text-[clamp(1.6rem,2.8vw,2.2rem)] font-[800] text-[#1E1B4B] tracking-[-0.02em] leading-[1.15] mb-0">{data.industries_section.heading}</h2>
+          <div className="flex flex-wrap gap-[10px] mt-[28px]">
             {data.industries_section.items.map((industry, idx) => (
-              <span key={idx} className="bg-white border-[1.5px] border-[#E5E7EB] text-[#4B5563] text-[0.84rem] font-semibold px-5 py-2.5 rounded-full transition-all cursor-default shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:border-[#5B4FE9] hover:text-[#5B4FE9] hover:shadow-[0_4px_16px_rgba(91,79,233,0.12)]">{industry}</span>
+              <span key={idx} className="bg-white border-[1.5px] border-[#E5E7EB] text-[#4B5563] text-[0.84rem] font-[600] px-[20px] py-[10px] rounded-[50px] transition-all cursor-default shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:border-[#5B4FE9] hover:text-[#5B4FE9] hover:shadow-[0_4px_16px_rgba(91,79,233,0.12)]">{industry}</span>
             ))}
           </div>
         </section>
@@ -346,17 +421,17 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
       {data.final_cta_section && (
         <section className="bg-[linear-gradient(135deg,#0D1035_0%,#111437_50%,#1a1060_100%)] px-[5%] py-[100px] text-center relative overflow-hidden">
           <div className="absolute top-[-100px] left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-[radial-gradient(circle,rgba(91,79,233,0.2)_0%,transparent_70%)] pointer-events-none"></div>
-          <div className="text-[0.73rem] font-bold tracking-[0.1em] uppercase text-[#7B72EE] mb-4 relative z-10">Start Today</div>
-          <h2 className="text-[clamp(2.2rem,5vw,4rem)] font-extrabold text-white tracking-[-0.03em] leading-[1.1] m-[0_auto_16px] max-w-[700px] relative z-10 [&>em]:not-italic [&>em]:text-[#7B72EE]" dangerouslySetInnerHTML={{ __html: data.final_cta_section.heading.replace('Converts?', '<em>Converts?</em>') }} />
+          <div className="text-[0.73rem] font-[700] tracking-[0.1em] uppercase text-[#7B72EE] mb-[16px] relative z-10">Start Today</div>
+          <h2 className="text-[clamp(2.2rem,5vw,4rem)] font-[800] text-white tracking-[-0.03em] leading-[1.1] m-[0_auto_16px] max-w-[700px] relative z-10 [&>span]:text-[#7B72EE]" dangerouslySetInnerHTML={{ __html: highlightText(data.final_cta_section.heading) }} />
           {data.final_cta_section.subheading && <p className="text-white/65 max-w-[500px] m-[0_auto_40px] text-[0.95rem] relative z-10">{data.final_cta_section.subheading}</p>}
           
-          <div className="flex justify-center gap-3.5 flex-wrap relative z-10">
+          <div className="flex justify-center gap-[14px] flex-wrap relative z-10">
             {data.final_cta_section.actions.map((action, idx) => {
               const baseClass = idx === 0 
-                ? "bg-[#5B4FE9] text-white px-[30px] py-[14px] rounded-full text-[0.9rem] font-bold no-underline inline-flex items-center gap-2 transition-all shadow-[0_4px_20px_rgba(91,79,233,0.4)] hover:bg-[#4A3FD4] hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(91,79,233,0.5)]" 
+                ? "bg-[#5B4FE9] text-white px-[30px] py-[14px] rounded-[50px] text-[0.9rem] font-[700] no-underline inline-flex items-center gap-[8px] transition-all shadow-[0_4px_20px_rgba(91,79,233,0.4)] hover:bg-[#4A3FD4] hover:-translate-y-[2px] hover:shadow-[0_8px_30px_rgba(91,79,233,0.5)]" 
                 : idx === 1 
-                  ? "bg-white/10 text-white border-[1.5px] border-white/25 px-[30px] py-[14px] rounded-full text-[0.9rem] font-semibold no-underline inline-flex items-center gap-2 transition-all hover:bg-white/20 hover:border-white/40" 
-                  : "bg-[#25D366]/10 text-[#25D366] border-[1.5px] border-[#25D366]/30 px-[24px] py-[14px] rounded-full text-[0.88rem] font-bold no-underline inline-flex items-center gap-2 transition-all hover:bg-[#25D366]/20";
+                  ? "bg-white/10 text-white border-[1.5px] border-white/25 px-[30px] py-[14px] rounded-[50px] text-[0.9rem] font-[600] no-underline inline-flex items-center gap-[8px] transition-all hover:bg-white/[0.18] hover:border-white/40" 
+                  : "bg-[#25D366]/[0.12] text-[#25D366] border-[1.5px] border-[#25D366]/[0.35] px-[24px] py-[14px] rounded-[50px] text-[0.88rem] font-[700] no-underline inline-flex items-center gap-[8px] transition-all hover:bg-[#25D366]/20";
               
               if (idx === 2) {
                 return (
@@ -372,12 +447,7 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
                   key={idx}
                   action={action}
                   className={baseClass}
-                  context={{
-                    page: "service",
-                    route: `/services/${slugPath}`,
-                    section: "final-cta",
-                    trigger: action.popupId ?? action.type,
-                  }}
+                  context={{ page: "service", route: `/services/${slugPath}`, section: "final-cta", trigger: action.popupId ?? action.type }}
                 />
               );
             })}
@@ -388,13 +458,6 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
   );
 }
 
-
-export async function generateStaticParams() {
-  const paths = await getAllServiceSlugs();
-  return paths
-    .filter(Boolean)
-    .map((path) => ({ slug: path.split("/").filter(Boolean) }));
-}
 
 export async function generateMetadata({
   params,
