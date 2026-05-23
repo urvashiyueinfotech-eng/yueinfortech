@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 import IntroSection from "@/sections/ServicesPage/IntroSection";
@@ -148,11 +149,11 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
         <section className="px-[5%] py-[90px] bg-white">
           <div className="text-[0.73rem] font-[700] tracking-[0.1em] uppercase text-[#5B4FE9] mb-[12px]">Overview</div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-[48px] items-start animate-fade-up">
-            <div className="max-w-[460px]">
+            <div className={data.intro_section.introImage ? "max-w-[560px]" : "max-w-[460px]"}>
               <h2 className="text-[clamp(2rem,3.5vw,3rem)] font-[800] text-[#1E1B4B] tracking-[-0.02em] leading-[1.15] mb-[14px] [&>span]:text-[#5B4FE9]" dangerouslySetInnerHTML={{ __html: highlightText(data.intro_section.heading) }} />
               <p className="text-[#4B5563] text-[0.97rem] max-w-[560px] leading-[1.7] mb-[32px]">{data.intro_section.description}</p>
               
-              <div className="flex gap-[12px] flex-wrap">
+              <div className="flex gap-[12px] flex-wrap mb-[28px]">
                 {data.intro_section.cta && (
                   <ServiceAction
                     action={data.intro_section.cta}
@@ -168,9 +169,42 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
                   />
                 )}
               </div>
+
+              {data.intro_section.introImage && data.intro_section.features?.length ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-[14px]">
+                  {data.intro_section.features.map((feature, idx) => (
+                    <div key={idx} className="bg-white rounded-[14px] px-[20px] py-[18px] flex items-start gap-[12px] shadow-[0_4px_24px_rgba(91,79,233,0.08)] border border-[#5B4FE9]/[0.08]">
+                      <div className="w-[10px] h-[10px] bg-[#5B4FE9] rounded-full shrink-0 mt-[6px]"></div>
+                      <p className="text-[0.88rem] font-[600] text-[#1E1B4B] leading-[1.4]">{feature}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : null}
             </div>
             
-            {data.intro_section.features && data.intro_section.features.length > 0 && (
+            {data.intro_section.introImage ? (
+              <div className="relative min-h-[340px] overflow-hidden rounded-[24px] bg-[#0D1035] shadow-[0_18px_60px_rgba(13,16,53,0.22)] md:min-h-[520px]">
+                <Image
+                  src={data.intro_section.introImage}
+                  alt={data.intro_section.imageAlt || data.intro_section.heading}
+                  fill
+                  sizes="(min-width: 768px) 45vw, 90vw"
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(13,16,53,0.72)_0%,transparent_55%)]" />
+                {(data.intro_section.imageBadgeTitle || data.intro_section.imageBadgeDescription) ? (
+                  <div className="absolute bottom-[20px] left-[20px] right-[20px] flex items-start gap-[12px] rounded-[16px] border border-white/10 bg-[#0D1035]/90 p-[16px] text-white shadow-[0_14px_40px_rgba(0,0,0,0.24)] backdrop-blur">
+                    <span className="mt-[4px] h-[8px] w-[8px] shrink-0 rounded-full bg-[#7B72EE] shadow-[0_0_8px_#7B72EE]" />
+                    <span className="text-[0.78rem] leading-[1.45] text-white/75">
+                      {data.intro_section.imageBadgeTitle ? (
+                        <strong className="mb-[2px] block text-[0.86rem] text-white">{data.intro_section.imageBadgeTitle}</strong>
+                      ) : null}
+                      {data.intro_section.imageBadgeDescription}
+                    </span>
+                  </div>
+                ) : null}
+              </div>
+            ) : data.intro_section.features && data.intro_section.features.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-[14px]">
                 {data.intro_section.features.map((feature, idx) => (
                   <div key={idx} className="bg-white rounded-[14px] px-[20px] py-[18px] flex items-start gap-[12px] shadow-[0_4px_24px_rgba(91,79,233,0.08)] border border-[#5B4FE9]/[0.08]">
@@ -179,7 +213,7 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
                   </div>
                 ))}
               </div>
-            )}
+            ) : null}
           </div>
           {data.intro_section.additionalDescription ? (
             <div className="mt-[42px] max-w-[760px] rounded-[12px] border-l-[4px] border-[#5B4FE9] bg-[#EEF0FF] px-[28px] py-[24px] text-[0.95rem] font-[500] leading-[1.7] text-[#1E1B4B] md:ml-auto [&>strong]:font-[800] [&>strong]:text-[#5B4FE9]">
@@ -198,11 +232,12 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
           
           <div className="grid grid-cols-1 md:grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-[24px] animate-fade-up">
             {data.sub_services_section.cards.map((card, idx) => {
-              const isFeatured = idx < 2;
+              const isFeatured = card.featured ?? idx < 2;
+              const isWide = card.wide ?? isFeatured;
               const titleSupportingText = card.snippet || card.subtitle;
               const calloutText = card.description && card.description !== card.snippet ? card.description : "";
               return (
-                <div key={card.id || idx} className={`bg-white rounded-[20px] px-[28px] py-[32px] shadow-[0_4px_24px_rgba(91,79,233,0.08)] border transition-all duration-[0.25s] hover:-translate-y-1 hover:shadow-[0_8px_40px_rgba(91,79,233,0.16)] flex flex-col ${isFeatured ? 'border-2 border-[#5B4FE9] bg-[linear-gradient(135deg,#fff_0%,#EEF0FF_100%)]' : 'border-[#5B4FE9]/[0.06]'}`} style={isFeatured ? { gridColumn: 'span 2' } : {}}>
+                <div key={card.id || idx} className={`bg-white rounded-[20px] px-[28px] py-[32px] shadow-[0_4px_24px_rgba(91,79,233,0.08)] border transition-all duration-[0.25s] hover:-translate-y-1 hover:shadow-[0_8px_40px_rgba(91,79,233,0.16)] flex flex-col ${isFeatured ? 'border-2 border-[#5B4FE9] bg-[linear-gradient(135deg,#fff_0%,#EEF0FF_100%)]' : 'border-[#5B4FE9]/[0.06]'}`} style={isWide ? { gridColumn: 'span 2' } : {}}>
                   <div className="text-[0.72rem] font-[700] text-[#5B4FE9] tracking-[0.08em] uppercase mb-[8px]">{String(idx + 1).padStart(2, '0')} — {card.category || card.subtitle || "Service"}</div>
                   <h3 className="text-[1.08rem] font-[800] text-[#1E1B4B] mb-[8px] tracking-[-0.01em]">{card.title}</h3>
                   {titleSupportingText && (
@@ -240,11 +275,79 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
         </section>
       ) : null}
 
+      {data.process_section?.bannerImage ? (
+        <section className="relative min-h-[420px] overflow-hidden bg-[#0D1035] px-[5%] py-[80px]">
+          <Image
+            src={data.process_section.bannerImage}
+            alt={data.process_section.bannerAlt || data.process_section.bannerHeading || data.process_section.heading}
+            fill
+            sizes="100vw"
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(13,16,53,0.9)_0%,rgba(26,16,96,0.65)_50%,rgba(13,16,53,0.3)_100%)]" />
+          <div className="relative z-10 max-w-[760px] text-white">
+            {data.process_section.bannerLabel ? (
+              <div className="mb-[12px] text-[0.73rem] font-[800] uppercase tracking-[0.12em] text-[#7B72EE]">
+                {data.process_section.bannerLabel}
+              </div>
+            ) : null}
+            {data.process_section.bannerHeading ? (
+              <h2 className="text-[clamp(2rem,4vw,3.6rem)] font-[800] leading-[1.08] tracking-[-0.035em]">
+                {data.process_section.bannerHeading}
+              </h2>
+            ) : null}
+            {data.process_section.bannerDescription ? (
+              <p className="mt-[18px] max-w-[620px] text-[1rem] leading-[1.72] text-white/72">
+                {data.process_section.bannerDescription}
+              </p>
+            ) : null}
+            {data.process_section.bannerStats?.length ? (
+              <div className="mt-[34px] flex flex-wrap gap-[18px]">
+                {data.process_section.bannerStats.map((stat, idx) => (
+                  <div key={`${stat.label}-${idx}`} className="rounded-[16px] border border-white/10 bg-white/10 px-[20px] py-[14px] backdrop-blur">
+                    <div className="text-[1.4rem] font-[800] text-[#7B72EE]">{stat.value}</div>
+                    <div className="text-[0.76rem] text-white/60">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </div>
+        </section>
+      ) : null}
+
       {/* ── PROCESS FUNNEL ── */}
       {data.process_section && (
         <section className="px-[5%] py-[90px] bg-white" id="approach">
           <div className="text-[0.73rem] font-[700] tracking-[0.1em] uppercase text-[#5B4FE9] mb-[12px]">{processEyebrow}</div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-[80px] items-start animate-fade-up">
+          <div className={`grid grid-cols-1 ${data.process_section.image ? "lg:grid-cols-2" : "md:grid-cols-2"} gap-[80px] items-start animate-fade-up`}>
+            {data.process_section.image ? (
+              <div className="relative min-h-[420px] overflow-hidden rounded-[24px] bg-[#0D1035] shadow-[0_18px_60px_rgba(13,16,53,0.2)] lg:row-span-2 lg:min-h-[560px]">
+                <Image
+                  src={data.process_section.image}
+                  alt={data.process_section.imageAlt || data.process_section.heading}
+                  fill
+                  sizes="(min-width: 1024px) 45vw, 90vw"
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(13,16,53,0.78)_0%,rgba(13,16,53,0.1)_55%,transparent_100%)]" />
+                {(data.process_section.imageCardLabel || data.process_section.imageStats?.length) ? (
+                  <div className="absolute bottom-[20px] left-[20px] right-[20px] rounded-[16px] border border-white/10 bg-[#0D1035]/92 p-[18px] text-white backdrop-blur">
+                    {data.process_section.imageCardLabel ? (
+                      <div className="mb-[8px] text-[0.62rem] font-[800] uppercase tracking-[0.08em] text-[#7B72EE]">
+                        {data.process_section.imageCardLabel}
+                      </div>
+                    ) : null}
+                    {data.process_section.imageStats?.map((stat, idx) => (
+                      <div key={`${stat.label}-${idx}`} className="flex items-center justify-between border-b border-white/10 py-[6px] last:border-b-0">
+                        <span className="text-[0.73rem] text-white/55">{stat.label}</span>
+                        <span className="text-[0.73rem] font-[800] text-[#00D4AA]">{stat.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+
             <div className="pt-[16px]">
               <h2 className="text-[clamp(2rem,3.5vw,3rem)] font-[800] text-[#1E1B4B] tracking-[-0.02em] leading-[1.15] mb-[14px] [&>span]:text-[#5B4FE9]" dangerouslySetInnerHTML={{ __html: highlightText(data.process_section.heading) }} />
               <p className="text-[#4B5563] text-[0.97rem] max-w-[560px] leading-[1.7] mb-[36px]">{data.process_section.description}</p>
@@ -257,7 +360,7 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
               )}
             </div>
             
-            <div className="flex flex-col gap-0">
+            <div className={`flex flex-col gap-0 ${data.process_section.image ? "lg:col-start-2" : ""}`}>
               {data.process_section.steps.map((step, idx) => (
                 <div key={idx} className="flex gap-[24px] relative pb-[32px] last:pb-0">
                   <div className="flex flex-col items-center shrink-0">
@@ -284,6 +387,23 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
           <div className="text-[0.73rem] font-[700] tracking-[0.1em] uppercase text-[#5B4FE9] mb-[12px]">Documented Results</div>
           <h2 className="text-[clamp(2rem,3.5vw,3rem)] font-[800] text-[#1E1B4B] tracking-[-0.02em] leading-[1.15] mb-[14px] [&>span]:text-[#5B4FE9]" dangerouslySetInnerHTML={{ __html: highlightText(data.results_section.heading) }} />
           <p className="text-[#4B5563] text-[0.97rem] max-w-[560px] leading-[1.7] mb-[52px]">{data.results_section.description}</p>
+
+          {data.results_section.images?.length ? (
+            <div className="mb-[28px] grid grid-cols-1 overflow-hidden rounded-[24px] border border-[#5B4FE9]/10 bg-white shadow-[0_18px_60px_rgba(91,79,233,0.08)] sm:grid-cols-3">
+              {data.results_section.images.map((image, idx) => (
+                <div key={`${image.tag}-${idx}`} className="relative min-h-[220px] overflow-hidden border-b border-white/10 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0">
+                  <Image src={image.src} alt={image.alt} fill sizes="(min-width: 640px) 33vw, 90vw" className="object-cover" />
+                  <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(30,27,75,0.92)_0%,transparent_60%)]" />
+                  <div className="absolute bottom-[18px] left-[18px] right-[18px] flex items-center justify-between gap-[12px]">
+                    <span className="rounded-[50px] bg-[#5B4FE9] px-[10px] py-[4px] text-[0.62rem] font-[800] uppercase tracking-[0.08em] text-white">
+                      {image.tag}
+                    </span>
+                    <span className="text-[1.6rem] font-[800] leading-[1] text-white">{image.value}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : null}
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-[24px] mb-[40px] animate-fade-up">
             {data.results_section.cards.map((card, idx) => (
@@ -328,6 +448,36 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
           <div className="text-[0.73rem] font-[700] tracking-[0.1em] uppercase text-[#5B4FE9] mb-[12px]">Engagement Options</div>
           <h2 className="text-[clamp(2rem,3.5vw,3rem)] font-[800] text-[#1E1B4B] tracking-[-0.02em] leading-[1.15] mb-[14px] [&>span]:text-[#5B4FE9]" dangerouslySetInnerHTML={{ __html: highlightText(data.engagement_tiers_section.heading) }} />
           <p className="text-[#4B5563] text-[0.97rem] max-w-[560px] leading-[1.7] mb-[52px]">{data.engagement_tiers_section.description}</p>
+
+          {data.engagement_tiers_section.image ? (
+            <div className="relative mb-[34px] min-h-[320px] overflow-hidden rounded-[24px] bg-[#0D1035] shadow-[0_18px_60px_rgba(13,16,53,0.18)]">
+              <Image
+                src={data.engagement_tiers_section.image}
+                alt={data.engagement_tiers_section.imageAlt || data.engagement_tiers_section.heading}
+                fill
+                sizes="90vw"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(13,16,53,0.97)_0%,rgba(13,16,53,0.6)_55%,transparent_100%)]" />
+              <div className="relative z-10 max-w-[620px] px-[28px] py-[40px] text-white sm:px-[44px]">
+                {data.engagement_tiers_section.imageLabel ? (
+                  <div className="mb-[10px] text-[0.72rem] font-[800] uppercase tracking-[0.12em] text-[#7B72EE]">
+                    {data.engagement_tiers_section.imageLabel}
+                  </div>
+                ) : null}
+                {data.engagement_tiers_section.imageHeading ? (
+                  <h3 className="text-[clamp(1.7rem,3vw,2.7rem)] font-[800] leading-[1.12] tracking-[-0.03em]">
+                    {data.engagement_tiers_section.imageHeading}
+                  </h3>
+                ) : null}
+                {data.engagement_tiers_section.imageDescription ? (
+                  <p className="mt-[16px] max-w-[520px] text-[0.95rem] leading-[1.72] text-white/70">
+                    {data.engagement_tiers_section.imageDescription}
+                  </p>
+                ) : null}
+              </div>
+            </div>
+          ) : null}
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-[24px] animate-fade-up">
             {data.engagement_tiers_section.tiers.map((tier, idx) => (

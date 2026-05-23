@@ -25,6 +25,8 @@ export type LinkAction = {
     subtitle?: string;
     description: string;
     snippet?: string;
+    featured?: boolean;
+    wide?: boolean;
     features?: string[];
     cta?: LinkAction;
   };
@@ -64,6 +66,9 @@ export type ServiceDoc = {
     cta: LinkAction;
     secondaryCta?: LinkAction;
     introImage?: string;
+    imageAlt?: string;
+    imageBadgeTitle?: string;
+    imageBadgeDescription?: string;
   };
     direct_answer_section?: {
       eyebrow: string;
@@ -82,11 +87,22 @@ export type ServiceDoc = {
       description: string;
       steps: Array<{ step_label: string; title: string; description: string }>;
       cta?: LinkAction;
+      image?: string;
+      imageAlt?: string;
+      imageCardLabel?: string;
+      imageStats?: Array<{ label: string; value: string }>;
+      bannerImage?: string;
+      bannerAlt?: string;
+      bannerLabel?: string;
+      bannerHeading?: string;
+      bannerDescription?: string;
+      bannerStats?: Array<{ value: string; label: string }>;
     };
     results_section?: {
       heading: string;
       description: string;
       cta?: LinkAction;
+      images?: Array<{ src: string; alt: string; tag: string; value: string }>;
       cards: Array<{
         id: string;
         tag: string;
@@ -97,6 +113,11 @@ export type ServiceDoc = {
     engagement_tiers_section?: {
       heading: string;
       description: string;
+      image?: string;
+      imageAlt?: string;
+      imageLabel?: string;
+      imageHeading?: string;
+      imageDescription?: string;
       tiers: Array<{
         id: string;
         name: string;
