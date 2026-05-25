@@ -40,6 +40,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function PortfolioPage() {
+  const yearsOfExperience = new Date().getFullYear() - 2018;
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -101,7 +102,7 @@ export default function PortfolioPage() {
               <div><div className="hs-num">50+</div><div className="hs-label">Projects Delivered</div></div>
               <div><div className="hs-num">15+</div><div className="hs-label">Industries Served</div></div>
               <div><div className="hs-num">3×</div><div className="hs-label">Avg. Traffic Growth</div></div>
-              <div><div className="hs-num">8+</div><div className="hs-label">Years · Est. 2018</div></div>
+              <div><div className="hs-num">{yearsOfExperience}+</div><div className="hs-label">Years · Est. 2018</div></div>
             </div>
             <div className="hero-ctas">
               <Link href="/contact-us" className="btn-p">Start Your Project →</Link>
@@ -128,7 +129,7 @@ export default function PortfolioPage() {
             <div className="metric-label">Avg. Traffic Growth</div>
           </div>
           <div className="metric-cell">
-            <div className="metric-num">8+</div>
+            <div className="metric-num">{yearsOfExperience}+</div>
             <div className="metric-label">Years · Est. 2018</div>
           </div>
         </div>

@@ -41,6 +41,7 @@ function buildFaqJsonLd(faqs: PublicFaq[]) {
 
 
 export default async function ServicesPage() {
+  const yearsOfExperience = new Date().getFullYear() - 2018;
   const [services, faqs] = await Promise.all([
     getAllMainServices(),
     fetchFaqsForPage("services", {
@@ -103,7 +104,7 @@ export default async function ServicesPage() {
       {/* ── STATS BAR ── */}
       <div className="bg-white border-b border-[#E5E7EB] grid grid-cols-2 md:grid-cols-4">
         {[
-          { num: "8+", label: "Years · Est. 2018" },
+          { num: `${yearsOfExperience}+`, label: "Years · Est. 2018" },
           { num: "50+", label: "Projects Delivered" },
           { num: "15+", label: "Industries Served" },
           { num: "9+", label: "Service Areas" }
@@ -220,7 +221,7 @@ export default async function ServicesPage() {
               <WhyChooseUsStep number="02" label="AI + Human Strategy" title="Advanced AI Tools With Expert Execution" description="We combine AI optimization — AEO, GEO, SXO, HEO — with human strategic oversight. Technology handles scale; experts handle judgment." />
               <WhyChooseUsStep number="03" label="Authority & Trust" title="E-E-A-T Optimized at Every Level" description="All content, strategy, and delivery satisfies Google's Experience, Expertise, Authoritativeness, and Trustworthiness framework — building sustainable authority, not short-term ranking spikes." />
               <WhyChooseUsStep number="04" label="Full Transparency" title="Clear Reporting — No Vanity Metrics" description="Monthly Looker Studio dashboards tied to your actual business KPIs — traffic, leads, conversions, and revenue — not just rankings and impressions." />
-              <WhyChooseUsStep number="05" label="Long-Term Partnership" title="8+ Years of Continuous Expertise" description="Established in 2018, Yue Infotech has navigated every major search, AI, and marketing platform change since — so your strategy reflects how digital works today, not 3 years ago." isLast={true} />
+              <WhyChooseUsStep number="05" label="Long-Term Partnership" title={`${yearsOfExperience}+ Years of Continuous Expertise`} description="Established in 2018, Yue Infotech has navigated every major search, AI, and marketing platform change since — so your strategy reflects how digital works today, not 3 years ago." isLast={true} />
             </div>
           </div>
         </div>

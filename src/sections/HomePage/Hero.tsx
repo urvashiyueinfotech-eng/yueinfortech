@@ -57,7 +57,9 @@ export default function Hero() {
             {/* Trust Metrics */}
             <div className="flex flex-wrap gap-8 items-start">
               <div>
-                <div className="text-[1.4rem] font-[800] font-['Syne',sans-serif] text-[#F1F5FF] leading-none mb-1">8<span className="text-[#5865F2]">+</span></div>
+                <div className="text-[1.4rem] font-[800] font-['Syne',sans-serif] text-[#F1F5FF] leading-none mb-1">
+                  {new Date().getFullYear() - 2018}<span className="text-[#5865F2]">+</span>
+                </div>
                 <div className="text-[0.7rem] text-[#5A6480] uppercase tracking-wider font-semibold">Years in<br />business</div>
               </div>
               <div className="w-[1px] h-10 bg-white/10 hidden sm:block"></div>
@@ -79,11 +81,11 @@ export default function Hero() {
           </div>
 
           {/* Right Dashboard Visual */}
-          <div className="flex-1 w-full max-w-[600px] lg:max-w-none perspective-1000 hidden md:block">
-            <div className="relative transform rotate-y-[-12deg] rotate-x-[5deg] shadow-[0_24px_80px_rgba(0,0,0,0.6)] rounded-[14px]" style={{ transformStyle: 'preserve-3d', transform: 'perspective(1000px) rotateY(-8deg) rotateX(2deg)' }}>
+          <div className="flex-1 w-full max-w-[600px] lg:max-w-none hidden md:block">
+            <div className="relative shadow-[0_24px_80px_rgba(0,0,0,0.6)] rounded-[14px] [transform-style:preserve-3d] [transform:perspective(1000px)_rotateY(-8deg)_rotateX(2deg)]">
               
               {/* Floating Badge 1 */}
-              <div className="absolute -top-4 -left-8 z-20 px-4 py-2 bg-[#161F35] border border-white/10 rounded-full shadow-lg flex items-center gap-2 backdrop-blur-md animate-bounce" style={{ animationDuration: '3s' }}>
+              <div className="absolute -top-4 -left-8 z-20 px-4 py-2 bg-[#161F35] border border-white/10 rounded-full shadow-lg flex items-center gap-2 backdrop-blur-md animate-bounce [animation-duration:3s]">
                 <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
                 <span className="text-[0.75rem] font-semibold text-[#A8B4CC]">AI Overview — 14 Keywords Cited</span>
               </div>
@@ -182,7 +184,7 @@ export default function Hero() {
               </div>
               
               {/* Floating Badge 2 */}
-              <div className="absolute -bottom-4 -right-8 z-20 px-4 py-2 bg-[#161F35] border border-white/10 rounded-full shadow-lg flex items-center gap-2 backdrop-blur-md animate-bounce" style={{ animationDuration: '4s', animationDelay: '1s' }}>
+              <div className="absolute -bottom-4 -right-8 z-20 px-4 py-2 bg-[#161F35] border border-white/10 rounded-full shadow-lg flex items-center gap-2 backdrop-blur-md animate-bounce [animation-duration:4s] [animation-delay:1s]">
                 <span className="w-2 h-2 rounded-full bg-[#06B6D4] animate-pulse" />
                 <span className="text-[0.75rem] font-semibold text-[#A8B4CC]">+296% organic clicks · Education client · 90 days</span>
               </div>

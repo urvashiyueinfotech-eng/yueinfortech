@@ -6,9 +6,9 @@ const COPYRIGHT_YEAR = new Date().getFullYear();
 
 export default function Footer() {
   return (
-    <footer className="relative bg-slate-900 text-slate-300">
+    <footer className="relative bg-[#06080F] text-[#A8B4CC] border-t border-white/5">
       {/* Subtle glow */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(121,133,255,0.08),transparent_45%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(88,101,242,0.08),transparent_45%)]" />
 
       <div className="relative mx-auto max-w-7xl px-6 pt-20 pb-5">
         {/* TOP GRID */}
@@ -25,7 +25,7 @@ export default function Footer() {
               className="h-12 w-auto max-w-none sm:h-14 md:h-16"
             />
 
-            <p className="text-sm leading-relaxed text-slate-400">
+            <p className="text-[0.9rem] leading-[1.65] text-[#5A6480]">
               Full-service digital agency helping businesses grow with strategy,
               design, technology, and performance marketing.
             </p>
@@ -33,10 +33,10 @@ export default function Footer() {
 
           {/* QUICK LINKS */}
           <div>
-            <h4 className="mb-5 text-sm font-semibold uppercase tracking-wider text-white">
+            <h4 className="mb-5 text-[0.8rem] font-bold uppercase tracking-wider text-white font-['Syne',sans-serif]">
               Quick Links
             </h4>
-            <ul className="space-y-3 text-sm">
+            <ul className="space-y-3 text-[0.9rem]">
               {[
                 { label: "About Us", href: "/about-us" },
                 { label: "Services", href: "/services" },
@@ -46,7 +46,7 @@ export default function Footer() {
                 <li key={item.label}>
                   <Link
                     href={item.href}
-                    className="transition hover:text-white"
+                    className="transition-colors hover:text-white"
                   >
                     {item.label}
                   </Link>
@@ -57,10 +57,10 @@ export default function Footer() {
 
           {/* SERVICES (LINKED) */}
           <div>
-            <h4 className="mb-5 text-sm font-semibold uppercase tracking-wider text-white">
+            <h4 className="mb-5 text-[0.8rem] font-bold uppercase tracking-wider text-white font-['Syne',sans-serif]">
               Our Services
             </h4>
-            <ul className="space-y-3 text-sm">
+            <ul className="space-y-3 text-[0.9rem]">
               {[
                 {
                   label: "Web Design & Development",
@@ -86,7 +86,7 @@ export default function Footer() {
                 <li key={service.href}>
                   <Link
                     href={service.href}
-                    className="transition hover:text-white"
+                    className="transition-colors hover:text-white"
                   >
                     {service.label}
                   </Link>
@@ -97,21 +97,21 @@ export default function Footer() {
 
           {/* CONTACT */}
           <div>
-            <h4 className="mb-5 text-sm font-semibold uppercase tracking-wider text-white">
+            <h4 className="mb-5 text-[0.8rem] font-bold uppercase tracking-wider text-white font-['Syne',sans-serif]">
               Contact Us
             </h4>
 
-            <div className="space-y-4 text-sm">
+            <div className="space-y-4 text-[0.9rem]">
               <div className="flex items-center gap-3">
-                <Phone className="h-4 w-4 text-indigo-400" />
+                <Phone className="h-4 w-4 text-[#5865F2]" />
                 <span>+91 85936 62992</span>
               </div>
 
               <div className="flex items-center gap-3">
-                <Mail className="h-4 w-4 text-indigo-400" />
+                <Mail className="h-4 w-4 text-[#5865F2]" />
                 <a
                   href="mailto:sales@yueinfotech.com"
-                  className="transition hover:text-white"
+                  className="transition-colors hover:text-white"
                 >
                   sales@yueinfotech.com
                 </a>
@@ -119,7 +119,7 @@ export default function Footer() {
 
               <Link
                 href="/contact-us"
-                className="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-5 py-2 text-xs font-semibold text-white transition hover:bg-indigo-700"
+                className="inline-flex items-center gap-2 rounded-full bg-[#5865F2] px-5 py-2.5 text-[0.8rem] font-bold text-white transition-colors hover:bg-[#4752C4]"
               >
                 Talk to Experts
                 <ArrowRight className="h-4 w-4" />
@@ -129,19 +129,19 @@ export default function Footer() {
         </div>
 
         {/* DIVIDER */}
-        <div className="my-12 h-px bg-white/10" />
+        <div className="my-12 h-px bg-white/5" />
 
         {/* BOTTOM BAR */}
-        <div className="flex flex-col items-center justify-between gap-4 text-sm sm:flex-row">
-          <p className="text-slate-500">
+        <div className="flex flex-col items-center justify-between gap-4 text-[0.8rem] sm:flex-row">
+          <p className="text-[#5A6480]">
             © {COPYRIGHT_YEAR} Yue Infotech. All rights reserved.
           </p>
 
-          <div className="flex gap-4 text-slate-400">
-            <Link href="/privacy-policy" className="hover:text-white">
+          <div className="flex gap-4 text-[#5A6480]">
+            <Link href="/privacy-policy" className="hover:text-white transition-colors">
               Privacy Policy
             </Link>
-            <Link href="/terms" className="hover:text-white">
+            <Link href="/terms" className="hover:text-white transition-colors">
               Terms
             </Link>
           </div>
