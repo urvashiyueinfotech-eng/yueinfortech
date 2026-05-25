@@ -8,7 +8,7 @@ type HeaderWrapperProps = {
 const HeaderWrapper = ({ heroEyebrow, heroHeading }: HeaderWrapperProps) => {
   return (
     <header className="relative">
-      <Hero heroEyebrow={heroEyebrow} heroHeading={heroHeading} />
+      <Hero />
     </header>
   );
 };

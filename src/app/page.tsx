@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import HeaderWrapper from "@/components/HeaderWrapper";
-import BlogHighlights from "@/sections/HomePage/BlogHighlights";
-import PageFaqSection from "@/sections/HomePage/PageFaqSection";
-import FeaturedServices from "@/sections/HomePage/FeaturedServices";
-import PortfolioHighlights from "@/sections/HomePage/PortfolioHighlights";
-import ProjectTypes from "@/sections/HomePage/ProjectTypes";
 import WhatWeDo from "@/sections/HomePage/WhatWeDo";
 import WhyChooseUs from "@/sections/HomePage/WhyChooseUs";
+import Approach from "@/sections/HomePage/Approach";
+import PortfolioHighlights from "@/sections/HomePage/PortfolioHighlights";
+import Industries from "@/sections/HomePage/Industries";
+import BlogHighlights from "@/sections/HomePage/BlogHighlights";
+import PageFaqSection from "@/sections/HomePage/PageFaqSection";
+import HomePageCTA from "@/sections/HomePage/HomePageCTA";
 import { getHomePageData } from "@/lib/homePage";
 import { getPageMetadata } from "@/lib/pageSeo.service";
 
@@ -25,19 +26,18 @@ export default async function Home() {
   const { posts } = await getHomePageData();
 
   return (
-    <main>
+    <main className="bg-[#06080F] text-[#F1F5FF] overflow-x-hidden">
       <HeaderWrapper />
       <WhatWeDo />
       <WhyChooseUs />
-      <section className="bg-white">
-        <FeaturedServices />
-        <ProjectTypes />
-      </section>
+      <Approach />
       <PortfolioHighlights />
+      <Industries />
       <BlogHighlights posts={posts} />
       <Suspense fallback={null}>
         <PageFaqSection pageId="home" revalidate={HOME_FAQ_REVALIDATE} />
       </Suspense>
+      <HomePageCTA />
     </main>
   );
 }
