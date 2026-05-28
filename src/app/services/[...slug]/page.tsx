@@ -98,49 +98,65 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
       <section className="min-h-screen bg-[linear-gradient(135deg,#0D1035_0%,#111437_40%,#1a1060_100%)] flex flex-col justify-center px-[5%] py-[120px] pb-[80px] relative overflow-hidden">
         <div className="absolute inset-0 z-0 bg-[radial-gradient(rgba(91,79,233,0.15)_1px,transparent_1px)] [background-size:32px_32px]"></div>
         <div className="absolute top-[-100px] right-0 w-[55%] h-[120%] z-0 bg-[linear-gradient(120deg,transparent_30%,rgba(91,79,233,0.12)_70%,rgba(91,79,233,0.05)_100%)]"></div>
-        <div className="relative z-10 max-w-[720px]">
-          {data.hero.badge && (
-            <div className="inline-flex items-center gap-[8px] bg-[#5B4FE9]/20 border border-[#5B4FE9]/40 text-[#7B72EE] px-[16px] py-[8px] rounded-[50px] text-[0.78rem] font-[600] tracking-[0.04em] uppercase mb-[28px]">
-              <span className="w-[6px] h-[6px] bg-[#7B72EE] rounded-full animate-pulse"></span>
-              {data.hero.badge}
-            </div>
-          )}
-          <h1 className="text-[clamp(2.8rem,5.5vw,4.5rem)] font-[800] text-white leading-[1.1] tracking-[-0.03em] mb-[20px] [&>span]:text-[#7B72EE]" dangerouslySetInnerHTML={{ __html: highlightText(data.hero.heading) }}>
-          </h1>
-          
-          {data.hero.description && (
-            <div className="bg-white/5 border-l-[3px] border-[#7B72EE] px-[20px] py-[14px] rounded-[0_8px_8px_0] mb-[32px] text-[0.93rem] text-white/75 leading-[1.68] max-w-[580px] [&>strong]:text-white">
-              <span dangerouslySetInnerHTML={{ __html: data.hero.description }} />
-            </div>
-          )}
+        <div className={`relative z-10 w-full ${data.hero.bannerImage ? 'max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center' : 'max-w-[720px]'}`}>
+          <div className={data.hero.bannerImage ? 'lg:col-span-7' : ''}>
+            {data.hero.badge && (
+              <div className="inline-flex items-center gap-[8px] bg-[#5B4FE9]/20 border border-[#5B4FE9]/40 text-[#7B72EE] px-[16px] py-[8px] rounded-[50px] text-[0.78rem] font-[600] tracking-[0.04em] uppercase mb-[28px]">
+                <span className="w-[6px] h-[6px] bg-[#7B72EE] rounded-full animate-pulse"></span>
+                {data.hero.badge}
+              </div>
+            )}
+            <h1 className="text-[clamp(2.8rem,5.5vw,4.5rem)] font-[800] text-white leading-[1.1] tracking-[-0.03em] mb-[20px] [&>span]:text-[#7B72EE]" dangerouslySetInnerHTML={{ __html: highlightText(data.hero.heading) }}>
+            </h1>
+            
+            {data.hero.description && (
+              <div className="bg-white/5 border-l-[3px] border-[#7B72EE] px-[20px] py-[14px] rounded-[0_8px_8px_0] mb-[32px] text-[0.93rem] text-white/75 leading-[1.68] max-w-[580px] [&>strong]:text-white">
+                <span dangerouslySetInnerHTML={{ __html: data.hero.description }} />
+              </div>
+            )}
 
-          {data.hero.stats && data.hero.stats.length > 0 && (
-            <div className="flex gap-[40px] flex-wrap mb-[40px]">
-              {data.hero.stats.map((stat, idx) => (
-                <div key={idx}>
-                  <div className="text-[2rem] font-[800] text-[#7B72EE] leading-[1]">{stat.value}</div>
-                  <div className="text-[0.78rem] text-white/55 mt-[2px]">{stat.label}</div>
-                </div>
-              ))}
+            {data.hero.stats && data.hero.stats.length > 0 && (
+              <div className="flex gap-[40px] flex-wrap mb-[40px]">
+                {data.hero.stats.map((stat, idx) => (
+                  <div key={idx}>
+                    <div className="text-[2rem] font-[800] text-[#7B72EE] leading-[1]">{stat.value}</div>
+                    <div className="text-[0.78rem] text-white/55 mt-[2px]">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            <div className="flex gap-[14px] flex-wrap">
+              {data.hero.actions.map((action, idx) => {
+                const baseClass = idx === 0 
+                  ? "bg-[#5B4FE9] text-white px-[30px] py-[14px] rounded-[50px] text-[0.9rem] font-[700] no-underline inline-flex items-center gap-[8px] transition-all shadow-[0_4px_20px_rgba(91,79,233,0.4)] hover:bg-[#4A3FD4] hover:-translate-y-[2px] hover:shadow-[0_8px_30px_rgba(91,79,233,0.5)]" 
+                  : "bg-white/10 text-white border-[1.5px] border-white/25 px-[30px] py-[14px] rounded-[50px] text-[0.9rem] font-[600] no-underline inline-flex items-center gap-[8px] transition-all hover:bg-white/[0.18] hover:border-white/40";
+                
+                return (
+                  <ServiceAction
+                    key={`${action.text}-${idx}`}
+                    action={action}
+                    className={baseClass}
+                    context={{ page: "service", route: `/services/${slugPath}`, section: "hero", trigger: action.popupId ?? action.type }}
+                  />
+                );
+              })}
+            </div>
+          </div>
+          {data.hero.bannerImage && (
+            <div className="lg:col-span-5 relative w-full flex justify-center lg:justify-end animate-fade-up mt-10 lg:mt-0">
+              <div className="relative w-full max-w-[500px] aspect-[4/3] rounded-[24px] overflow-hidden border border-white/10 shadow-[0_24px_60px_rgba(0,0,0,0.5)] bg-slate-950/40 backdrop-blur-sm">
+                <Image
+                  src={data.hero.bannerImage}
+                  alt={data.hero.bannerAlt || data.hero.heading}
+                  fill
+                  priority
+                  className="object-cover"
+                  sizes="(min-width: 1024px) 40vw, 90vw"
+                />
+              </div>
             </div>
           )}
-          
-          <div className="flex gap-[14px] flex-wrap">
-            {data.hero.actions.map((action, idx) => {
-              const baseClass = idx === 0 
-                ? "bg-[#5B4FE9] text-white px-[30px] py-[14px] rounded-[50px] text-[0.9rem] font-[700] no-underline inline-flex items-center gap-[8px] transition-all shadow-[0_4px_20px_rgba(91,79,233,0.4)] hover:bg-[#4A3FD4] hover:-translate-y-[2px] hover:shadow-[0_8px_30px_rgba(91,79,233,0.5)]" 
-                : "bg-white/10 text-white border-[1.5px] border-white/25 px-[30px] py-[14px] rounded-[50px] text-[0.9rem] font-[600] no-underline inline-flex items-center gap-[8px] transition-all hover:bg-white/[0.18] hover:border-white/40";
-              
-              return (
-                <ServiceAction
-                  key={`${action.text}-${idx}`}
-                  action={action}
-                  className={baseClass}
-                  context={{ page: "service", route: `/services/${slugPath}`, section: "hero", trigger: action.popupId ?? action.type }}
-                />
-              );
-            })}
-          </div>
         </div>
       </section>
 
@@ -655,24 +671,40 @@ export default async function ServicePage({
   return (
     <main>
       <section className="relative overflow-hidden py-16 lg:py-20">
-        <div className="mx-auto max-w-6xl px-6">
-          <p className="text-xs font-bold uppercase tracking-[0.1em] text-indigo-600">{data.hero.subheading}</p>
-          <h1 className="mt-3 text-4xl font-extrabold tracking-tight text-slate-900 md:text-5xl">{data.hero.heading}</h1>
-          <p className="mt-4 max-w-3xl text-slate-600">{data.hero.description}</p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            {data.hero.actions.map((action, idx) => (
-              <HeroAction
-                key={`${action.text}-${idx}`}
-                action={action}
-                context={{
-                  page: "service",
-                  route: `/services/${slugPath}`,
-                  section: "hero",
-                  trigger: action.popupId ?? action.type,
-                }}
-              />
-            ))}
+        <div className={`mx-auto max-w-6xl px-6 ${data.hero.bannerImage ? 'grid grid-cols-1 lg:grid-cols-12 gap-12 items-center' : ''}`}>
+          <div className={data.hero.bannerImage ? 'lg:col-span-7' : ''}>
+            <p className="text-xs font-bold uppercase tracking-[0.1em] text-indigo-600">{data.hero.subheading}</p>
+            <h1 className="mt-3 text-4xl font-extrabold tracking-tight text-slate-900 md:text-5xl">{data.hero.heading}</h1>
+            <p className="mt-4 max-w-3xl text-slate-600">{data.hero.description}</p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              {data.hero.actions.map((action, idx) => (
+                <HeroAction
+                  key={`${action.text}-${idx}`}
+                  action={action}
+                  context={{
+                    page: "service",
+                    route: `/services/${slugPath}`,
+                    section: "hero",
+                    trigger: action.popupId ?? action.type,
+                  }}
+                />
+              ))}
+            </div>
           </div>
+          {data.hero.bannerImage && (
+            <div className="lg:col-span-5 relative w-full flex justify-center lg:justify-end mt-10 lg:mt-0">
+              <div className="relative w-full max-w-[500px] aspect-[4/3] rounded-[24px] overflow-hidden border border-slate-200 shadow-xl bg-slate-50">
+                <Image
+                  src={data.hero.bannerImage}
+                  alt={data.hero.bannerAlt || data.hero.heading}
+                  fill
+                  priority
+                  className="object-cover"
+                  sizes="(min-width: 1024px) 40vw, 90vw"
+                />
+              </div>
+            </div>
+          )}
         </div>
       </section>
 

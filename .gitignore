@@ -19,7 +19,7 @@
 
 # testing
 /coverage
-
+/yueinfotech-admin
 # next.js
 /.next/
 /out/

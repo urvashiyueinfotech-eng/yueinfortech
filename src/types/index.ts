@@ -55,6 +55,8 @@ export type ServiceDoc = {
     subheading: string;
     description: string;
     backgroundImage?: string;
+    bannerImage?: string;
+    bannerAlt?: string;
     stats?: Array<{ value: string; label: string }>;
     actions: LinkAction[];
   };
