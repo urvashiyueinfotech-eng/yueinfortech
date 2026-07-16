@@ -4,11 +4,13 @@ export const CACHE_TTL = {
   servicesList: 60 * 60 * 24 * 30,
   serviceDetail: 60 * 60 * 24,
   blogs: 60 * 60,
+  pageContent: 60 * 60 * 24,
 } as const;
 
 export const CACHE_TAGS = {
   servicesList: "services:list",
   blogsList: "blogs:list",
+  portfolioPage: "page-content:portfolio",
 } as const;
 
 export const getSeoTag = (pageId: string) => `seo:${pageId}`;

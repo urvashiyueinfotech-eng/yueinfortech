@@ -38,7 +38,7 @@ const plugin = postcss.plugin('scope-plugin', () => {
     return (root) => {
         root.walkRules(rule => {
             if (rule.parent && rule.parent.name === 'keyframes') return; // Don't prefix keyframes
-            
+
             // Exclude global resets
             if (rule.selector === ':root' || rule.selector === '*, *::before, *::after' || rule.selector === 'html' || rule.selector === 'body') {
                 return;
