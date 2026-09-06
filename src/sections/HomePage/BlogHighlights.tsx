@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import { buildCloudinaryUrl } from "@/lib/cloudinary";
 
 type CardProps = {
   title: string;
@@ -58,12 +57,7 @@ export default function BlogHighlights({ posts }: BlogHighlightsProps) {
               className="group relative rounded-[24px] overflow-hidden aspect-[4/3] lg:aspect-auto lg:h-[600px] flex items-end p-8 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
             >
               <Image
-                src={buildCloudinaryUrl(featuredPost.image, {
-                  width: 800,
-                  crop: "fill",
-                  gravity: "auto",
-                  quality: "auto:eco",
-                }) || featuredPost.image}
+                src={featuredPost.image}
                 alt={featuredPost.title}
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
@@ -98,12 +92,7 @@ export default function BlogHighlights({ posts }: BlogHighlightsProps) {
                     className="group relative rounded-[24px] overflow-hidden aspect-[16/9] lg:aspect-auto lg:flex-1 lg:h-[288px] flex items-end p-6 lg:p-8 border border-white/10 shadow-[0_15px_40px_rgba(0,0,0,0.4)]"
                   >
                     <Image
-                      src={buildCloudinaryUrl(post.image, {
-                        width: 600,
-                        crop: "fill",
-                        gravity: "auto",
-                        quality: "auto:eco",
-                      }) || post.image}
+                      src={post.image}
                       alt={post.title}
                       fill
                       sizes="(min-width: 1024px) 50vw, 100vw"

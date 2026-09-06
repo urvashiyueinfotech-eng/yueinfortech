@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getAllMainServices } from "@/lib/services.service";
-import { fetchFaqsForPage, PublicFaq } from "@/lib/firestoreServer";
+import { fetchFaqsForPage } from "@/lib/firestoreServer";
 import { getPageMetadata } from "@/lib/pageSeo.service";
 import CtaButton from "@/components/CtaButton";
 import CustomSolutionPopup from "@/components/CustomSolutionPopup";
@@ -12,6 +12,7 @@ import WhyChooseUsStep from "./_components/WhyChooseUsStep";
 import IndustryPill from "./_components/IndustryPill";
 import WhatsAppIcon from "@/components/icons/WhatsAppIcon";
 import FaqSection from "@/components/FaqSection";
+import PageStructuredData from "@/components/PageStructuredData";
 
 export const revalidate = 2592000;
 const SERVICES_FAQ_REVALIDATE = 2592000;
@@ -22,23 +23,6 @@ export async function generateMetadata(): Promise<Metadata> {
     revalidate: SERVICES_SEO_REVALIDATE,
   });
 }
-
-function buildFaqJsonLd(faqs: PublicFaq[]) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((faq) => ({
-      "@type": "Question",
-      name: faq.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: faq.answer,
-      },
-    })),
-  };
-}
-
-
 
 export default async function ServicesPage() {
   const yearsOfExperience = new Date().getFullYear() - 2018;
@@ -52,6 +36,7 @@ export default async function ServicesPage() {
 
   return (
     <main className="min-h-screen bg-[#F8F9FF] text-[#1E1B4B] font-sans">
+      <PageStructuredData pageId="services" />
       {/* ── HERO ── */}
       <section className="bg-gradient-to-br from-[#0D1035] via-[#111437] to-[#1a1060] pt-[140px] px-[5%] pb-[80px] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(rgba(91,79,233,0.15)_1px,transparent_1px)] bg-[size:32px_32px]"></div>
@@ -248,13 +233,7 @@ export default async function ServicesPage() {
 
       {/* ── FAQ ── */}
       {faqs && faqs.length > 0 && (
-        <>
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqJsonLd(faqs)) }}
-          />
-          <FaqSection faqs={faqs} />
-        </>
+        <FaqSection faqs={faqs} />
       )}
 
       {/* ── HELP CHOOSE ── */}

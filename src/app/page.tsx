@@ -11,6 +11,7 @@ import PageFaqSection from "@/sections/HomePage/PageFaqSection";
 import HomePageCTA from "@/sections/HomePage/HomePageCTA";
 import { getHomePageData } from "@/lib/homePage";
 import { getPageMetadata } from "@/lib/pageSeo.service";
+import PageStructuredData from "@/components/PageStructuredData";
 
 export const revalidate = 2592000;
 const HOME_FAQ_REVALIDATE = 2592000;
@@ -27,6 +28,7 @@ export default async function Home() {
 
   return (
     <main className="bg-[#06080F] text-[#F1F5FF] overflow-x-hidden">
+      <PageStructuredData pageId="home" />
       <HeaderWrapper />
       <WhatWeDo />
       <WhyChooseUs />
@@ -35,7 +37,7 @@ export default async function Home() {
       <Industries />
       <BlogHighlights posts={posts} />
       <Suspense fallback={null}>
-        <PageFaqSection pageId="home" revalidate={HOME_FAQ_REVALIDATE} />
+        <PageFaqSection pageId="home" revalidate={HOME_FAQ_REVALIDATE} renderJsonLd={false} />
       </Suspense>
       <HomePageCTA />
     </main>

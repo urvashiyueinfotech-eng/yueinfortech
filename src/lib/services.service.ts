@@ -98,7 +98,7 @@ async function fetchAllServiceDocs(): Promise<Array<{ id: string; data: ServiceD
 }
 
 async function getAllServiceDocs() {
-  return unstable_cache(fetchAllServiceDocs, ["services:all"], {
+  return unstable_cache(fetchAllServiceDocs, ["services:all:v6"], {
     revalidate: CACHE_TTL.servicesList,
     tags: [CACHE_TAGS.servicesList],
   })();
@@ -187,7 +187,7 @@ export async function getServiceBySlug(slug: string): Promise<ServiceDoc | null>
         return null;
       }
     },
-    ["services:detail:v2", normalizedSlug],
+    ["services:detail:v7", normalizedSlug],
     {
       revalidate: CACHE_TTL.serviceDetail,
       tags: [getServiceDetailTag(normalizedSlug)],

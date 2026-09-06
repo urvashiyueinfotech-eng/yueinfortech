@@ -19,6 +19,8 @@ type PageSeoDocument = {
   pagePath: string;
   title: string;
   description: string;
+  author: string;
+  themeColor: string;
   robots: string;
   canonicalUrl: string;
   openGraphType: string;
@@ -26,18 +28,27 @@ type PageSeoDocument = {
   openGraphDescription: string;
   openGraphUrl: string;
   openGraphImage: string;
+  openGraphImageWidth: number | null;
+  openGraphImageHeight: number | null;
+  openGraphImageAlt: string;
+  openGraphLocale: string;
   openGraphSiteName: string;
   twitterCard: string;
+  twitterSite: string;
   twitterTitle: string;
   twitterDescription: string;
   twitterImage: string;
+  twitterImageAlt: string;
+  jsonLd: JsonLdItem[];
 };
 
 type PageSeoOptions = {
   revalidate?: number;
+  fallbackPageIds?: string[];
 };
 
 type TwitterCard = "summary" | "summary_large_image" | "player" | "app";
+export type JsonLdItem = Record<string, unknown>;
 
 const decodeValue = (val: FirestoreValue): unknown => {
   if ("stringValue" in val) return val.stringValue;
@@ -57,8 +68,11 @@ const decodeValue = (val: FirestoreValue): unknown => {
   return null;
 };
 
-const decodeDocument = (document: any) => {
-  const fields = document?.fields;
+const decodeDocument = (document: unknown) => {
+  const fields =
+    typeof document === "object" && document !== null && "fields" in document
+      ? (document as { fields?: Record<string, FirestoreValue> }).fields
+      : null;
   if (!fields) return null;
 
   const out: Record<string, unknown> = {};
@@ -66,6 +80,19 @@ const decodeDocument = (document: any) => {
     out[key] = decodeValue(value as FirestoreValue);
   });
   return out;
+};
+
+const toNumberOrNull = (value: unknown) => {
+  const numericValue = Number(value);
+  return Number.isFinite(numericValue) ? numericValue : null;
+};
+
+const normalizeJsonLd = (value: unknown): JsonLdItem[] => {
+  if (!Array.isArray(value)) return [];
+  return value.filter(
+    (item): item is JsonLdItem =>
+      Boolean(item) && typeof item === "object" && !Array.isArray(item)
+  );
 };
 
 const parseRobots = (directives?: string): Metadata["robots"] | undefined => {
@@ -128,6 +155,8 @@ async function getPageSeoDocument(
     pagePath: String(data.pagePath ?? ""),
     title: String(data.title ?? ""),
     description: String(data.description ?? ""),
+    author: String(data.author ?? ""),
+    themeColor: String(data.themeColor ?? ""),
     robots: String(data.robots ?? ""),
     canonicalUrl: String(data.canonicalUrl ?? ""),
     openGraphType: String(data.openGraphType ?? "website"),
@@ -135,19 +164,43 @@ async function getPageSeoDocument(
     openGraphDescription: String(data.openGraphDescription ?? ""),
     openGraphUrl: String(data.openGraphUrl ?? ""),
     openGraphImage: String(data.openGraphImage ?? ""),
+    openGraphImageWidth: toNumberOrNull(data.openGraphImageWidth),
+    openGraphImageHeight: toNumberOrNull(data.openGraphImageHeight),
+    openGraphImageAlt: String(data.openGraphImageAlt ?? ""),
+    openGraphLocale: String(data.openGraphLocale ?? ""),
     openGraphSiteName: String(data.openGraphSiteName ?? "Yue Infotech"),
     twitterCard: String(data.twitterCard ?? "summary_large_image"),
+    twitterSite: String(data.twitterSite ?? ""),
     twitterTitle: String(data.twitterTitle ?? ""),
     twitterDescription: String(data.twitterDescription ?? ""),
     twitterImage: String(data.twitterImage ?? ""),
+    twitterImageAlt: String(data.twitterImageAlt ?? ""),
+    jsonLd: normalizeJsonLd(data.jsonLd),
   };
 }
 
 export async function getPageSeo(
   pageId: string,
-  { revalidate = CACHE_TTL.seo }: PageSeoOptions = {}
+  { revalidate = CACHE_TTL.seo, fallbackPageIds = [] }: PageSeoOptions = {}
 ) {
-  return getPageSeoDocument(pageId, revalidate);
+  for (const candidatePageId of [pageId, ...fallbackPageIds]) {
+    const seo = await getPageSeoDocument(candidatePageId, revalidate);
+    if (seo) return seo;
+  }
+
+  return null;
+}
+
+export async function getPageJsonLd(
+  pageId: string,
+  { revalidate = CACHE_TTL.seo, fallbackPageIds = [] }: PageSeoOptions = {}
+) {
+  const seo = await getPageSeo(pageId, { revalidate, fallbackPageIds });
+  return seo?.jsonLd ?? [];
+}
+
+export function getServiceSeoPageId(slugPath: string) {
+  return `service-${slugPath.replace(/\//g, "__")}`;
 }
 
 export async function getPageMetadata(
@@ -174,23 +227,43 @@ export async function getPageMetadata(
       ? { url: seo.openGraphUrl || seo.canonicalUrl }
       : {}),
     ...(seo.openGraphSiteName ? { siteName: seo.openGraphSiteName } : {}),
-    ...(seo.openGraphImage ? { images: [{ url: seo.openGraphImage }] } : {}),
+    ...(seo.openGraphLocale ? { locale: seo.openGraphLocale } : {}),
+    ...(seo.openGraphImage
+      ? {
+          images: [
+            {
+              url: seo.openGraphImage,
+              ...(seo.openGraphImageWidth ? { width: seo.openGraphImageWidth } : {}),
+              ...(seo.openGraphImageHeight ? { height: seo.openGraphImageHeight } : {}),
+              ...(seo.openGraphImageAlt ? { alt: seo.openGraphImageAlt } : {}),
+            },
+          ],
+        }
+      : {}),
   };
 
   const twitter: Metadata["twitter"] = {
     ...(fallback.twitter ?? {}),
     ...(seo.twitterCard ? { card: seo.twitterCard as TwitterCard } : {}),
+    ...(seo.twitterSite ? { site: seo.twitterSite } : {}),
     ...(seo.twitterTitle || seo.title ? { title: seo.twitterTitle || seo.title } : {}),
     ...(seo.twitterDescription || seo.description
       ? { description: seo.twitterDescription || seo.description }
       : {}),
-    ...(seo.twitterImage ? { images: [seo.twitterImage] } : {}),
+    ...(seo.twitterImage
+      ? {
+          images: seo.twitterImageAlt
+            ? [{ url: seo.twitterImage, alt: seo.twitterImageAlt }]
+            : [seo.twitterImage],
+        }
+      : {}),
   };
 
   return {
     ...fallback,
     title: seo.title || fallback.title,
     description: seo.description || fallback.description,
+    authors: seo.author ? [{ name: seo.author }] : fallback.authors,
     robots: parseRobots(seo.robots) ?? fallback.robots,
     alternates: seo.canonicalUrl
       ? {
@@ -200,5 +273,14 @@ export async function getPageMetadata(
       : fallback.alternates,
     openGraph,
     twitter,
+    ...(seo.themeColor
+      ? {
+          other: {
+            "theme-color": seo.themeColor,
+          },
+        }
+      : fallback.other
+      ? { other: fallback.other }
+      : {}),
   };
 }

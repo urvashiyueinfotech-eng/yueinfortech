@@ -6,6 +6,7 @@ import PageHero from '@/components/ui/PageHero';
 import CustomSolutionPopup from '@/components/CustomSolutionPopup';
 import { getPageMetadata } from "@/lib/pageSeo.service";
 import WhatsAppIcon from "@/components/icons/WhatsAppIcon";
+import PageStructuredData from "@/components/PageStructuredData";
 
 const ABOUT_SEO_REVALIDATE = 2592000;
 
@@ -147,6 +148,7 @@ const YEARS_OF_EXPERIENCE = new Date().getFullYear() - 2018;
 export default function AboutUs() {
   return (
     <main className="font-sans text-slate-600 antialiased bg-slate-50 min-h-screen">
+      <PageStructuredData pageId="about-us" />
 
       {/* Navbar Placeholder - Assuming you have a Layout, but adding this just in case you need a standalone header */}
       {/* <div className="fixed w-full z-50 top-0 py-4 bg-white/80 backdrop-blur-md border-b border-slate-100">

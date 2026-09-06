@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import PageHero from "@/components/ui/PageHero";
 import Image from "next/image";
 import { fetchBlogBySlug } from "@/lib/firestoreServer";
-import { buildCloudinaryUrl } from "@/lib/cloudinary";
 import { getPageMetadata } from "@/lib/pageSeo.service";
 
 export const revalidate = 2592000;
@@ -44,18 +43,13 @@ export default async function BlogDetailPage({ params }: PageProps) {
       })
     : "";
 
-  const heroImage = buildCloudinaryUrl(blog.thumbnail ?? "", {
-    width: 1600,
-    crop: "fill",
-    gravity: "auto",
-    quality: "auto",
-  }) || blog.thumbnail || "";
+  const heroImage = blog.thumbnail || "";
 
   return (
     <main className="min-h-screen">
       <PageHero
         title={blog.title}
-        backgroundImage={heroImage || "https://res.cloudinary.com/demo/image/upload/f_auto,q_auto,c_fill,w_1600/sample.jpg"}
+        backgroundImage={heroImage || "https://images.unsplash.com/photo-1499750310107-5fef28a66643"}
         breadcrumbs={[
           { label: "Home", href: "/" },
           { label: "Blog", href: "/blog" },

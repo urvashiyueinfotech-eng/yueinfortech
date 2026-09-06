@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Calendar, User } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { buildCloudinaryUrl } from "@/lib/cloudinary";
 
 export type CardProps = {
   title: string;
@@ -41,10 +40,6 @@ const Card = ({
     badgeColorClass ??
     (variant === "featured" ? "bg-indigo-600 text-white" : "bg-indigo-100 text-indigo-600");
 
-  // Consistent Cloudinary transforms per variant
-  const featuredSrc = buildCloudinaryUrl(image, { width: 1600, crop: "fill", gravity: "auto", quality: "auto" });
-  const overlaySrc = buildCloudinaryUrl(image, { width: 1400, crop: "fill", gravity: "auto", quality: "auto" });
-  const compactSrc = buildCloudinaryUrl(image, { width: 900, crop: "fill", gravity: "auto", quality: "auto" });
   /* -------------------------------------------------------------------------- */
   /*                               FEATURED CARD                                */
   /* -------------------------------------------------------------------------- */
@@ -58,7 +53,7 @@ const Card = ({
         )}
       >
         <Image
-          src={featuredSrc || image}
+          src={image}
           alt={title}
           fill
           priority
@@ -123,7 +118,7 @@ const Card = ({
         )}
       >
         <Image
-          src={overlaySrc || image}
+          src={image}
           alt={title}
           fill
           sizes="(max-width: 1024px) 100vw, 900px"
@@ -177,7 +172,7 @@ const Card = ({
     >
       <div className="relative h-56 w-full overflow-hidden rounded-2xl">
         <Image
-          src={compactSrc || image}
+          src={image}
           alt={title}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 400px"

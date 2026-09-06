@@ -1,11 +1,14 @@
 import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
-const cloudName = process.env.CLOUDINARY_CLOUD_NAME as string;
-const apiKey = process.env.CLOUDINARY_API_KEY as string;
-const apiSecret = process.env.CLOUDINARY_API_SECRET as string;
-const uploadPreset = process.env.CLOUDINARY_UPLOAD_PRESET; // optional if unsigned preset
-const folder = process.env.CLOUDINARY_UPLOAD_FOLDER || "uploads";
+const accountId = process.env.R2_ACCOUNT_ID as string;
+const accessKeyId = process.env.R2_ACCESS_KEY_ID as string;
+const secretAccessKey = process.env.R2_SECRET_ACCESS_KEY as string;
+const bucket = process.env.R2_BUCKET_NAME as string;
+const publicUrl = process.env.R2_PUBLIC_URL as string; // e.g. https://pub-xxxx.r2.dev
+const folder = process.env.R2_UPLOAD_FOLDER || "uploads";
 const adminOrigin = process.env.ADMIN_PANEL_ORIGIN;
 
 const normalizeOrigin = (value?: string | null) =>
@@ -29,6 +32,13 @@ const buildCorsHeaders = (requestOrigin?: string | null) => {
   };
 };
 
+const getR2Client = () =>
+  new S3Client({
+    region: "auto",
+    endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
+    credentials: { accessKeyId, secretAccessKey },
+  });
+
 export async function OPTIONS(req: NextRequest) {
   return new NextResponse(null, {
     status: 204,
@@ -37,15 +47,15 @@ export async function OPTIONS(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  if (!cloudName || !apiKey || !apiSecret) {
+  if (!accountId || !accessKeyId || !secretAccessKey || !bucket || !publicUrl) {
     return NextResponse.json(
-      { error: "Cloudinary is not configured" },
+      { error: "R2 storage is not configured" },
       { status: 500, headers: buildCorsHeaders(req.headers.get("origin")) }
     );
   }
 
   try {
-    const { filename } = await req.json();
+    const { filename, contentType } = await req.json();
     if (!filename) {
       return NextResponse.json(
         { error: "filename is required" },
@@ -53,49 +63,27 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const timestamp = Math.floor(Date.now() / 1000);
-    const publicId = `${crypto.randomUUID()}-${filename}`.replace(/\s+/g, "-");
+    const safeFilename = `${crypto.randomUUID()}-${filename}`.replace(/\s+/g, "-");
+    const key = `${folder}/${safeFilename}`;
 
-    // Build the string to sign with keys sorted alphabetically (Cloudinary requirement)
-    const signParams: Record<string, string> = {
-      folder,
-      public_id: publicId,
-      timestamp: String(timestamp),
-    };
-    if (uploadPreset) {
-      signParams.upload_preset = uploadPreset;
-    }
+    const client = getR2Client();
+    const command = new PutObjectCommand({
+      Bucket: bucket,
+      Key: key,
+      ContentType: contentType || "application/octet-stream",
+    });
 
-    const stringToSign = Object.keys(signParams)
-      .sort()
-      .map((key) => `${key}=${signParams[key]}`)
-      .join("&");
-
-    const signature = crypto.createHash("sha1").update(stringToSign + apiSecret).digest("hex");
-
-    const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
-    // Cloudinary public URL omits the folder in the path when using the default upload mapping; include folder in public_id instead.
-    const fileUrl = `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}`;
+    const uploadUrl = await getSignedUrl(client, command, { expiresIn: 300 });
+    const fileUrl = `${publicUrl.replace(/\/$/, "")}/${key}`;
 
     return NextResponse.json(
-      {
-        uploadUrl,
-        fileUrl,
-        signature,
-        timestamp,
-        apiKey,
-        folder,
-        uploadPreset: uploadPreset ?? null,
-        upload_preset: uploadPreset ?? null, // convenience for clients expecting snake_case
-        publicId,
-        stringToSign,
-      },
+      { uploadUrl, fileUrl, key },
       { headers: buildCorsHeaders(req.headers.get("origin")) }
     );
   } catch (error) {
-    console.error("Error generating Cloudinary signature", error);
+    console.error("Error generating R2 upload URL", error);
     return NextResponse.json(
-      { error: "Failed to generate signature" },
+      { error: "Failed to generate upload URL" },
       { status: 500, headers: buildCorsHeaders(req.headers.get("origin")) }
     );
   }

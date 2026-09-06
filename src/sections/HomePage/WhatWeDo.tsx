@@ -197,7 +197,7 @@ export default function WhatWeDo() {
             desc="Comprehensive cybersecurity — threat detection, vulnerability assessments, firewall configuration, SSL management, and incident response."
             pills={["Threat Detection", "Vulnerability Audit", "Firewall Config", "SSL"]}
             linkText="Explore Cybersecurity"
-            linkHref="/services/it-services/cyber-security"
+            linkHref="/services/it-services/cybersecurity"
             linkColor="text-[#F43F5E]"
             hoverBorder="hover:border-[#F43F5E]/40"
             hoverGlow="rgba(244,63,94,0.15)"
@@ -212,7 +212,7 @@ export default function WhatWeDo() {
             desc="Cloud-based VoIP phone systems that replace traditional landlines — scalable, cost-effective, and fully managed with HD call quality."
             pills={["Cloud PBX", "HD Call Quality", "Remote Teams", "Fully Managed"]}
             linkText="Explore VoIP"
-            linkHref="/services/it-services/voip-solution"
+            linkHref="/services/it-services/voip-solutions"
             linkColor="text-[#06B6D4]"
             hoverBorder="hover:border-[#06B6D4]/40"
             hoverGlow="rgba(6,182,212,0.15)"

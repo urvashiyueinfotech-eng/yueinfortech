@@ -8,6 +8,7 @@ import {
 type PageFaqSectionProps = {
   pageId: "home" | "services";
   revalidate?: number;
+  renderJsonLd?: boolean;
   sectionProps?: Omit<FaqSectionProps, "faqs">;
 };
 
@@ -29,6 +30,7 @@ function buildFaqJsonLd(faqs: PublicFaq[]) {
 export default async function PageFaqSection({
   pageId,
   revalidate = CACHE_TTL.faqs,
+  renderJsonLd = true,
   sectionProps,
 }: PageFaqSectionProps) {
   const faqs = await fetchFaqsForPage(pageId, {
@@ -42,10 +44,12 @@ export default async function PageFaqSection({
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqJsonLd(faqs)) }}
-      />
+      {renderJsonLd ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqJsonLd(faqs)) }}
+        />
+      ) : null}
       <FaqSection 
         faqs={faqs} 
         sectionClassName="bg-slate-50 border-y border-slate-200"

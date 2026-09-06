@@ -7,6 +7,7 @@ import { getPageMetadata } from "@/lib/pageSeo.service";
 import { getPortfolioPageContent } from "@/lib/portfolio.service";
 import type { LinkAction } from "@/types";
 import type { PortfolioDeliveryItem } from "@/types/portfolio";
+import PageStructuredData from "@/components/PageStructuredData";
 import "./portfolio.css";
 
 const PORTFOLIO_FALLBACK_METADATA: Metadata = {
@@ -72,48 +73,10 @@ function DeliveryIcon({ icon, title }: Pick<PortfolioDeliveryItem, "icon" | "tit
 
 export default async function PortfolioPage() {
   const content = await getPortfolioPageContent();
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "CollectionPage",
-        "@id": "https://www.yueinfotech.com/case-studies#page",
-        name: "Yue Infotech Case Studies & Portfolio",
-        description: "A collection of real client results across SEO, AI visibility, web design, digital marketing, and content strategy delivered by Yue Infotech.",
-        url: "https://www.yueinfotech.com/case-studies",
-        publisher: {
-          "@type": "Organization",
-          name: "Yue Infotech",
-          "@id": "https://www.yueinfotech.com/#organization",
-          url: "https://www.yueinfotech.com",
-        },
-      },
-      {
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          {
-            "@type": "ListItem",
-            position: 1,
-            name: "Home",
-            item: "https://www.yueinfotech.com",
-          },
-          {
-            "@type": "ListItem",
-            position: 2,
-            name: "Case Studies",
-            item: "https://www.yueinfotech.com/case-studies",
-          },
-        ],
-      },
-    ],
-  };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <PageStructuredData pageId="portfolio" />
       <main className="portfolio-page-main min-h-screen bg-[#F8F9FF] text-[#1E1B4B] font-sans">
         <section className="hero">
           <div className="hero-dots"></div>
