@@ -262,7 +262,7 @@ export default async function ServicesPage() {
                 Book Free Consultation →
               </CtaButton>
               <CtaButton
-                href="https://wa.me/918859366292"
+                href="https://wa.me/919319847585"
                 target="_blank"
                 rel="noopener noreferrer"
                 bgClassName="bg-white border-[1.5px] border-[#E5E7EB] hover:border-[#5B4FE9]"
@@ -331,7 +331,7 @@ export default async function ServicesPage() {
             }
           />
           <CtaButton
-            href="https://wa.me/918859366292"
+            href="https://wa.me/919319847585"
             target="_blank"
             rel="noopener noreferrer"
             bgClassName="bg-[rgba(37,211,102,0.1)] border-[1.5px] border-[rgba(37,211,102,0.3)] hover:bg-[rgba(37,211,102,0.18)]"

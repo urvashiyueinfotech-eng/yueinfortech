@@ -589,8 +589,8 @@ const MobileMenu = ({
                 <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-slate-400">
                   <PhoneCall className="h-4 w-4 text-indigo-400" />
                   <div>
-                    <a href="tel:8859366292" className="font-semibold text-white">
-                      +91 8859366292
+                    <a href="tel:+919319847585" className="font-semibold text-white">
+                      +91 93198 47585
                     </a>
                     <p className="text-xs">Talk with a strategist</p>
                   </div>
@@ -671,7 +671,7 @@ const Navbar = ({ servicesFromServer = [] }: NavbarProps) => {
                 >
                   <PhoneCall className={cn("h-4 w-4", isScrolled ? "text-slate-900" : "text-indigo-400")} />
                   <div>
-                    <a href="tel:8859366292" className={cn("font-semibold", isScrolled ? "text-slate-900" : "text-white")}>+91 8859366292</a>
+                    <a href="tel:+919319847585" className={cn("font-semibold", isScrolled ? "text-slate-900" : "text-white")}>+91 93198 47585</a>
                     <p className={cn("text-[11px]", isScrolled ? "text-slate-600" : "text-slate-300")}>Talk with a strategist</p>
                   </div>
                 </div>
