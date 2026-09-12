@@ -60,7 +60,62 @@ export type PublicBlog = {
   thumbnail?: string;
   author?: string;
   date?: string;
+  category?: string;
+  readTime?: string;
+  quickAnswer?: string;
+  heroEyebrow?: string;
+  heroImageAlt?: string;
+  heroStats?: Array<{ label: string; value: string }>;
+  keyTakeaways?: string[];
+  faqs?: Array<{ question: string; answer: string }>;
+  ctaTitle?: string;
+  ctaDescription?: string;
+  ctaLabel?: string;
+  ctaUrl?: string;
+  showTableOfContents?: boolean;
+  tableOfContents?: Array<{ id: string; title: string; level: 2 | 3 }>;
 };
+
+const stringArray = (value: unknown) =>
+  Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : [];
+
+const blogStats = (value: unknown) =>
+  Array.isArray(value)
+    ? value.filter((item): item is { label: string; value: string } =>
+        Boolean(item && typeof item === "object" && typeof (item as { label?: unknown }).label === "string" && typeof (item as { value?: unknown }).value === "string"))
+    : [];
+
+const blogFaqs = (value: unknown) =>
+  Array.isArray(value)
+    ? value.filter((item): item is { question: string; answer: string } =>
+        Boolean(item && typeof item === "object" && typeof (item as { question?: unknown }).question === "string" && typeof (item as { answer?: unknown }).answer === "string"))
+    : [];
+
+const blogTableOfContents = (value: unknown) =>
+  Array.isArray(value)
+    ? value.filter((item): item is { id: string; title: string; level: 2 | 3 } => {
+        if (!item || typeof item !== "object") return false;
+        const tocItem = item as { id?: unknown; title?: unknown; level?: unknown };
+        return typeof tocItem.id === "string" && typeof tocItem.title === "string" && (tocItem.level === 2 || tocItem.level === 3);
+      })
+    : [];
+
+const toPublicBlogExtras = (data: Record<string, unknown>) => ({
+  category: typeof data.category === "string" ? data.category : "",
+  readTime: typeof data.readTime === "string" ? data.readTime : "",
+  quickAnswer: typeof data.quickAnswer === "string" ? data.quickAnswer : "",
+  heroEyebrow: typeof data.heroEyebrow === "string" ? data.heroEyebrow : "",
+  heroImageAlt: typeof data.heroImageAlt === "string" ? data.heroImageAlt : "",
+  heroStats: blogStats(data.heroStats),
+  keyTakeaways: stringArray(data.keyTakeaways),
+  faqs: blogFaqs(data.faqs),
+  ctaTitle: typeof data.ctaTitle === "string" ? data.ctaTitle : "",
+  ctaDescription: typeof data.ctaDescription === "string" ? data.ctaDescription : "",
+  ctaLabel: typeof data.ctaLabel === "string" ? data.ctaLabel : "",
+  ctaUrl: typeof data.ctaUrl === "string" ? data.ctaUrl : "",
+  showTableOfContents: data.showTableOfContents !== false,
+  tableOfContents: blogTableOfContents(data.tableOfContents),
+});
 
 export async function fetchFaqsForPage(
   pageId: string,
@@ -239,12 +294,13 @@ export async function fetchBlogs({ limit = 4, revalidate = CACHE_TTL.blogs } = {
         slug: data.slug ? `/blog/${data.slug}` : `/blog/${row.document.name?.split("/").pop() ?? ""}`,
         metaTitle: typeof data.metaTitle === "string" ? data.metaTitle : "",
         metaDescription: typeof data.metaDescription === "string" ? data.metaDescription : "",
-        keywords: Array.isArray(data.keywords) ? data.keywords.filter((keyword) => typeof keyword === "string") : [],
+        keywords: stringArray(data.keywords),
         excerpt: typeof data.excerpt === "string" ? data.excerpt : "",
         content: typeof data.content === "string" ? data.content : "",
         thumbnail: typeof data.thumbnail === "string" ? data.thumbnail : "",
         author: typeof data.author === "string" ? data.author : "Admin",
-        date: data.createdAt ?? data.updatedAt ?? "",
+        date: data.publishedAt ?? data.createdAt ?? data.updatedAt ?? "",
+        ...toPublicBlogExtras(data),
       } as PublicBlog;
     })
     .filter((b: PublicBlog | null): b is PublicBlog => Boolean(b && b.title));
@@ -292,23 +348,19 @@ export async function fetchBlogBySlug(
   const data = decodeDocument(entry);
   if (!data) return null;
 
-  const date =
-    typeof data.createdAt === "string"
-      ? data.createdAt
-      : typeof data.updatedAt === "string"
-        ? data.updatedAt
-        : "";
+  const date = typeof data.publishedAt === "string" ? data.publishedAt : typeof data.createdAt === "string" ? data.createdAt : typeof data.updatedAt === "string" ? data.updatedAt : "";
   return {
     id: entry.document.name?.split("/").pop() ?? "",
     title: String(data.title ?? ""),
     slug: `/blog/${slug}`,
     metaTitle: typeof data.metaTitle === "string" ? data.metaTitle : "",
     metaDescription: typeof data.metaDescription === "string" ? data.metaDescription : "",
-    keywords: Array.isArray(data.keywords) ? data.keywords.filter((keyword) => typeof keyword === "string") : [],
+    keywords: stringArray(data.keywords),
     excerpt: typeof data.excerpt === "string" ? data.excerpt : "",
     content: typeof data.content === "string" ? data.content : "",
     thumbnail: typeof data.thumbnail === "string" ? data.thumbnail : "",
     author: typeof data.author === "string" ? data.author : "Admin",
     date,
+    ...toPublicBlogExtras(data),
   };
 }
