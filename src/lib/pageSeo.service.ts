@@ -3,6 +3,15 @@ import { CACHE_TTL, getSeoTag } from "@/lib/cacheTags";
 
 const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
 
+const STATIC_CANONICALS: Record<string, string> = {
+  home: "https://yueinfotech.com/",
+  "about-us": "https://yueinfotech.com/about-us",
+  services: "https://yueinfotech.com/services",
+  blog: "https://yueinfotech.com/blog",
+  "contact-us": "https://yueinfotech.com/contact-us",
+  portfolio: "https://yueinfotech.com/portfolio",
+};
+
 type FirestoreValue =
   | { stringValue: string }
   | { integerValue: string }
@@ -209,13 +218,17 @@ export async function getPageMetadata(
   { revalidate = CACHE_TTL.seo }: PageSeoOptions = {}
 ): Promise<Metadata> {
   const seo = await getPageSeo(pageId, { revalidate });
+  const fallbackWithCanonical: Metadata = {
+    ...fallback,
+    alternates: fallback.alternates ?? (STATIC_CANONICALS[pageId] ? { canonical: STATIC_CANONICALS[pageId] } : undefined),
+  };
 
   if (!seo) {
-    return fallback;
+    return fallbackWithCanonical;
   }
 
   const openGraph: Metadata["openGraph"] = {
-    ...(fallback.openGraph ?? {}),
+    ...(fallbackWithCanonical.openGraph ?? {}),
     ...(seo.openGraphType ? { type: seo.openGraphType as Metadata["openGraph"] extends { type?: infer T } ? T : never } : {}),
     ...(seo.openGraphTitle || seo.title
       ? { title: seo.openGraphTitle || seo.title }
@@ -243,7 +256,7 @@ export async function getPageMetadata(
   };
 
   const twitter: Metadata["twitter"] = {
-    ...(fallback.twitter ?? {}),
+    ...(fallbackWithCanonical.twitter ?? {}),
     ...(seo.twitterCard ? { card: seo.twitterCard as TwitterCard } : {}),
     ...(seo.twitterSite ? { site: seo.twitterSite } : {}),
     ...(seo.twitterTitle || seo.title ? { title: seo.twitterTitle || seo.title } : {}),
@@ -260,17 +273,17 @@ export async function getPageMetadata(
   };
 
   return {
-    ...fallback,
-    title: seo.title || fallback.title,
-    description: seo.description || fallback.description,
-    authors: seo.author ? [{ name: seo.author }] : fallback.authors,
-    robots: parseRobots(seo.robots) ?? fallback.robots,
+    ...fallbackWithCanonical,
+    title: seo.title || fallbackWithCanonical.title,
+    description: seo.description || fallbackWithCanonical.description,
+    authors: seo.author ? [{ name: seo.author }] : fallbackWithCanonical.authors,
+    robots: parseRobots(seo.robots) ?? fallbackWithCanonical.robots,
     alternates: seo.canonicalUrl
       ? {
-          ...(fallback.alternates ?? {}),
+          ...(fallbackWithCanonical.alternates ?? {}),
           canonical: seo.canonicalUrl,
         }
-      : fallback.alternates,
+      : fallbackWithCanonical.alternates,
     openGraph,
     twitter,
     ...(seo.themeColor
@@ -279,8 +292,8 @@ export async function getPageMetadata(
             "theme-color": seo.themeColor,
           },
         }
-      : fallback.other
-      ? { other: fallback.other }
+      : fallbackWithCanonical.other
+      ? { other: fallbackWithCanonical.other }
       : {}),
   };
 }

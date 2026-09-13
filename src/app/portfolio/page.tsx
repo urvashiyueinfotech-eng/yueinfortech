@@ -32,7 +32,7 @@ const PORTFOLIO_FALLBACK_METADATA: Metadata = {
     images: ["https://www.yueinfotech.com/assets/og-portfolio.jpg"],
   },
   alternates: {
-    canonical: "https://www.yueinfotech.com/case-studies",
+    canonical: "https://yueinfotech.com/portfolio",
   },
 };
 

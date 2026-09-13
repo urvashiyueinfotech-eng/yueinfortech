@@ -23,6 +23,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: blog.metaTitle || blog.title,
     description: blog.metaDescription || blog.excerpt || "",
     keywords: blog.keywords,
+    alternates: { canonical: `https://yueinfotech.com/blog/${slug}` },
   };
 
   return getPageMetadata("blog-detail", fallback, {
