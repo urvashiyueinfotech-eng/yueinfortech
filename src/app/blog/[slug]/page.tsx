@@ -5,7 +5,8 @@ import Link from "next/link";
 import { fetchBlogBySlug } from "@/lib/firestoreServer";
 import { getPageMetadata } from "@/lib/pageSeo.service";
 
-export const revalidate = 2592000;
+// Admin-authored posts should refresh promptly even if on-demand revalidation is unavailable.
+export const revalidate = 3600;
 
 type PageProps = {
   params: Promise<{ slug: string }>;
