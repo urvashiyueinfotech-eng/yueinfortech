@@ -54,6 +54,7 @@ export type PublicBlog = {
   slug: string;
   metaTitle?: string;
   metaDescription?: string;
+  canonicalUrl?: string;
   keywords?: string[];
   excerpt?: string;
   content?: string;
@@ -294,6 +295,7 @@ export async function fetchBlogs({ limit = 4, revalidate = CACHE_TTL.blogs } = {
         slug: data.slug ? `/blog/${data.slug}` : `/blog/${row.document.name?.split("/").pop() ?? ""}`,
         metaTitle: typeof data.metaTitle === "string" ? data.metaTitle : "",
         metaDescription: typeof data.metaDescription === "string" ? data.metaDescription : "",
+        canonicalUrl: typeof data.canonicalUrl === "string" ? data.canonicalUrl : "",
         keywords: stringArray(data.keywords),
         excerpt: typeof data.excerpt === "string" ? data.excerpt : "",
         content: typeof data.content === "string" ? data.content : "",
@@ -355,6 +357,7 @@ export async function fetchBlogBySlug(
     slug: `/blog/${slug}`,
     metaTitle: typeof data.metaTitle === "string" ? data.metaTitle : "",
     metaDescription: typeof data.metaDescription === "string" ? data.metaDescription : "",
+    canonicalUrl: typeof data.canonicalUrl === "string" ? data.canonicalUrl : "",
     keywords: stringArray(data.keywords),
     excerpt: typeof data.excerpt === "string" ? data.excerpt : "",
     content: typeof data.content === "string" ? data.content : "",

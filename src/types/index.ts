@@ -48,6 +48,7 @@ export type ServiceDoc = {
       metaTitle: string;
       metaDescription: string;
       keywords: string[];
+      canonicalUrl?: string;
     };
   hero: {
     badge?: string;

@@ -852,19 +852,20 @@ export async function generateMetadata({
   const slugPath = joinSlug(slug);
   const data = await getServiceBySlug(slugPath);
   if (!data) return { title: "Service Not Found" };
+  const canonicalUrl = data.seo.canonicalUrl || absoluteServiceUrl(slugPath);
 
   const fallback: Metadata = {
     title: data.seo.metaTitle,
     description: data.seo.metaDescription,
     keywords: data.seo.keywords,
     alternates: {
-      canonical: absoluteServiceUrl(slugPath),
+      canonical: canonicalUrl,
     },
     openGraph: {
       type: "website",
       title: data.seo.metaTitle,
       description: data.seo.metaDescription,
-      url: absoluteServiceUrl(slugPath),
+      url: canonicalUrl,
       siteName: "Yue Infotech",
       images: data.hero.backgroundImage ? [{ url: data.hero.backgroundImage }] : undefined,
     },
