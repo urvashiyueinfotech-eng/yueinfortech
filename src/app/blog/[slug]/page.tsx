@@ -12,6 +12,13 @@ type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
+/** Adds a scroll container around author-created tables without modifying their data. */
+function prepareBlogContent(content: string) {
+  return content.replace(/<table\b([^>]*)>([\s\S]*?)<\/table>/gi, (_table, attributes, body) => {
+    return `<div class="blog-table-wrap" tabindex="0" role="region" aria-label="Scrollable table"><table${attributes}>${body}</table></div>`;
+  });
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const blog = await fetchBlogBySlug(slug, { revalidate });
@@ -49,17 +56,17 @@ export default async function BlogDetailPage({ params }: PageProps) {
 
   return (
     <main className="min-h-screen">
-      <section className="bg-[#f7f8ff] pb-16 pt-12 lg:pb-24 lg:pt-20">
-        <div className="mx-auto flex max-w-5xl flex-col gap-8 px-6 lg:px-8">
+      <section className="bg-[#f7f8ff] pb-16 pt-28 sm:pt-32 lg:pb-24 lg:pt-36">
+        <div className="mx-auto flex max-w-5xl flex-col gap-6 px-4 sm:gap-8 sm:px-6 lg:px-8">
           <div className="text-center">
-            <p className="text-sm text-slate-500"><Link href="/" className="hover:text-indigo-600">Home</Link> / <Link href="/blog" className="hover:text-indigo-600">Blog</Link> / {blog.title}</p>
-            {blog.heroEyebrow && <p className="mt-8 text-xs font-bold uppercase tracking-[0.16em] text-indigo-600">{blog.heroEyebrow}</p>}
-            <h1 className="mx-auto mt-3 max-w-4xl text-4xl font-extrabold tracking-tight text-slate-950 lg:text-6xl">{blog.title}</h1>
-            <p className="mt-5 text-sm text-slate-500">By {blog.author ?? "Admin"}{date ? ` · ${date}` : ""}{blog.readTime ? ` · ${blog.readTime}` : ""}</p>
+            <p className="mx-auto max-w-3xl text-xs leading-5 text-slate-500 sm:text-sm"><Link href="/" className="hover:text-indigo-600">Home</Link> / <Link href="/blog" className="hover:text-indigo-600">Blog</Link> / {blog.title}</p>
+            {blog.heroEyebrow && <p className="mt-6 text-xs font-bold uppercase tracking-[0.16em] text-indigo-600 sm:mt-8">{blog.heroEyebrow}</p>}
+            <h1 className="mx-auto mt-3 max-w-4xl text-4xl font-extrabold leading-[1.08] tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">{blog.title}</h1>
+            <p className="mx-auto mt-5 max-w-2xl text-sm leading-6 text-slate-500">By {blog.author ?? "Admin"}{date ? ` · ${date}` : ""}{blog.readTime ? ` · ${blog.readTime}` : ""}</p>
           </div>
 
           {heroImage && (
-            <div className="relative h-[320px] w-full overflow-hidden rounded-2xl lg:h-[440px]">
+            <div className="relative h-[260px] w-full overflow-hidden rounded-2xl shadow-sm sm:h-[360px] lg:h-[440px]">
               <Image
                 src={heroImage}
                 alt={blog.heroImageAlt || blog.title}
@@ -80,14 +87,14 @@ export default async function BlogDetailPage({ params }: PageProps) {
           {blog.quickAnswer && <aside className="rounded-xl border border-indigo-100 bg-white p-5 shadow-sm"><p className="text-xs font-bold uppercase tracking-wider text-indigo-600">Quick answer</p><p className="mt-2 leading-7 text-slate-700">{blog.quickAnswer}</p></aside>}
 
           {blog.showTableOfContents && blog.tableOfContents && blog.tableOfContents.length > 0 && (
-            <nav aria-label="Table of contents" className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"><p className="font-bold text-slate-950">Table of contents</p><ol className="mt-3 space-y-2 text-sm">{blog.tableOfContents.map((item) => <li key={item.id} className={item.level === 3 ? "ml-4" : ""}><a className="text-indigo-600 hover:text-indigo-800 hover:underline" href={`#${item.id}`}>{item.title}</a></li>)}</ol></nav>
+            <nav aria-label="Table of contents" className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"><p className="font-bold text-slate-950">Table of contents</p><ol className="mt-3 space-y-2 text-sm">{blog.tableOfContents.map((item) => <li key={item.id} className={item.level === 3 ? "ml-4" : ""}><a className="block text-indigo-600 hover:text-indigo-800 hover:underline" href={`#${item.id}`}>{item.title}</a></li>)}</ol></nav>
           )}
 
           <article
-            className="prose prose-lg max-w-none rounded-xl bg-white p-6 text-slate-800 shadow-sm prose-headings:scroll-mt-24 prose-headings:text-slate-900 prose-p:text-slate-700 prose-li:text-slate-700 prose-strong:text-slate-900 prose-a:text-indigo-600 hover:prose-a:text-indigo-700 prose-table:block prose-table:w-full prose-table:overflow-x-auto prose-th:bg-slate-100 prose-th:p-3 prose-td:p-3 prose-th:text-left prose-td:border prose-th:border prose-td:border-slate-200 prose-th:border-slate-200 lg:p-10"
+            className="blog-prose prose prose-base sm:prose-lg max-w-none rounded-xl bg-white p-5 text-slate-800 shadow-sm prose-headings:scroll-mt-24 prose-headings:text-slate-900 prose-p:text-slate-700 prose-li:text-slate-700 prose-strong:text-slate-900 prose-a:text-indigo-600 hover:prose-a:text-indigo-700 sm:p-8 lg:p-10"
           >
             {blog.content ? (
-              <div dangerouslySetInnerHTML={{ __html: blog.content }} />
+              <div dangerouslySetInnerHTML={{ __html: prepareBlogContent(blog.content) }} />
             ) : (
               <p className="text-slate-600">Content coming soon.</p>
             )}

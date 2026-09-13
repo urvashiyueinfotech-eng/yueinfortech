@@ -610,6 +610,7 @@ type NavbarProps = {
 };
 
 const Navbar = ({ servicesFromServer = [] }: NavbarProps) => {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [services, setServices] = useState<NavServiceItem[]>(servicesFromServer);
@@ -647,12 +648,17 @@ const Navbar = ({ servicesFromServer = [] }: NavbarProps) => {
     return () => document.removeEventListener("keydown", handleKeydown);
   }, [isOpen]);
 
+  // Blog pages have a pale hero rather than the dark hero used on the home page.
+  // Give their fixed navigation a solid surface from the first paint so the logo,
+  // links, and mobile menu do not disappear against the page background.
+  const hasLightNavigation = isScrolled || pathname === "/blog" || pathname.startsWith("/blog/");
+
   return (
     <>
       <header
         className={cn(
           "fixed inset-x-0 top-0 transition-all duration-300 ease-in-out",
-          isScrolled ? "bg-white shadow-sm py-2" : "bg-transparent py-4",
+          hasLightNavigation ? "bg-white/95 shadow-sm backdrop-blur-md py-2" : "bg-transparent py-4",
           isOpen ? "z-30" : "z-50"
         )}
       >
@@ -660,19 +666,19 @@ const Navbar = ({ servicesFromServer = [] }: NavbarProps) => {
           <div className={cn("relative transition-all duration-300 ease-in-out")}>
             <div className="relative flex items-center justify-between gap-4">
               <div className={cn("transition-opacity", isOpen && "opacity-0")}>
-                <Logo tone={isScrolled ? "dark" : "light"} />
+                <Logo tone={hasLightNavigation ? "dark" : "light"} />
               </div>
               
-              <DesktopNav isScrolled={isScrolled} services={services} />
+              <DesktopNav isScrolled={hasLightNavigation} services={services} />
               
               <div className="flex items-center gap-2">
                 <div className="hidden items-center gap-3 rounded-full border px-4 py-2 text-left text-xs backdrop-blur-lg xl:flex"
-                  style={isScrolled ? { borderColor: 'rgb(229 231 235)'} : { borderColor: 'rgba(255, 255, 255, 0.1)'}}
+                  style={hasLightNavigation ? { borderColor: 'rgb(229 231 235)'} : { borderColor: 'rgba(255, 255, 255, 0.1)'}}
                 >
-                  <PhoneCall className={cn("h-4 w-4", isScrolled ? "text-slate-900" : "text-indigo-400")} />
+                  <PhoneCall className={cn("h-4 w-4", hasLightNavigation ? "text-slate-900" : "text-indigo-400")} />
                   <div>
-                    <a href="tel:+919319847585" className={cn("font-semibold", isScrolled ? "text-slate-900" : "text-white")}>+91 93198 47585</a>
-                    <p className={cn("text-[11px]", isScrolled ? "text-slate-600" : "text-slate-300")}>Talk with a strategist</p>
+                    <a href="tel:+919319847585" className={cn("font-semibold", hasLightNavigation ? "text-slate-900" : "text-white")}>+91 93198 47585</a>
+                    <p className={cn("text-[11px]", hasLightNavigation ? "text-slate-600" : "text-slate-300")}>Talk with a strategist</p>
                   </div>
                 </div>
                 <Link href="/contact-us" className="hidden items-center gap-2 rounded-full bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition hover:scale-105 hover:bg-indigo-700 xl:inline-flex">
@@ -692,7 +698,7 @@ const Navbar = ({ servicesFromServer = [] }: NavbarProps) => {
                         onClick={() => setIsOpen(true)}
                         className={cn(
                           "flex h-11 w-11 items-center justify-center rounded-full border transition-colors xl:hidden",
-                          isScrolled
+                          hasLightNavigation
                             ? "border-slate-200 text-slate-700 hover:text-indigo-600"
                             : "border-white/20 text-white hover:text-white hover:bg-white/10"
                         )}
