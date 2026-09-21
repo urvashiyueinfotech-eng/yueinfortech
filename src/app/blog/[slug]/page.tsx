@@ -1,22 +1,34 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { fetchBlogBySlug } from "@/lib/firestoreServer";
 import { getPageMetadata } from "@/lib/pageSeo.service";
+import BlogFaqAccordion from "@/components/blog/BlogFaqAccordion";
+import BlogReadingBar from "@/components/blog/BlogReadingBar";
+import FadeInImage from "@/components/blog/FadeInImage";
+import HeadingAnchors from "@/components/blog/HeadingAnchors";
+import Reveal from "@/components/blog/Reveal";
+import { BlogTocSidebar, BlogTocInline } from "@/components/blog/BlogToc";
 
-// Admin-authored posts should refresh promptly even if on-demand revalidation is unavailable.
 export const revalidate = 3600;
 
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
-/** Adds a scroll container around author-created tables without modifying their data. */
+/** Prepares author-authored HTML for display without changing the stored data:
+ *  - drops blank headings/paragraphs (e.g. `<h2><br></h2>`) the editor leaves
+ *    behind, which would otherwise render stray spacing and accent bars;
+ *  - wraps tables in a horizontal scroll container. */
 function prepareBlogContent(content: string) {
-  return content.replace(/<table\b([^>]*)>([\s\S]*?)<\/table>/gi, (_table, attributes, body) => {
-    return `<div class="blog-table-wrap" tabindex="0" role="region" aria-label="Scrollable table"><table${attributes}>${body}</table></div>`;
-  });
+  return content
+    .replace(
+      /<(h[1-6]|p)\b[^>]*>(?:\s|&nbsp;|<br\s*\/?>)*<\/\1>/gi,
+      ""
+    )
+    .replace(/<table\b([^>]*)>([\s\S]*?)<\/table>/gi, (_table, attributes, body) => {
+      return `<div class="blog-table-wrap" tabindex="0" role="region" aria-label="Scrollable table"><table${attributes}>${body}</table></div>`;
+    });
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -53,60 +65,221 @@ export default async function BlogDetailPage({ params }: PageProps) {
     : "";
 
   const heroImage = blog.thumbnail || "";
+  const toc = blog.tableOfContents ?? [];
+  const hasToc = Boolean(blog.showTableOfContents && toc.length > 0);
+
+  /* ── Main reading column (shared between layouts) ── */
+  const mainContent = (
+    <div className="min-w-0">
+      {/* Quick Answer */}
+      {blog.quickAnswer && (
+        <aside className="mb-10 overflow-hidden rounded-2xl border border-indigo-100 bg-gradient-to-br from-indigo-50 via-white to-white p-6 shadow-[0_1px_2px_rgba(16,24,40,0.04)] sm:p-7">
+          <div className="flex items-start gap-3.5">
+            <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-[0_4px_12px_rgba(88,101,242,0.35)]">
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+            </span>
+            <div>
+              <p className="text-[0.7rem] font-bold uppercase tracking-[0.14em] text-indigo-600">Quick Answer</p>
+              <p className="mt-2 text-[0.975rem] leading-7 text-slate-700">{blog.quickAnswer}</p>
+            </div>
+          </div>
+        </aside>
+      )}
+
+      {/* Table of contents — collapsible, mobile / narrow only */}
+      {hasToc && (
+        <div className="lg:hidden">
+          <BlogTocInline items={toc} />
+        </div>
+      )}
+
+      {/* Article */}
+      {blog.content ? (
+        <article
+          className="blog-prose"
+          dangerouslySetInnerHTML={{ __html: prepareBlogContent(blog.content) }}
+        />
+      ) : (
+        <article className="blog-prose">
+          <p className="text-slate-500">Content coming soon.</p>
+        </article>
+      )}
+      <HeadingAnchors />
+
+      {/* Key Takeaways */}
+      {blog.keyTakeaways && blog.keyTakeaways.length > 0 && (
+        <Reveal>
+          <section className="mt-14 overflow-hidden rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50 via-white to-white p-6 sm:p-8">
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-[0_4px_12px_rgba(5,150,105,0.3)]">
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path d="M5 13l4 4L19 7" /></svg>
+              </span>
+              <h2 className="text-lg font-extrabold tracking-tight text-slate-900 sm:text-xl">Key Takeaways</h2>
+            </div>
+            <ul className="mt-5 space-y-3.5">
+              {blog.keyTakeaways.map((item) => (
+                <li key={item} className="flex gap-3 text-[0.975rem] leading-relaxed text-slate-700">
+                  <svg className="mt-1 h-4 w-4 shrink-0 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path d="M5 13l4 4L19 7" /></svg>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </section>
+        </Reveal>
+      )}
+
+      {/* FAQs */}
+      {blog.faqs && blog.faqs.length > 0 && (
+        <Reveal>
+          <section className="mt-14">
+            <div className="mb-6 flex items-center gap-2.5">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-amber-500 text-white shadow-[0_4px_12px_rgba(245,158,11,0.3)]">
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01" /></svg>
+              </span>
+              <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">Frequently Asked Questions</h2>
+            </div>
+            <BlogFaqAccordion faqs={blog.faqs} />
+          </section>
+        </Reveal>
+      )}
+    </div>
+  );
 
   return (
-    <main className="min-h-screen">
-      <section className="bg-[#f7f8ff] pb-16 pt-28 sm:pt-32 lg:pb-24 lg:pt-36">
-        <div className="mx-auto flex max-w-5xl flex-col gap-6 px-4 sm:gap-8 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <p className="mx-auto max-w-3xl text-xs leading-5 text-slate-500 sm:text-sm"><Link href="/" className="hover:text-indigo-600">Home</Link> / <Link href="/blog" className="hover:text-indigo-600">Blog</Link> / {blog.title}</p>
-            {blog.heroEyebrow && <p className="mt-6 text-xs font-bold uppercase tracking-[0.16em] text-indigo-600 sm:mt-8">{blog.heroEyebrow}</p>}
-            <h1 className="mx-auto mt-3 max-w-4xl text-4xl font-extrabold leading-[1.08] tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">{blog.title}</h1>
-            <p className="mx-auto mt-5 max-w-2xl text-sm leading-6 text-slate-500">By {blog.author ?? "Admin"}{date ? ` · ${date}` : ""}{blog.readTime ? ` · ${blog.readTime}` : ""}</p>
+    <main className="min-h-screen bg-white">
+      <BlogReadingBar title={blog.title} />
+
+      {/* ── HERO ── */}
+      <section className="relative overflow-hidden bg-[#06080F] pt-24 sm:pt-28 lg:pt-32">
+        <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_75%_55%_at_50%_15%,rgba(88,101,242,0.14)_0%,transparent_62%),radial-gradient(ellipse_40%_40%_at_85%_30%,rgba(6,182,212,0.08)_0%,transparent_55%)]" />
+        <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:34px_34px] [mask-image:radial-gradient(ellipse_90%_80%_at_50%_0%,black,transparent_80%)]" />
+
+        <div className="relative z-10 mx-auto max-w-5xl px-5 sm:px-6 lg:px-8">
+          {/* Breadcrumbs */}
+          <nav className="mb-6 sm:mb-8">
+            <ol className="flex flex-wrap items-center gap-1.5 text-[0.78rem] text-slate-400">
+              <li><Link href="/" className="transition-colors hover:text-white">Home</Link></li>
+              <li className="text-slate-600">/</li>
+              <li><Link href="/blog" className="transition-colors hover:text-white">Blog</Link></li>
+              <li className="text-slate-600">/</li>
+              <li className="line-clamp-1 max-w-[60vw] text-slate-500">{blog.title}</li>
+            </ol>
+          </nav>
+
+          {/* Eyebrow */}
+          {blog.heroEyebrow && (
+            <div className="mb-5">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3.5 py-1.5 text-[0.68rem] font-bold uppercase tracking-[0.16em] text-indigo-300 backdrop-blur-sm">
+                <span className="h-1.5 w-1.5 rounded-full bg-indigo-400" />
+                {blog.heroEyebrow}
+              </span>
+            </div>
+          )}
+
+          {/* Title */}
+          <h1 className="max-w-4xl text-balance text-[clamp(1.9rem,4.4vw,3.5rem)] font-extrabold leading-[1.08] tracking-[-0.02em] text-white">
+            {blog.title}
+          </h1>
+
+          {/* Meta */}
+          <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-slate-400">
+            <span className="inline-flex items-center gap-2.5">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-indigo-600 text-xs font-bold text-white shadow-[0_4px_12px_rgba(88,101,242,0.35)]">
+                {(blog.author ?? "Admin").charAt(0).toUpperCase()}
+              </span>
+              <span className="font-medium text-slate-200">{blog.author ?? "Admin"}</span>
+            </span>
+            {date && (
+              <span className="inline-flex items-center gap-1.5">
+                <svg className="h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></svg>
+                {date}
+              </span>
+            )}
+            {blog.readTime && (
+              <span className="inline-flex items-center gap-1.5">
+                <svg className="h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
+                {blog.readTime}
+              </span>
+            )}
           </div>
 
+          {/* Hero image — a clean white card sized to the graphic; its white
+              background merges with the infographic so there are no side gaps */}
           {heroImage && (
-            <div className="relative h-[260px] w-full overflow-hidden rounded-2xl shadow-sm sm:h-[360px] lg:h-[440px]">
-              <Image
-                src={heroImage}
-                alt={blog.heroImageAlt || blog.title}
-                fill
-                priority
-                sizes="(max-width: 1024px) 100vw, 1000px"
-                className="object-cover"
-              />
-            </div>
+            <figure className="relative mx-auto mt-9 max-w-2xl sm:mt-11">
+              <div className="pointer-events-none absolute -inset-5 z-0 rounded-[2.5rem] bg-indigo-500/15 blur-3xl" />
+              <div className="relative z-10 overflow-hidden rounded-2xl bg-white p-2.5 shadow-[0_28px_70px_-24px_rgba(0,0,0,0.6)] ring-1 ring-white/10 sm:p-3">
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-white">
+                  <FadeInImage
+                    src={heroImage}
+                    alt={blog.heroImageAlt || blog.title}
+                    fill
+                    priority
+                    sizes="(max-width: 768px) 100vw, 672px"
+                    className="object-contain"
+                  />
+                </div>
+              </div>
+            </figure>
           )}
+        </div>
 
+        {/* Fade into content */}
+        <div className="h-14 sm:h-20" />
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-white" />
+      </section>
+
+      {/* ── CONTENT ── */}
+      <section className="relative bg-white">
+        <div className="mx-auto max-w-5xl px-5 sm:px-6 lg:px-8">
+          {/* Stats bar — overlaps hero/content seam */}
           {blog.heroStats && blog.heroStats.length > 0 && (
-            <div className="grid grid-cols-1 overflow-hidden rounded-2xl bg-[#0b1233] text-white sm:grid-cols-3">
-              {blog.heroStats.map((stat) => <div key={`${stat.value}-${stat.label}`} className="border-b border-white/10 px-6 py-5 text-center last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0"><p className="text-2xl font-extrabold">{stat.value}</p><p className="mt-1 text-xs text-slate-300">{stat.label}</p></div>)}
+            <div className="relative z-20 -mt-24 mb-12 grid grid-cols-1 gap-px overflow-hidden rounded-2xl bg-slate-200/80 shadow-[0_20px_50px_-20px_rgba(16,24,40,0.25)] ring-1 ring-slate-200 sm:-mt-28 sm:grid-cols-3">
+              {blog.heroStats.map((stat) => (
+                <div key={`${stat.value}-${stat.label}`} className="group relative bg-white px-6 py-7 text-center transition-colors hover:bg-slate-50">
+                  <span className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-indigo-500 to-cyan-400 opacity-0 transition-opacity group-hover:opacity-100" />
+                  <p className="bg-gradient-to-br from-slate-900 to-slate-700 bg-clip-text text-2xl font-extrabold tracking-tight text-transparent sm:text-[1.75rem]">{stat.value}</p>
+                  <p className="mt-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-slate-500">{stat.label}</p>
+                </div>
+              ))}
             </div>
           )}
 
-          {blog.quickAnswer && <aside className="rounded-xl border border-indigo-100 bg-white p-5 shadow-sm"><p className="text-xs font-bold uppercase tracking-wider text-indigo-600">Quick answer</p><p className="mt-2 leading-7 text-slate-700">{blog.quickAnswer}</p></aside>}
-
-          {blog.showTableOfContents && blog.tableOfContents && blog.tableOfContents.length > 0 && (
-            <nav aria-label="Table of contents" className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"><p className="font-bold text-slate-950">Table of contents</p><ol className="mt-3 space-y-2 text-sm">{blog.tableOfContents.map((item) => <li key={item.id} className={item.level === 3 ? "ml-4" : ""}><a className="block text-indigo-600 hover:text-indigo-800 hover:underline" href={`#${item.id}`}>{item.title}</a></li>)}</ol></nav>
-          )}
-
-          <article
-            className="blog-prose prose prose-base sm:prose-lg max-w-none rounded-xl bg-white p-5 text-slate-800 shadow-sm prose-headings:scroll-mt-24 prose-headings:text-slate-900 prose-p:text-slate-700 prose-li:text-slate-700 prose-strong:text-slate-900 prose-a:text-indigo-600 hover:prose-a:text-indigo-700 sm:p-8 lg:p-10"
-          >
-            {blog.content ? (
-              <div dangerouslySetInnerHTML={{ __html: prepareBlogContent(blog.content) }} />
+          <div className={blog.heroStats && blog.heroStats.length > 0 ? "pb-16 sm:pb-20 lg:pb-24" : "pt-14 pb-16 sm:pt-16 sm:pb-20 lg:pb-24"}>
+            {hasToc ? (
+              <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_248px] lg:gap-14">
+                {mainContent}
+                <aside className="hidden lg:block">
+                  <BlogTocSidebar items={toc} />
+                </aside>
+              </div>
             ) : (
-              <p className="text-slate-600">Content coming soon.</p>
+              <div className="mx-auto max-w-3xl">{mainContent}</div>
             )}
-          </article>
-
-          {blog.keyTakeaways && blog.keyTakeaways.length > 0 && <section className="rounded-xl border border-indigo-100 bg-indigo-50 p-6"><h2 className="text-2xl font-bold text-slate-950">Key takeaways</h2><ul className="mt-4 space-y-2 text-slate-700">{blog.keyTakeaways.map((item) => <li key={item} className="flex gap-2"><span className="text-indigo-600">✓</span>{item}</li>)}</ul></section>}
-
-          {blog.faqs && blog.faqs.length > 0 && <section><h2 className="text-3xl font-bold text-slate-950">Frequently Asked Questions</h2><div className="mt-5 space-y-3">{blog.faqs.map((faq) => <article key={faq.question} className="rounded-xl bg-white p-5 shadow-sm"><h3 className="font-bold text-slate-950">{faq.question}</h3><p className="mt-2 leading-7 text-slate-700">{faq.answer}</p></article>)}</div></section>}
-
-          {blog.ctaTitle && <section className="rounded-2xl bg-[#0b1233] px-6 py-10 text-center text-white lg:px-12"><h2 className="text-3xl font-bold">{blog.ctaTitle}</h2>{blog.ctaDescription && <p className="mx-auto mt-3 max-w-2xl text-slate-300">{blog.ctaDescription}</p>}{blog.ctaLabel && blog.ctaUrl && <Link href={blog.ctaUrl} className="mt-6 inline-flex rounded-lg bg-indigo-500 px-5 py-3 font-semibold hover:bg-indigo-400">{blog.ctaLabel}</Link>}</section>}
+          </div>
         </div>
       </section>
+
+      {/* ── CTA ── */}
+      {blog.ctaTitle && (
+        <section className="relative overflow-hidden bg-[#06080F] py-16 sm:py-20 lg:py-24">
+          <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_60%_60%_at_50%_50%,rgba(88,101,242,0.18)_0%,transparent_70%)]" />
+          <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:34px_34px] opacity-60" />
+          <Reveal className="relative z-10 mx-auto max-w-3xl px-5 text-center sm:px-6 lg:px-8">
+            <h2 className="text-[clamp(1.75rem,3.5vw,2.5rem)] font-extrabold tracking-tight text-white">{blog.ctaTitle}</h2>
+            {blog.ctaDescription && <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-slate-400">{blog.ctaDescription}</p>}
+            {blog.ctaLabel && blog.ctaUrl && (
+              <Link
+                href={blog.ctaUrl}
+                className="mt-8 inline-flex items-center gap-2 rounded-2xl bg-indigo-600 px-8 py-4 text-sm font-bold text-white shadow-[0_0_20px_rgba(88,101,242,0.4)] transition-all hover:scale-[1.03] hover:bg-indigo-500 hover:shadow-[0_0_32px_rgba(88,101,242,0.6)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#06080F] active:scale-95"
+              >
+                {blog.ctaLabel}
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+              </Link>
+            )}
+          </Reveal>
+        </section>
+      )}
     </main>
   );
 }
