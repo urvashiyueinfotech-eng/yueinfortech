@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 import type { PortfolioCaseStudy, PortfolioFilter } from "@/types/portfolio";
 import "./portfolio.css";
 
@@ -59,7 +60,7 @@ export default function PortfolioClient({ filters, caseStudies }: PortfolioClien
                 ))}
               </div>
               <span className="cs-arrow" aria-hidden="true">
-                <ArrowUpRight className="h-4 w-4" strokeWidth={3} />
+                {item.slug ? <Link href={`/portfolio/${item.slug}`} aria-label={`View ${item.title}`}><ArrowUpRight className="h-4 w-4" strokeWidth={3} /></Link> : <ArrowUpRight className="h-4 w-4" strokeWidth={3} />}
               </span>
             </article>
           ))}

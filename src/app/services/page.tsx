@@ -38,9 +38,10 @@ export default async function ServicesPage() {
     <main className="min-h-screen bg-[#F8F9FF] text-[#1E1B4B] font-sans">
       <PageStructuredData pageId="services" />
       {/* ── HERO ── */}
-      <section className="bg-gradient-to-br from-[#0D1035] via-[#111437] to-[#1a1060] pt-[140px] px-[5%] pb-[80px] relative overflow-hidden">
+      <section className="bg-[#06080F] pt-[140px] px-[5%] pb-[80px] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(rgba(91,79,233,0.15)_1px,transparent_1px)] bg-[size:32px_32px]"></div>
         <div className="absolute top-[-60px] right-[-100px] w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(91,79,233,0.12)_0%,transparent_65%)]"></div>
+        <div className="absolute -bottom-[220px] -left-[180px] h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,rgba(6,182,212,0.12)_0%,transparent_65%)]"></div>
         <div className="relative z-10 max-w-[800px] mx-auto xl:mx-0">
           <div className="text-[0.8rem] text-[rgba(255,255,255,0.45)] mb-[20px]">
             <Link href="/" className="text-[rgba(255,255,255,0.5)] no-underline hover:text-[#7B72EE]">Home</Link> / Services

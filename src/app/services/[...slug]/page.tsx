@@ -195,9 +195,10 @@ function MainServiceTemplate({ data, slugPath }: { data: ServiceDoc; slugPath: s
     <main className="overflow-x-clip bg-[#F8F9FF] font-sans text-[#1E1B4B] selection:bg-[#5B4FE9]/20">
       <ServiceStructuredData data={data} slugPath={slugPath} />
       {/* ── HERO ── */}
-      <section className={`${isSubServicePage ? "min-h-[92vh] lg:min-h-screen" : "min-h-screen"} bg-[linear-gradient(135deg,#0D1035_0%,#111437_40%,#1a1060_100%)] flex flex-col justify-center px-[5%] py-[120px] pb-[80px] relative overflow-hidden`}>
+      <section className={`${isSubServicePage ? "min-h-[92vh] lg:min-h-screen" : "min-h-screen"} bg-[#06080F] flex flex-col justify-center px-[5%] py-[120px] pb-[80px] relative overflow-hidden`}>
         <div className="absolute inset-0 z-0 bg-[radial-gradient(rgba(91,79,233,0.15)_1px,transparent_1px)] [background-size:32px_32px]"></div>
         <div className="absolute top-[-100px] right-0 w-full max-w-[760px] h-[120%] z-0 bg-[linear-gradient(120deg,transparent_30%,rgba(91,79,233,0.12)_70%,rgba(91,79,233,0.05)_100%)]"></div>
+        <div className="absolute -bottom-[260px] -left-[180px] z-0 h-[580px] w-[580px] rounded-full bg-[radial-gradient(circle,rgba(6,182,212,0.12)_0%,transparent_65%)]"></div>
         <div className={`relative z-10 w-full ${data.hero.bannerImage ? 'max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center' : 'max-w-[720px]'}`}>
           <div className={data.hero.bannerImage ? 'lg:col-span-7' : ''}>
             {isSubServicePage ? (
