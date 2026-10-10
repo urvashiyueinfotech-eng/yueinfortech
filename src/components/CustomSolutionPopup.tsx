@@ -15,6 +15,7 @@ type CustomSolutionPopupProps = Omit<
 
 const DEFAULT_SERVICE_OPTIONS = [
   { label: "Web Design & Development", value: "Web Design & Development" },
+  { label: "CRM Development Service", value: "CRM Development Service" },
   { label: "SEO & AI Search Optimization", value: "SEO & AI Search Optimization" },
   { label: "Digital Marketing & Ads", value: "Digital Marketing & Ads" },
   { label: "Content & Copywriting", value: "Content & Copywriting" },

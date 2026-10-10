@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ArrowRight, Check, ChevronRight, CircleCheck, Database, Layers3, LockKeyhole, MessageCircle, MousePointer2, Settings2, Sparkles } from "lucide-react";
 import { StructuredDataScripts } from "@/components/PageStructuredData";
 import ProjectModules from "./ProjectModules";
+import ProductWalkthrough from "./ProductWalkthrough";
 import { getPortfolioProjectBySlug } from "@/lib/portfolioProjects.service";
 import type { PortfolioProject, PortfolioProjectAction } from "@/types/portfolio";
 import "./project.css";
@@ -124,6 +125,8 @@ export function ProjectDetail({ project, context }: { project: PortfolioProject;
         </div></section>
 
         <section className="project-section project-modules"><div className="project-shell"><header className="project-section-heading centered"><p>{project.modules.eyebrow}</p><ProjectTitle title={project.modules.title} highlight={project.modules.highlightedTitle} /><div>{project.modules.description}</div></header><ProjectModules items={project.modules.items} browserLabel={project.hero.browserLabel || project.hero.title} /></div></section>
+
+        <ProductWalkthrough productName={project.card.title} industry={project.card.industry} items={project.modules.items} />
 
         <section className="project-section project-workflow"><div className="project-shell"><header className="project-section-heading centered"><p>{project.workflow.eyebrow}</p><ProjectTitle title={project.workflow.title} /><div>{project.workflow.description}</div></header><ol>{project.workflow.steps.map((step, index) => <li key={step.title}><span>{index + 1}</span><div><h3>{step.title}</h3><p>{step.description}</p></div></li>)}</ol></div></section>
 
