@@ -4,7 +4,6 @@ import { SITE_URL } from "@/lib/publicRoutes";
 const DISABLE_INDEXING = process.env.DISABLE_INDEXING === "true";
 
 const LEGACY_DISALLOWS: string[] = [
-  "/products/",
   "/product/",
   "/class/",
   "/*.htm$",

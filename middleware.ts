@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 const SPAM_PATTERNS = [
-  '/products/',
   '/product/',
   '/class/',
   '/petpooja_captain/',
