@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { ProjectDetail, getProjectMetadata, type ProjectPageContext } from "@/app/portfolio/[slug]/page";
 import { getProductBySlug } from "@/lib/portfolioProjects.service";
 import "../../portfolio/[slug]/project.css";
+import "../../portfolio/[slug]/workflow.css";
 
 type PageProps = { params: Promise<{ slug: string }> };
 export const revalidate = 3600;

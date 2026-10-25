@@ -1,0 +1,13 @@
+/* Keep the shared workflow treatment intact while adapting column count to each product's step count. */
+@media (max-width: 1024px) {
+  .project-workflow ol {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 28px 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .project-workflow ol {
+    grid-template-columns: 1fr !important;
+  }
+}

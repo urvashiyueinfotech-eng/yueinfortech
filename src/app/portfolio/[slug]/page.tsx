@@ -9,6 +9,7 @@ import ProductWalkthrough from "./ProductWalkthrough";
 import { getPortfolioProjectBySlug } from "@/lib/portfolioProjects.service";
 import type { PortfolioProject, PortfolioProjectAction } from "@/types/portfolio";
 import "./project.css";
+import "./workflow.css";
 
 type PageProps = { params: Promise<{ slug: string }> };
 export const revalidate = 3600;
@@ -128,7 +129,7 @@ export function ProjectDetail({ project, context }: { project: PortfolioProject;
 
         <ProductWalkthrough productName={project.card.title} industry={project.card.industry} items={project.modules.items} />
 
-        <section className="project-section project-workflow"><div className="project-shell"><header className="project-section-heading centered"><p>{project.workflow.eyebrow}</p><ProjectTitle title={project.workflow.title} /><div>{project.workflow.description}</div></header><ol>{project.workflow.steps.map((step, index) => <li key={step.title}><span>{index + 1}</span><div><h3>{step.title}</h3><p>{step.description}</p></div></li>)}</ol></div></section>
+        <section className="project-section project-workflow"><div className="project-shell"><header className="project-section-heading centered"><p>{project.workflow.eyebrow}</p><ProjectTitle title={project.workflow.title} /><div>{project.workflow.description}</div></header><ol style={{ gridTemplateColumns: `repeat(${Math.min(Math.max(project.workflow.steps.length, 1), 6)}, minmax(0, 1fr))` }}>{project.workflow.steps.map((step, index) => <li key={step.title}><span>{index + 1}</span><div><h3>{step.title}</h3><p>{step.description}</p></div></li>)}</ol></div></section>
 
         {project.details && <section className="project-section project-details"><div className="project-shell"><header className="project-section-heading"><p>{project.details.eyebrow}</p><ProjectTitle title={project.details.title} highlight={project.details.highlightedTitle} />{project.details.description && <div>{project.details.description}</div>}</header><div className="project-detail-grid">{project.details.items.map((item) => <article key={item.title}><h3>{item.title}</h3><p>{item.description}</p>{item.bullets?.length ? <ul>{item.bullets.map((bullet) => <li key={bullet}><Check aria-hidden="true" />{bullet}</li>)}</ul> : null}</article>)}</div></div></section>}
 
