@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, Check, ChevronRight, CircleCheck, Database, Layers3, LockKeyhole, MessageCircle, MousePointer2, Settings2, Sparkles } from "lucide-react";
+import { ArrowRight, Check, ChevronRight, CircleCheck, Cloud, Database, Gauge, Layers3, LockKeyhole, MessageCircle, MousePointer2, PlugZap, Rocket, Settings2, ShieldCheck, Sparkles, UsersRound } from "lucide-react";
 import { StructuredDataScripts } from "@/components/PageStructuredData";
 import ProjectModules from "./ProjectModules";
 import ProductWalkthrough from "./ProductWalkthrough";
@@ -58,6 +58,7 @@ function ProjectTitle({ title, highlight }: { title: string; highlight?: string 
 function DetailIcon({ value }: { value?: string }) {
   const icons: Record<string, React.ReactNode> = {
     settings: <Settings2 />, database: <Database />, layers: <Layers3 />, lock: <LockKeyhole />, message: <MessageCircle />, sparkles: <Sparkles />,
+    shield: <ShieldCheck />, cloud: <Cloud />, users: <UsersRound />, plug: <PlugZap />, gauge: <Gauge />, rocket: <Rocket />,
   };
   return <span className="project-detail-icon">{icons[value ?? ""] ?? <CircleCheck />}</span>;
 }
